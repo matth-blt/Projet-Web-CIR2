@@ -202,8 +202,8 @@ try:
     # 6. TABLE : POINT_DE_CHARGE
     # ==============================================================================
     print("🚀 Insertion de la table 'point_de_charge'...")
-    df_pdc = df[['id', 'consolidated_longitude', 'consolidated_latitude', 'puissance_nominale', 'cable_t2_attache', 'gratuit', 'condition_acces']].copy()
-    df_pdc.columns = ['id_pdc', 'lon', 'lat', 'puissance', 'cable_t2_attache', 'gratuit', 'pdc_condition']
+    df_pdc = df[['id', 'consolidated_longitude', 'consolidated_latitude', 'puissance_nominale', 'cable_t2_attache', 'gratuit', 'condition_acces', 'tarification']].copy()
+    df_pdc.columns = ['id_pdc', 'lon', 'lat', 'puissance', 'cable_t2_attache', 'gratuit', 'pdc_condition', 'tarification']
     
     df_pdc = df_pdc.drop_duplicates(subset=['id_pdc']).dropna(subset=['id_pdc'])
     df_pdc['id_pdc'] = df_pdc['id_pdc'].astype(int)
@@ -211,6 +211,7 @@ try:
     df_pdc['lat'] = df_pdc['lat'].fillna(0.0).astype(float)
     df_pdc['puissance'] = df_pdc['puissance'].fillna(0.0).astype(float)
     df_pdc['pdc_condition'] = df_pdc['pdc_condition'].astype(str).str[:50]
+    df_pdc['tarification'] = df_pdc['tarification'].fillna('Non spécifiée').astype(str).str[:255]
     
     df_pdc.to_sql('point_de_charge', con=engine, if_exists='append', index=False)
 

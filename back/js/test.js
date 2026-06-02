@@ -1,14 +1,14 @@
 'use strict';
 
-async function requestAmenageurs() {
+async function requestStations() {
     try {
-        const response = await fetch('../../utils/request.php/amenageurs');
-        const amenageurs = await response.json();
-        console.log(amenageurs);
+        const response = await fetch('../../utils/request.php/stations');
+        const stations = await response.json();
+        console.log(stations);
     } catch (error) {
         console.error('Erreur:', error);
         return
     }
 }
 
-requestAmenageurs()
+requestStations()

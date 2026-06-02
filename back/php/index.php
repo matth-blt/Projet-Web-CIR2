@@ -23,10 +23,10 @@ $installations = [
     <a href="create.php"><button class="btn-add">+ Ajouter un point</button></a>
   </div>
 
-  <div class="info-box">
+  <!-- <div class="info-box">
     Interface d'administration permettant de consulter, créer et modifier les installations IRVE.
     Toutes les opérations passent par l'API REST (PDO/PHP) et sont stockées en MariaDB.
-  </div>
+  </div> -->
 
   <div class="table-wrap">
     <table>

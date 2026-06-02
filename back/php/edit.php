@@ -120,7 +120,7 @@ include 'header.php';
 
     <div class="form-actions">
       <button type="submit" class="btn-save">Sauvegarder</button>
-      <a href="/php/liste.php"><button type="button" class="btn-cancel">Annuler</button></a>
+      <a href="back/php/liste.php"><button type="button" class="btn-cancel">Annuler</button></a>
     </div>
 
   </form>
