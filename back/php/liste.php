@@ -18,7 +18,7 @@ $installations = [
   <div class="page-header">
     <div>
       <div class="page-title">Toutes les installations</div>
-      <div class="page-sub">Affichage limitÃ© Ã  100 enregistrements Â· /back/liste</div>
+      <div class="page-sub">Affichage limité à 100 enregistrements Â· /back/liste</div>
     </div>
     <a href="/php/create.php"><button class="btn-add">+ Ajouter</button></a>
   </div>
@@ -28,11 +28,11 @@ $installations = [
       <thead>
         <tr>
           <th>ID</th>
-          <th>AmÃ©nageur</th>
+          <th>Aménageur</th>
           <th>Type prise</th>
           <th>Puissance</th>
           <th>Commune</th>
-          <th>DÃ©pt.</th>
+          <th>Dépt.</th>
           <th>Service</th>
           <th>Actions</th>
         </tr>

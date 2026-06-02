@@ -24,10 +24,10 @@ include 'header.php';
 
   <form class="form-card" method="POST" action="/php/create.php">
 
-    <div class="form-section-title">Informations amÃ©nageur</div>
+    <div class="form-section-title">Informations Aménageur</div>
     <div class="form-grid">
       <div class="form-group">
-        <label class="form-label">AmÃ©nageur <span class="required">*</span></label>
+        <label class="form-label">Aménageur <span class="required">*</span></label>
         <input class="form-input" type="text" name="amenageur" placeholder="Ex : R3" required>
       </div>
       <div class="form-group">
@@ -35,21 +35,21 @@ include 'header.php';
         <input class="form-input" type="text" name="siren" placeholder="000 000 000">
       </div>
       <div class="form-group">
-        <label class="form-label">OpÃ©rateur <span class="required">*</span></label>
+        <label class="form-label">Opérateur <span class="required">*</span></label>
         <input class="form-input" type="text" name="operateur" placeholder="Ex : SPV COM" required>
       </div>
       <div class="form-group">
-        <label class="form-label">Contact opÃ©rateur</label>
+        <label class="form-label">Contact Opérateur</label>
         <input class="form-input" type="email" name="contact" placeholder="contact@operateur.fr">
       </div>
     </div>
 
-    <div class="form-section-title">CaractÃ©ristiques techniques</div>
+    <div class="form-section-title">Caractacristiques techniques</div>
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">Type de prise <span class="required">*</span></label>
         <select class="form-select" name="type_prise" required>
-          <option value="">â€” SÃ©lectionner â€”</option>
+          <option value="">” Sélectionner”</option>
           <option value="Combo CCS">Combo CCS</option>
           <option value="CHAdeMO">CHAdeMO</option>
           <option value="Type 2">Type 2</option>
@@ -76,9 +76,9 @@ include 'header.php';
         <input class="form-input" type="text" name="commune" placeholder="Ex : Brest" required>
       </div>
       <div class="form-group">
-        <label class="form-label">DÃ©partement <span class="required">*</span></label>
+        <label class="form-label">Département <span class="required">*</span></label>
         <select class="form-select" name="dept" required>
-          <option value="">â€” SÃ©lectionner â€”</option>
+          <option value="">” Sélectionner”</option>
           <option value="22">22</option>
           <option value="29">29</option>
           <option value="35">35</option>

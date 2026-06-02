@@ -49,7 +49,7 @@ include 'header.php';
     <div class="form-section-title">Informations amÃ©nageur</div>
     <div class="form-grid">
       <div class="form-group">
-        <label class="form-label">AmÃ©nageur <span class="required">*</span></label>
+        <label class="form-label">Aménageur <span class="required">*</span></label>
         <input class="form-input" type="text" name="amenageur" value="<?= htmlspecialchars($installation['amenageur']) ?>" required>
       </div>
       <div class="form-group">
@@ -57,7 +57,7 @@ include 'header.php';
         <input class="form-input" type="text" name="siren" value="<?= htmlspecialchars($installation['siren']) ?>">
       </div>
       <div class="form-group">
-        <label class="form-label">OpÃ©rateur</label>
+        <label class="form-label">Opérateur</label>
         <input class="form-input" type="text" name="operateur" value="<?= htmlspecialchars($installation['operateur']) ?>">
       </div>
       <div class="form-group">
@@ -66,7 +66,7 @@ include 'header.php';
       </div>
     </div>
 
-    <div class="form-section-title">CaractÃ©ristiques techniques</div>
+    <div class="form-section-title">Caractéristiques techniques</div>
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">Type de prise</label>
@@ -99,7 +99,7 @@ include 'header.php';
         <input class="form-input" type="text" name="commune" value="<?= htmlspecialchars($installation['commune']) ?>">
       </div>
       <div class="form-group">
-        <label class="form-label">DÃ©partement</label>
+        <label class="form-label">Département</label>
         <select class="form-select" name="dept">
           <?php foreach (['22', '29', '35', '56'] as $d): ?>
             <option value="<?= $d ?>" <?= ($installation['dept'] === $d) ? 'selected' : '' ?>>

@@ -18,14 +18,14 @@ $installations = [
   <div class="page-header">
     <div>
       <div class="page-title">Administration des IRVE</div>
-      <div class="page-sub">Gestion des points de recharge vÃ©hicules Ã©lectriques en Bretagne</div>
+      <div class="page-sub">Gestion des points de recharge véhicules électriques en Bretagne</div>
     </div>
     <a href="create.php"><button class="btn-add">+ Ajouter un point</button></a>
   </div>
 
   <div class="info-box">
-    Interface d'administration permettant de consulter, crÃ©er et modifier les installations IRVE.
-    Toutes les opÃ©rations passent par l'API REST (PDO/PHP) et sont stockÃ©es en MariaDB.
+    Interface d'administration permettant de consulter, créer et modifier les installations IRVE.
+    Toutes les opérations passent par l'API REST (PDO/PHP) et sont stockées en MariaDB.
   </div>
 
   <div class="table-wrap">
@@ -33,7 +33,7 @@ $installations = [
       <thead>
         <tr>
           <th>ID Installation</th>
-          <th>AmÃ©nageur</th>
+          <th>Aménageur</th>
           <th>Type de prise</th>
           <th>Commune</th>
           <th>Mise en service</th>
@@ -50,7 +50,7 @@ $installations = [
           <td><?= htmlspecialchars($row['service']) ?></td>
           <td>
             <a href="detail.php?id=<?= urlencode($row['id']) ?>"><button class="btn-view">Voir</button></a>
-            <a href="edit.php?id=<?= urlencode($row['id']) ?>"><button class="btn-edit">Ã‰diter</button></a>
+            <a href="edit.php?id=<?= urlencode($row['id']) ?>"><button class="btn-edit">éditer</button></a>
           </td>
         </tr>
         <?php endforeach; ?>
