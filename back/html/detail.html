@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRVE Admin — Fiche Détail</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="page" id="back-detail">
+  <header>
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-5h2zm0-7H11V7h2z"/></svg></div>
+      <span class="logo-name">IRVE Admin</span><span class="admin-badge">Back-office</span>
+    </div>
+    <nav>
+      <a href="accueil.html">Accueil</a>
+      <a href="liste.html" class="active">Liste</a>
+      <a href="creation.html">Nouveau</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <a href="liste.html" class="back-link">← Retour à la liste</a>
+    
+    <div class="detail-card">
+      <div class="detail-card-header">
+        <div>
+          <h2>Station Brest — Rue de l'Alma</h2>
+          <p>ID : FRXXE7400123 · /back/detail/FRXXE7400123</p>
+        </div>
+        <a href="modification.html"><button class="btn-edit">✎ Modifier</button></a>
+      </div>
+      
+      <div class="detail-card-body">
+        <div class="detail-group">
+          <div class="detail-group-title">Aménageur &amp; Opérateur</div>
+          <div class="detail-grid-2">
+            <div class="detail-field"><span class="detail-key">Aménageur</span><span class="detail-val">R3</span></div>
+            <div class="detail-field"><span class="detail-key">SIREN</span><span class="detail-val">902 726 488</span></div>
+            <div class="detail-field"><span class="detail-key">Opérateur</span><span class="detail-val">SPV COM</span></div>
+            <div class="detail-field"><span class="detail-key">Contact</span><span class="detail-val">exploitation@r3-charge.fr</span></div>
+          </div>
+        </div>
+
+        <div class="detail-group">
+          <div class="detail-group-title">Caractéristiques techniques</div>
+          <div class="detail-grid-2">
+            <div class="detail-field"><span class="detail-key">Type de prise</span><span class="detail-val">Combo CCS</span></div>
+            <div class="detail-field"><span class="detail-key">Puissance</span><span class="detail-val">22 kW</span></div>
+            <div class="detail-field"><span class="detail-key">Nb points</span><span class="detail-val">2</span></div>
+            <div class="detail-field"><span class="detail-key">Mise en service</span><span class="detail-val">03 / 2023</span></div>
+          </div>
+        </div>
+
+        <div class="detail-group">
+          <div class="detail-group-title">Localisation</div>
+          <div class="detail-grid-2">
+            <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val">Brest</span></div>
+            <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val">29 — Finistère</span></div>
+            <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val">48.3904° N</span></div>
+            <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val">4.4861° W</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer><span>Groupe CIR2 — 2026</span><span>ISEN Ouest</span></footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRVE Admin — Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="page" id="back-accueil">
+  <header>
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-5h2zm0-7H11V7h2z"/></svg></div>
+      <span class="logo-name">IRVE Admin</span><span class="admin-badge">Back-office</span>
+    </div>
+    <nav>
+      <a href="accueil.html" class="active">Accueil</a>
+      <a href="liste.html">Liste</a>
+      <a href="creation.html">Nouveau</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Administration des IRVE</div>
+        <div class="page-sub">Gestion des points de recharge véhicules électriques en Bretagne</div>
+      </div>
+      <a href="creation.html"><button class="btn-add">+ Ajouter un point</button></a>
+    </div>
+
+    <div class="info-box">Interface d'administration permettant de consulter, créer et modifier les installations IRVE. Toutes les opérations passent par l'API REST (PDO/PHP) et sont stockées en MariaDB.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID Installation</th><th>Aménageur</th><th>Type de prise</th><th>Commune</th><th>Mise en service</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FRXXE7400123</td><td>R3</td><td>Combo CCS</td><td>Brest</td><td>03/2023</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400456</td><td>ELECTRIC 55 CHARGING</td><td>Type 2</td><td>Rennes</td><td>07/2022</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400789</td><td>R3</td><td>CHAdeMO</td><td>Vannes</td><td>11/2024</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400812</td><td>LE ROUX LOISIRS</td><td>Type 2</td><td>Lorient</td><td>01/2023</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer><span>Groupe CIR2 — 2026</span><span>ISEN Ouest</span></footer>
+</div>
+
+</body>
+</html>

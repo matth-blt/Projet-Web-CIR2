@@ -1,0 +1,466 @@
+/* ==========================================================================
+   1. RESET & CONFIGURATION GLOBALE
+   ========================================================================== */
+
+*, 
+*::before, 
+*::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+:root {
+  /* Couleurs principales */
+  --blue-dark: #1c2b3a; 
+  --blue-accent: #4a8fc1; 
+  --blue-light: #e6f1fb;
+  --white: #ffffff; 
+  --bg: #f4f6f9; 
+  --surface2: #eef2f7;
+
+  /* Typographie & Bordures */
+  --text: #111827; 
+  --text2: #4a5568; 
+  --text3: #8898aa; 
+  --border: #d5dde6;
+
+  /* Rayons des arrondis (Border Radius) */
+  --radius-sm: 6px; 
+  --radius-md: 10px; 
+  --radius-lg: 14px;
+}
+
+body { 
+  font-family: 'DM Sans', sans-serif; 
+  background-color: var(--bg); 
+  color: var(--text); 
+  width: 1440px; 
+  margin: 0 auto;
+}
+
+/* Conteneur principal d'une page */
+.page { 
+  width: 1440px; 
+  min-height: 900px; 
+  background-color: var(--bg); 
+  display: flex; 
+  flex-direction: column; 
+}
+
+
+/* ==========================================================================
+   2. EN-TÊTE (HEADER) & NAVIGATION
+   ========================================================================== */
+
+header { 
+  background-color: var(--blue-dark); 
+  height: 64px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 0 80px; 
+}
+
+.logo { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.logo-icon { 
+  width: 32px; 
+  height: 32px; 
+  background-color: var(--blue-accent); 
+  border-radius: 8px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.logo-icon svg { 
+  width: 16px; 
+  height: 16px; 
+  fill: var(--white); 
+}
+
+.logo-name { 
+  font-size: 16px; 
+  font-weight: 600; 
+  color: var(--white); 
+}
+
+.admin-badge { 
+  background-color: rgba(74, 143, 193, 0.2); 
+  color: #7bbfe0; 
+  font-size: 11px; 
+  font-weight: 500; 
+  padding: 3px 10px; 
+  border-radius: 20px; 
+  margin-left: 6px; 
+  border: 1px solid rgba(74, 143, 193, 0.3); 
+}
+
+nav { 
+  display: flex; 
+  gap: 36px; 
+}
+
+nav a { 
+  font-size: 14px; 
+  color: rgba(255, 255, 255, 0.6); 
+  text-decoration: none; 
+  font-weight: 500; 
+}
+
+nav a.active { 
+  color: var(--blue-accent); 
+}
+
+
+/* ==========================================================================
+   3. MISE EN PAGE DU CONTENU (LAYOUT)
+   ========================================================================== */
+
+.content { 
+  padding: 48px 80px; 
+  flex: 1; 
+}
+
+.page-header { 
+  display: flex; 
+  align-items: flex-start; 
+  justify-content: space-between; 
+  margin-bottom: 32px; 
+}
+
+.page-title { 
+  font-size: 24px; 
+  font-weight: 600; 
+  color: var(--text); 
+  margin-bottom: 6px; 
+}
+
+.page-sub { 
+  font-size: 14px; 
+  color: var(--text3); 
+}
+
+/* Composants d'information */
+.info-box { 
+  background-color: var(--blue-light); 
+  border-left: 4px solid var(--blue-accent); 
+  border-radius: 0 var(--radius-md) var(--radius-md) 0; 
+  padding: 16px 20px; 
+  font-size: 14px; 
+  color: var(--text2); 
+  line-height: 1.6; 
+  margin-bottom: 32px; 
+}
+
+.back-link { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px; 
+  font-size: 14px; 
+  color: var(--blue-dark); 
+  font-weight: 500; 
+  text-decoration: none; 
+  margin-bottom: 28px; 
+}
+
+
+/* ==========================================================================
+   4. TABLEAUX & PAGINATION (DATA TABLES)
+   ========================================================================== */
+
+.table-wrap { 
+  background-color: var(--white); 
+  border-radius: var(--radius-lg); 
+  border: 1px solid var(--border); 
+  overflow: hidden; 
+}
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+
+thead th { 
+  background-color: var(--surface2); 
+  padding: 14px 20px; 
+  text-align: left; 
+  font-size: 12px; 
+  font-weight: 600; 
+  color: var(--text3); 
+  text-transform: uppercase; 
+  letter-spacing: 0.05em; 
+  border-bottom: 1px solid var(--border); 
+}
+
+tbody td { 
+  padding: 14px 20px; 
+  font-size: 14px; 
+  color: var(--text); 
+  border-bottom: 1px solid var(--border); 
+}
+
+tbody tr:last-child td { 
+  border-bottom: none; 
+}
+
+/* Système de pagination */
+.pager { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-end; 
+  gap: 6px; 
+  padding: 16px 20px; 
+  border-top: 1px solid var(--border); 
+}
+
+.pager-btn { 
+  width: 32px; 
+  height: 32px; 
+  border-radius: 5px; 
+  border: 1px solid var(--border); 
+  background-color: var(--white); 
+  font-size: 13px; 
+  color: var(--text2); 
+  cursor: pointer; 
+  font-family: inherit; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.pager-btn.active { 
+  background-color: var(--blue-dark); 
+  color: var(--white); 
+  border-color: var(--blue-dark); 
+}
+
+
+/* ==========================================================================
+   5. FORMULAIRES (INPUTS & CARDS)
+   ========================================================================== */
+
+.form-card { 
+  background-color: var(--white); 
+  border-radius: var(--radius-lg); 
+  border: 1px solid var(--border); 
+  padding: 36px; 
+}
+
+.form-section-title { 
+  font-size: 13px; 
+  font-weight: 600; 
+  color: var(--blue-accent); 
+  text-transform: uppercase; 
+  letter-spacing: 0.07em; 
+  margin-bottom: 20px; 
+  padding-bottom: 10px; 
+  border-bottom: 1px solid var(--border); 
+}
+
+.form-grid { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
+  margin-bottom: 28px; 
+}
+
+.form-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+}
+
+.form-label { 
+  font-size: 13px; 
+  font-weight: 500; 
+  color: var(--text2); 
+}
+
+.required { 
+  color: #e24b4a; 
+}
+
+.form-input, 
+.form-select { 
+  background-color: var(--surface2); 
+  border: 1px solid var(--border); 
+  border-radius: var(--radius-sm); 
+  padding: 11px 14px; 
+  font-size: 14px; 
+  color: var(--text); 
+  font-family: inherit; 
+  width: 100%; 
+  appearance: none; 
+}
+
+.form-actions { 
+  display: flex; 
+  gap: 12px; 
+  padding-top: 12px; 
+  border-top: 1px solid var(--border); 
+}
+
+
+/* ==========================================================================
+   6. BOUTONS ACTIONNELS
+   ========================================================================== */
+
+.btn-add { 
+  background-color: var(--blue-dark); 
+  color: var(--white); 
+  border: none; 
+  padding: 12px 24px; 
+  border-radius: var(--radius-sm); 
+  font-size: 14px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  font-family: inherit; 
+  white-space: nowrap; 
+}
+
+.btn-save { 
+  background-color: var(--blue-dark); 
+  color: var(--white); 
+  border: none; 
+  padding: 12px 32px; 
+  border-radius: var(--radius-sm); 
+  font-size: 14px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
+
+.btn-cancel { 
+  background-color: transparent; 
+  color: var(--text2); 
+  border: 1px solid var(--border); 
+  padding: 12px 24px; 
+  border-radius: var(--radius-sm); 
+  font-size: 14px; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
+
+.btn-view { 
+  font-size: 12px; 
+  padding: 5px 14px; 
+  border-radius: 5px; 
+  border: 1px solid var(--border); 
+  background-color: var(--white); 
+  color: var(--text2); 
+  cursor: pointer; 
+  font-family: inherit; 
+  font-weight: 500; 
+  margin-right: 6px; 
+}
+
+.btn-edit { 
+  font-size: 12px; 
+  padding: 5px 14px; 
+  border-radius: 5px; 
+  border: 1px solid var(--blue-accent); 
+  background-color: var(--blue-light); 
+  color: var(--blue-accent); 
+  cursor: pointer; 
+  font-family: inherit; 
+  font-weight: 500; 
+}
+
+
+/* ==========================================================================
+   7. VUE DÉTAILLÉE (DETAIL CARD)
+   ========================================================================== */
+
+.detail-card { 
+  background-color: var(--white); 
+  border-radius: var(--radius-lg); 
+  border: 1px solid var(--border); 
+  overflow: hidden; 
+}
+
+.detail-card-header { 
+  background-color: var(--blue-dark); 
+  padding: 28px 36px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+}
+
+.detail-card-header h2 { 
+  font-size: 20px; 
+  font-weight: 600; 
+  color: var(--white); 
+  margin-bottom: 6px; 
+}
+
+.detail-card-header p { 
+  font-size: 13px; 
+  color: rgba(255, 255, 255, 0.5); 
+}
+
+.detail-card-body { 
+  padding: 36px; 
+}
+
+.detail-group { 
+  margin-bottom: 28px; 
+}
+
+.detail-group-title { 
+  font-size: 11px; 
+  font-weight: 600; 
+  color: var(--blue-accent); 
+  text-transform: uppercase; 
+  letter-spacing: 0.08em; 
+  margin-bottom: 16px; 
+  padding-bottom: 8px; 
+  border-bottom: 1px solid var(--border); 
+}
+
+.detail-grid-2 { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
+}
+
+.detail-field { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 4px; 
+}
+
+.detail-key { 
+  font-size: 12px; 
+  color: var(--text3); 
+  font-weight: 500; 
+}
+
+.detail-val { 
+  font-size: 15px; 
+  color: var(--text); 
+  font-weight: 500; 
+}
+
+
+/* ==========================================================================
+   8. PIED DE PAGE (FOOTER)
+   ========================================================================== */
+
+footer { 
+  background-color: var(--blue-dark); 
+  padding: 24px 80px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+}
+
+footer span { 
+  font-size: 13px; 
+  color: rgba(255, 255, 255, 0.4); 
+}

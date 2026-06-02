@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRVE Admin — Liste complète</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="page" id="back-liste">
+  <header>
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-5h2zm0-7H11V7h2z"/></svg></div>
+      <span class="logo-name">IRVE Admin</span><span class="admin-badge">Back-office</span>
+    </div>
+    <nav>
+      <a href="accueil.html">Accueil</a>
+      <a href="liste.html" class="active">Liste</a>
+      <a href="creation.html">Nouveau</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Toutes les installations</div>
+        <div class="page-sub">Affichage limité à 100 enregistrements · /back/liste</div>
+      </div>
+      <a href="creation.html"><button class="btn-add">+ Ajouter</button></a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Aménageur</th><th>Type prise</th><th>Puissance</th><th>Commune</th><th>Dépt.</th><th>Service</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FRXXE7400123</td><td>R3</td><td>Combo CCS</td><td>22 kW</td><td>Brest</td><td>29</td><td>03/2023</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400456</td><td>ELECTRIC 55</td><td>Type 2</td><td>50 kW</td><td>Rennes</td><td>35</td><td>07/2022</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400789</td><td>R3</td><td>CHAdeMO</td><td>150 kW</td><td>Vannes</td><td>56</td><td>11/2024</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400812</td><td>LE ROUX LOISIRS</td><td>Type 2</td><td>22 kW</td><td>Lorient</td><td>56</td><td>01/2023</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+          <tr>
+            <td>FRXXE7400999</td><td>Freshmile</td><td>Combo CCS</td><td>100 kW</td><td>Quimper</td><td>29</td><td>05/2024</td>
+            <td>
+              <a href="detail.html"><button class="btn-view">Voir</button></a>
+              <a href="modification.html"><button class="btn-edit">Éditer</button></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pager">
+        <button class="pager-btn active">1</button>
+        <button class="pager-btn">2</button>
+        <button class="pager-btn">3</button>
+        <button class="pager-btn">→</button>
+      </div>
+    </div>
+  </div>
+
+  <footer><span>Groupe CIR2 — 2026</span><span>ISEN Ouest</span></footer>
+</div>
+
+</body>
+</html>
