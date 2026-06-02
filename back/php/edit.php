@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // PAGE 4 â€” Formulaire de modification d'un point de recharge existant
 // L'ID est passÃ© en paramÃ¨tre GET : /back/edit.php?id=FRXXE7400123
 

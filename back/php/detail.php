@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // PAGE 5 â€” DÃ©tail d'un point de recharge
 // L'ID est passÃ© en paramÃ¨tre GET : /back/detail.php?id=FRXXE7400123
 

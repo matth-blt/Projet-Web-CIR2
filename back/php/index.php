@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $page_active = 'accueil';
 include 'header.php';
 
@@ -28,7 +28,7 @@ $installations = [
     <table>
       <thead>
         <tr>
-          <th>ID Installation</th>
+          <th>Station</th>
           <th>Aménageur</th>
           <th>Opérateur</th>
           <th>Type de prise</th>
@@ -37,7 +37,7 @@ $installations = [
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="stations-table-body">
+      <tbody id="pdcs-table-body">
         <!-- Le contenu sera injecté par test.js -->
       </tbody>
     </table>

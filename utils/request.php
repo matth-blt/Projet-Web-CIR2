@@ -16,8 +16,8 @@ if ($id == '')
     $id = NULL;
 $data = false;
 
-if ($requestRessource == 'stations') {
-    $data = dbRequestStations($db);
+if ($requestRessource == 'pdcs') {
+    $data = dbRequestPDCS($db);
 }
 
 if ($data !== false) {

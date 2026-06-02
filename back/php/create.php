@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // PAGE 3 â€” Formulaire de crÃ©ation d'un nouveau point de recharge
 // Quand le formulaire est soumis (mÃ©thode POST), on traite les donnÃ©es ici.
 

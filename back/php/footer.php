@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Ce fichier est inclus en bas de chaque page back-office.
 ?>
 <footer>

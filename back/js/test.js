@@ -2,10 +2,10 @@
 
 async function requestStations() {
     try {
-        const response = await fetch('../../utils/request.php/stations');
+        const response = await fetch('../../utils/request.php/pdcs');
         const stations = await response.json();
 
-        const tbody = document.getElementById('stations-table-body');
+        const tbody = document.getElementById('pdcs-table-body');
         
         tbody.innerHTML = ''; 
 
@@ -13,12 +13,12 @@ async function requestStations() {
             const tr = document.createElement('tr');
         
             tr.innerHTML = `
-                <td>${station.id_station_itinerance || ''}</td>
+                <td>${station.nom_station || ''}</td>
                 <td>${station.amenageur || ''}</td>
                 <td>${station.operateur || ''}</td>
                 <td>${station.type_prise || ''}</td>
                 <td>${station.commune || ''}</td>
-                <td>${station.tarif_pdc || ''}</td>
+                <td>${station.tarification || ''}</td>
                 <td>
                     <a href="detail.php?id=${encodeURIComponent(station.id_station_itinerance)}"><button class="btn-view">Voir</button></a>
                     <a href="edit.php?id=${encodeURIComponent(station.id_station_itinerance)}"><button class="btn-edit">Éditer</button></a>

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // PAGE 2 â€” Liste complÃ¨te des installations (avec pagination)
 
 $page_active = 'liste';

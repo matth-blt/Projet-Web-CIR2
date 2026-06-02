@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // $page_active doit être défini avant l'inclusion : 'accueil', 'liste' ou 'nouveau'
 ?><!DOCTYPE html>
 <html lang="fr">
