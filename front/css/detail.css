@@ -1,0 +1,105 @@
+/* =============================================
+   PAGE DÉTAIL (detail.html)
+   ============================================= */
+
+.detail-section {
+  padding: 56px 80px;
+  background: var(--fond);
+}
+
+/* Lien "← Retour aux résultats" */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vert-fonce);
+  text-decoration: none;
+  margin-bottom: 28px;
+}
+
+/* ── CARTE DE DÉTAIL ── */
+.detail-card {
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: var(--arrondi-lg);
+  overflow: hidden;
+}
+
+/* En-tête sombre de la carte */
+.detail-card-header {
+  background: var(--vert-fonce);
+  padding: 28px 32px;
+}
+
+.detail-card-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.detail-card-header p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Corps de la carte */
+.detail-card-body {
+  padding: 32px;
+}
+
+/* Groupe de champs (ex: Aménageur, Localisation…) */
+.detail-group {
+  margin-bottom: 32px;
+}
+
+/* Titre du groupe */
+.detail-group-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vert-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--bordure);
+}
+
+/* Grille 2 colonnes pour les champs */
+.detail-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Champ individuel : label + valeur */
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-key {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texte3);
+}
+
+.detail-val {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--texte);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .detail-grid-2 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .detail-section     { padding: 40px 16px; }
+  .detail-card-header { padding: 20px; }
+  .detail-card-body   { padding: 20px; }
+}

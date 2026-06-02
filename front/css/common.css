@@ -1,0 +1,187 @@
+/* =============================================
+   RESET — supprime les marges/paddings par défaut
+   ============================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============================================
+   VARIABLES — couleurs et valeurs réutilisables
+   ============================================= */
+:root {
+  --vert-fonce:   #1a3a2a;
+  --vert-moyen:   #2d5c42;
+  --vert-accent:  #4caf7d;
+  --vert-clair:   #e1f5ee;
+  --fond:         #f5f7f5;
+  --blanc:        #ffffff;
+  --surface:      #f0f4f1;
+  --texte:        #111b14;
+  --texte2:       #4a5c50;
+  --texte3:       #7a8c80;
+  --bordure:      #d8e4dc;
+  --arrondi-sm:   6px;
+  --arrondi-md:   10px;
+  --arrondi-lg:   14px;
+}
+
+/* =============================================
+   BASE — police et fond général
+   ============================================= */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fond);
+  color: var(--texte);
+}
+
+/* Conteneur principal de chaque page */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+header {
+  background: var(--vert-fonce);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 80px;
+}
+
+/* Logo : icône + nom */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--vert-accent);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: #ffffff;
+}
+
+.logo-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Navigation */
+nav {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+}
+
+/* Lien actif (page courante) */
+nav a.active {
+  color: var(--vert-accent);
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+footer {
+  background: var(--vert-fonce);
+  padding: 24px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+footer span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* =============================================
+   TITRES DE SECTION — utilisés sur plusieurs pages
+   ============================================= */
+.section-heading {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--texte3);
+  margin-bottom: 32px;
+}
+
+/* =============================================
+   FORMULAIRES — champs et bouton partagés
+   (utilisés sur Recherche et Carte)
+   ============================================= */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texte2);
+}
+
+.field-select {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--arrondi-sm);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--texte);
+  font-family: inherit;
+  width: 100%;
+  appearance: none;
+}
+
+.search-btn {
+  background: var(--vert-fonce);
+  color: #ffffff;
+  border: none;
+  padding: 12px 32px;
+  border-radius: var(--arrondi-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* =============================================
+   RESPONSIVE — ajustements mobile (< 600px)
+   ============================================= */
+@media (max-width: 600px) {
+  header  { padding: 14px 16px; }
+  footer  { padding: 20px 16px; }
+}
