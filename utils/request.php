@@ -16,8 +16,8 @@ if ($id == '')
     $id = NULL;
 $data = false;
 
-if ($requestRessource == 'amenageurs') {
-    $data = dbRequestAmenageurs($db);
+if ($requestRessource == 'stations') {
+    $data = dbRequestStations($db);
 }
 
 if ($data !== false) {

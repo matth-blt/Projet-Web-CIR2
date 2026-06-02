@@ -10,19 +10,19 @@ $id = $_GET['id'] ?? '';
 // TODO : remplacer par une vraie requÃªte SQL  â†’  SELECT * FROM irve WHERE id = ?
 // DonnÃ©es d'exemple prÃ©-remplies
 $installation = [
-  'id'         => 'FRXXE7400123',
-  'amenageur'  => 'R3',
-  'siren'      => '902 726 488',
-  'operateur'  => 'SPV COM',
-  'contact'    => 'exploitation@r3-charge.fr',
+  'id' => 'FRXXE7400123',
+  'amenageur' => 'R3',
+  'siren' => '902 726 488',
+  'operateur' => 'SPV COM',
+  'contact' => 'exploitation@r3-charge.fr',
   'type_prise' => 'Combo CCS',
-  'puissance'  => '22',
-  'nb_points'  => '2',
+  'puissance' => '22',
+  'nb_points' => '2',
   'date_service'=> '2023-03-15',
-  'commune'    => 'Brest',
-  'dept'       => '29',
-  'latitude'   => '48.3904',
-  'longitude'  => '-4.4861',
+  'commune' => 'Brest',
+  'dept' => '29',
+  'latitude' => '48.3904',
+  'longitude' => '-4.4861',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -127,6 +127,3 @@ include 'header.php';
 </div>
 
 <?php include 'footer.php'; ?>
-
-
-

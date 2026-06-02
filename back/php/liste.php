@@ -6,11 +6,11 @@ include 'header.php';
 
 // DonnÃ©es d'exemple (Ã  remplacer par une vraie requÃªte SQL avec LIMIT/OFFSET)
 $installations = [
-  ['id' => 'FRXXE7400123', 'amenageur' => 'R3',              'prise' => 'Combo CCS', 'puissance' => '22 kW',  'commune' => 'Brest',   'dept' => '29', 'service' => '03/2023'],
-  ['id' => 'FRXXE7400456', 'amenageur' => 'ELECTRIC 55',     'prise' => 'Type 2',    'puissance' => '50 kW',  'commune' => 'Rennes',  'dept' => '35', 'service' => '07/2022'],
-  ['id' => 'FRXXE7400789', 'amenageur' => 'R3',              'prise' => 'CHAdeMO',   'puissance' => '150 kW', 'commune' => 'Vannes',  'dept' => '56', 'service' => '11/2024'],
+  ['id' => 'FRXXE7400123', 'amenageur' => 'R3', 'prise' => 'Combo CCS', 'puissance' => '22 kW',  'commune' => 'Brest',   'dept' => '29', 'service' => '03/2023'],
+  ['id' => 'FRXXE7400456', 'amenageur' => 'ELECTRIC 55', 'prise' => 'Type 2',    'puissance' => '50 kW',  'commune' => 'Rennes',  'dept' => '35', 'service' => '07/2022'],
+  ['id' => 'FRXXE7400789', 'amenageur' => 'R3', 'prise' => 'CHAdeMO',   'puissance' => '150 kW', 'commune' => 'Vannes',  'dept' => '56', 'service' => '11/2024'],
   ['id' => 'FRXXE7400812', 'amenageur' => 'LE ROUX LOISIRS', 'prise' => 'Type 2',    'puissance' => '22 kW',  'commune' => 'Lorient', 'dept' => '56', 'service' => '01/2023'],
-  ['id' => 'FRXXE7400999', 'amenageur' => 'Freshmile',       'prise' => 'Combo CCS', 'puissance' => '100 kW', 'commune' => 'Quimper', 'dept' => '29', 'service' => '05/2024'],
+  ['id' => 'FRXXE7400999', 'amenageur' => 'Freshmile', 'prise' => 'Combo CCS', 'puissance' => '100 kW', 'commune' => 'Quimper', 'dept' => '29', 'service' => '05/2024'],
 ];
 ?>
 

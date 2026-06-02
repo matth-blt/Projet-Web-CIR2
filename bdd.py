@@ -248,11 +248,11 @@ try:
     prise_rows = []
     for _, row in df[['id', 'prise_type_ef', 'prise_type_2', 'prise_type_combo_ccs', 'prise_type_chademo', 'prise_type_autre']].dropna(subset=['id']).drop_duplicates(subset=['id']).iterrows():
         pid = int(row['id'])
-        if str(row['prise_type_ef']).lower() == 'true':        prise_rows.append({'id_pdc': pid, 'type_prise': 'EF'})
-        if str(row['prise_type_2']).lower() == 'true':         prise_rows.append({'id_pdc': pid, 'type_prise': 'Type 2'})
+        if str(row['prise_type_ef']).lower() == 'true': prise_rows.append({'id_pdc': pid, 'type_prise': 'EF'})
+        if str(row['prise_type_2']).lower() == 'true': prise_rows.append({'id_pdc': pid, 'type_prise': 'Type 2'})
         if str(row['prise_type_combo_ccs']).lower() == 'true': prise_rows.append({'id_pdc': pid, 'type_prise': 'Combo CCS'})
-        if str(row['prise_type_chademo']).lower() == 'true':   prise_rows.append({'id_pdc': pid, 'type_prise': 'CHAdeMO'})
-        if str(row['prise_type_autre']).lower() == 'true':     prise_rows.append({'id_pdc': pid, 'type_prise': 'Autre'})
+        if str(row['prise_type_chademo']).lower() == 'true': prise_rows.append({'id_pdc': pid, 'type_prise': 'CHAdeMO'})
+        if str(row['prise_type_autre']).lower() == 'true': prise_rows.append({'id_pdc': pid, 'type_prise': 'Autre'})
         
     if prise_rows:
         df_a_des_prise = pd.DataFrame(prise_rows).drop_duplicates()
