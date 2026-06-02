@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRVE Bretagne — Carte</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="page" id="page-carte">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <span class="logo-name">IRVE Bretagne</span>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="recherche.html">Recherche</a>
+      <a href="carte.html" class="active">Carte</a>
+    </nav>
+  </header>
+
+  <div class="map-section">
+    <div class="section-heading">Visualisation cartographique</div>
+    <div class="section-sub">Sélectionnez un filtre pour afficher les bornes sur la carte OpenStreetMap</div>
+
+    <div class="map-controls">
+      <div class="field-group">
+        <label class="field-label">Année d'installation</label>
+        <select class="field-select">
+          <option>— Toutes les années —</option>
+          <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Département</label>
+        <select class="field-select">
+          <option>— Tous les départements —</option>
+          <option>22 — Côtes-d'Armor</option>
+          <option>29 — Finistère</option>
+          <option>35 — Ille-et-Vilaine</option>
+          <option>56 — Morbihan</option>
+        </select>
+      </div>
+      <button class="search-btn">Afficher</button>
+    </div>
+
+    <div class="map-placeholder">
+      <div class="map-grid-lines"></div>
+      <div class="map-pin" style="left:18%;top:38%"></div>
+      <div class="map-pin" style="left:28%;top:62%"></div>
+      <div class="map-pin" style="left:42%;top:45%"></div>
+      <div class="map-pin" style="left:55%;top:30%"></div>
+      <div class="map-pin" style="left:60%;top:58%"></div>
+      <div class="map-pin" style="left:72%;top:42%"></div>
+      <div class="map-pin" style="left:80%;top:65%"></div>
+      <div class="map-pin" style="left:35%;top:75%"></div>
+      <span class="map-label-center">🗺 OpenStreetMap · Leaflet.js</span>
+    </div>
+    <p style="font-size:13px;color:var(--text3);margin-top:12px">Cliquer sur un marqueur pour afficher une bulle avec la localité, la puissance et un lien vers la page détail.</p>
+  </div>
+
+  <footer>
+    <span>Groupe CIR2 — 2026</span>
+    <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
+  </footer>
+</div>
+
+</body>
+</html>
