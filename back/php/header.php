@@ -27,8 +27,11 @@
   </nav>
 
   <button class="hamburger" id="hamburger" aria-label="Menu">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+    <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
       <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"></path>
+    </svg>
+    <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style="display:none">
+      <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
     </svg>
   </button>
 </header>
@@ -40,8 +43,35 @@
 </nav>
 
 <script>
-  document.getElementById('hamburger').addEventListener('click', function() {
-    document.getElementById('mobile-nav').classList.toggle('open');
+  var hamburger  = document.getElementById('hamburger');
+  var mobileNav  = document.getElementById('mobile-nav');
+  var iconMenu   = hamburger.querySelector('.icon-menu');
+  var iconClose  = hamburger.querySelector('.icon-close');
+
+  function openMenu() {
+    mobileNav.classList.add('open');
+    iconMenu.style.display  = 'none';
+    iconClose.style.display = 'block';
+  }
+
+  function closeMenu() {
+    mobileNav.classList.remove('open');
+    iconMenu.style.display  = 'block';
+    iconClose.style.display = 'none';
+  }
+
+  hamburger.addEventListener('click', function() {
+    mobileNav.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  mobileNav.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+      closeMenu();
+    }
   });
 </script>
 
