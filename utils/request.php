@@ -46,10 +46,22 @@ if ($requestMethod == 'GET') {
 }
 
 if ($requestMethod == 'POST') {
-    $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : null;
-
     if ($id_pdc !== null) {
-        $data = dbRequestPDC($db, $id_pdc, $type_prise);
+        $body = json_decode(file_get_contents('php://input'), true);
+
+        if (!$body) {
+            header('HTTP/1.1 400 Bad Request');
+            exit;
+        }
+
+        $data = dbUpdatePDC($db, [
+            'id_pdc' => $id_pdc,
+            'puissance' => $body['puissance'] ?? null,
+            'cable_t2_attache' => $body['cable_t2_attache'] ?? 0,
+            'latitude' => $body['latitude'] ?? null,
+            'longitude' => $body['longitude'] ?? null,
+            'tarification' => $body['tarification'] ?? null,
+        ]);
     }
 }
 

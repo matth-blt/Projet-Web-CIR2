@@ -103,7 +103,38 @@ async function requestPDC(id_pdc, type_prise) {
                 </form>
             `;
 
-            // TODO : brancher le submit sur une requête POST vers l'API
+            document.getElementById('edit-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const fd = new FormData(e.target);
+
+                const payload = {
+                    puissance: fd.get('puissance') || null,
+                    cable_t2_attache: parseInt(fd.get('cable_t2_attache'), 10),
+                    latitude: fd.get('latitude') || null,
+                    longitude: fd.get('longitude') || null,
+                    tarification: fd.get('tarification') || null,
+                };
+
+                try {
+                    const res = await fetch(`../../utils/request.php/pdcs/${encodeURIComponent(pdc.id_pdc)}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        }
+                    );
+
+                    if (res.ok) {
+                        window.location.href = `detail.php?id_pdc=${encodeURIComponent(pdc.id_pdc)}&type_prise=${encodeURIComponent(pdc.type_prise || '')}`;
+                    } else {
+                        console.error('Erreur lors de la sauvegarde :', res.status);
+                        alert('Erreur lors de la sauvegarde. Vérifie la console.');
+                    }
+                } catch (err) {
+                    console.error('Erreur réseau :', err);
+                    alert('Erreur réseau. Vérifie la console.');
+                }
+            });
         }
 
     } catch (error) {

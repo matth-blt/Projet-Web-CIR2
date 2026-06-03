@@ -136,30 +136,28 @@ function dbRequestPDC($db, $id_pdc, $type_prise) {
     return $result;
 }
 
-
 function dbUpdatePDC($db, $data) {
     try {
         $stmt = $db->prepare('
             UPDATE point_de_charge
             SET
-                puissance        = :puissance,
+                puissance = :puissance,
                 cable_t2_attache = :cable_t2_attache,
-                lat              = :latitude,
-                lon              = :longitude,
-                tarification     = :tarification
+                lat = :latitude,
+                lon = :longitude,
+                tarification = :tarification
             WHERE id_pdc = :id_pdc
         ');
         $stmt->execute([
-            ':puissance'        => $data['puissance']        ?? null,
+            ':puissance' => $data['puissance'] ?? null,
             ':cable_t2_attache' => $data['cable_t2_attache'] ?? 0,
-            ':latitude'         => $data['latitude']         ?? null,
-            ':longitude'        => $data['longitude']        ?? null,
-            ':tarification'     => $data['tarification']     ?? null,
-            ':id_pdc'           => $data['id_pdc'],
+            ':latitude' => $data['latitude'] ?? null,
+            ':longitude' => $data['longitude'] ?? null,
+            ':tarification' => $data['tarification'] ?? null,
+            ':id_pdc' => $data['id_pdc'],
         ]);
 
         return true;
-
     } catch (PDOException $exception) {
         error_log('Update error: ' . $exception->getMessage());
         return false;
