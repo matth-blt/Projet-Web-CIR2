@@ -2,7 +2,7 @@
 
 async function requestPDCS() {
     try {
-        const response = await fetch('../../utils/request.php/pdcs');
+        const response = await fetch('../../utils/request.php/pdcs?accueil=true');
         const pdcs = await response.json();
 
         const tbody = document.getElementById('pdcs-table-body');

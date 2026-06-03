@@ -20,7 +20,21 @@ if ($id_pdc == '') {
 $data = false;
 
 if ($requestRessource == 'pdcs' && $id_pdc === null) {
-    $data = dbRequestPDCS($db);
+    $accueil = isset($_GET['accueil']) && $_GET['accueil'] === 'true';
+
+    if ($accueil) {
+        $data = dbRequestPDCS($db, true);
+    } else {
+        $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
+        $page   = isset($_GET['page'])  ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $limit;
+
+        $total = dbCountPDCS($db);
+        header('X-Total-Count: ' . $total);
+        header('Access-Control-Expose-Headers: X-Total-Count');
+
+        $data = dbRequestPDCS($db, false, $limit, $offset);
+    }
 }
 
 if ($requestMethod == 'GET') {

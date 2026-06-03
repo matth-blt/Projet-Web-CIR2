@@ -15,7 +15,7 @@ async function requestPDC(id_pdc, type_prise) {
             header.innerHTML = `
                 <div>
                     <h2>${pdc.nom_station || 'Non renseigné'}</h2>
-                    <p>ID : ${pdc.id_pdc}</p>
+                    <p>ID PDC : ${pdc.id_pdc}</p>
                 </div>
                 <!-- TODO : adapter le lien vers l'édition si besoin -->
                 <a href="/php/edit.php?id=${encodeURIComponent(pdc.id_pdc)}"><button class="btn-edit">Modifier</button></a>
