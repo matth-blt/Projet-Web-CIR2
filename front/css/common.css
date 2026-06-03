@@ -179,6 +179,19 @@ footer span {
 }
 
 /* =============================================
+   HAMBURGER — bouton visible uniquement mobile
+   ============================================= */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 0;
+}
+
+/* =============================================
    RESPONSIVE — ajustements mobile (< 600px)
    ============================================= */
 @media (max-width: 768px) {
@@ -187,6 +200,44 @@ footer span {
 }
 
 @media (max-width: 600px) {
-  header  { padding: 14px 16px; }
-  footer  { padding: 20px 16px; }
+  header {
+    padding: 14px 16px;
+    flex-wrap: nowrap;
+    position: relative;
+  }
+
+  footer { padding: 20px 16px; }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--vert-fonce);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+  }
+
+  nav.open {
+    display: flex;
+  }
+
+  nav a {
+    padding: 14px 20px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  nav a:last-child {
+    border-bottom: none;
+  }
 }
