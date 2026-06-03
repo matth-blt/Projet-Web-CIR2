@@ -17,6 +17,16 @@ function dbConnect() {
     return $db;
 }
 
+// ------------------------------------------------------------------------------------------
+
+/* === FRONT === */
+
+// function 
+
+// ------------------------------------------------------------------------------------------
+
+/* === BACK === */
+
 function dbCountPDCS($db) {
     try {
         $request = '
@@ -209,26 +219,24 @@ function dbAddPDC($db, $data) {
         $id_acteur_op = $db->lastInsertId();
 
         // 5. ID station : généré si non fourni
-        $id_station = !empty($data['id_station_itinerance'])
-            ? $data['id_station_itinerance']
-            : 'STA_' . time() . '_' . rand(100, 999);
+        $id_station = !empty($data['id_station_itinerance']) ? $data['id_station_itinerance'] : 'STA_' . time() . '_' . rand(100, 999);
 
         // 6. Station
         $db->prepare('
             INSERT INTO station (id_station_itinerance, nom_station, adresse_station, nbr_pdc, date_mise_en_service, code_insee_commune, id_acteur, id_acteur_est_utiliser_par)
             VALUES (:id_sta, :nom, :adresse, 1, :date_service, :code_insee, :id_am, :id_op)
         ')->execute([
-            ':id_sta'       => $id_station,
-            ':nom'          => $data['nom_station'],
-            ':adresse'      => $data['adresse_station'],
+            ':id_sta' => $id_station,
+            ':nom' => $data['nom_station'],
+            ':adresse' => $data['adresse_station'],
             ':date_service' => $data['date_service'] ?: null,
-            ':code_insee'   => $data['code_insee'],
-            ':id_am'        => $id_acteur_am,
-            ':id_op'        => $id_acteur_op,
+            ':code_insee' => $data['code_insee'],
+            ':id_am' => $id_acteur_am,
+            ':id_op' => $id_acteur_op,
         ]);
 
         // 7. id_pdc : MAX + 1
-        $row    = $db->query('SELECT COALESCE(MAX(id_pdc), 0) + 1 AS next_id FROM point_de_charge')->fetch(PDO::FETCH_ASSOC);
+        $row = $db->query('SELECT COALESCE(MAX(id_pdc), 0) + 1 AS next_id FROM point_de_charge')->fetch(PDO::FETCH_ASSOC);
         $id_pdc = (int) $row['next_id'];
 
         // 8. Point de charge
@@ -236,12 +244,12 @@ function dbAddPDC($db, $data) {
             INSERT INTO point_de_charge (id_pdc, lon, lat, puissance, cable_t2_attache, gratuit, tarification)
             VALUES (:id_pdc, :lon, :lat, :puissance, :cable, :gratuit, :tarification)
         ')->execute([
-            ':id_pdc'      => $id_pdc,
-            ':lon'         => $data['longitude'],
-            ':lat'         => $data['latitude'],
-            ':puissance'   => $data['puissance'],
-            ':cable'       => (int)($data['cable_t2_attache'] ?? 0),
-            ':gratuit'     => (int)($data['gratuit'] ?? 0),
+            ':id_pdc' => $id_pdc,
+            ':lon' => $data['longitude'],
+            ':lat' => $data['latitude'],
+            ':puissance' => $data['puissance'],
+            ':cable' => (int)($data['cable_t2_attache'] ?? 0),
+            ':gratuit' => (int)($data['gratuit'] ?? 0),
             ':tarification'=> $data['tarification'] ?: null,
         ]);
 
@@ -263,7 +271,6 @@ function dbAddPDC($db, $data) {
 
         $db->commit();
         return $id_pdc;
-
     } catch (PDOException $exception) {
         $db->rollBack();
         error_log('Insert error: ' . $exception->getMessage());

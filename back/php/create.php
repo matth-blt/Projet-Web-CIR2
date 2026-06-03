@@ -1,5 +1,5 @@
 <?php
-require_once '../../utils/database.php';
+require_once '../../api/database.php';
 
 $page_active = 'nouveau';
 
@@ -23,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
         'siren_amenageur' => (int)($_POST['siren_amenageur'] ?? 0),
         'contact_amenageur' => $_POST['contact_amenageur'] ?? '',
         // Opérateur
-        'nom_operateur'         => $_POST['nom_operateur']         ?? '',
-        'contact_operateur'     => $_POST['contact_operateur']     ?? '',
-        'telephone_operateur'   => $_POST['telephone_operateur']   ?? '',
+        'nom_operateur' => $_POST['nom_operateur'] ?? '',
+        'contact_operateur' => $_POST['contact_operateur'] ?? '',
+        'telephone_operateur' => $_POST['telephone_operateur'] ?? '',
         // Localisation
         'code_insee' => (int)($_POST['code_insee'] ?? 0),
         'nom_commune' => $_POST['nom_commune'] ?? '',
@@ -44,11 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
     ]);
 
     if ($id_pdc !== false) {
-        // Redirection vers le détail du PDC créé
         header('Location: detail.php?id_pdc=' . urlencode($id_pdc) . '&type_prise=' . urlencode($_POST['type_prise'] ?? ''));
         exit;
     } else {
-        $error   = true;
+        $error = true;
         $message = 'Erreur lors de l\'insertion. Vérifie les données saisies.';
     }
 }

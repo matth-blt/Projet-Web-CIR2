@@ -41,6 +41,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 60px; /* compense le header fixed */
 }
 
 /* =============================================
@@ -54,6 +55,10 @@ header {
   flex-wrap: wrap;
   gap: 12px;
   padding: 14px 80px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: 60px;
 }
 
 /* Logo : icône + nom */
@@ -218,13 +223,13 @@ footer span {
     display: none;
     flex-direction: column;
     gap: 0;
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: 60px;
     left: 0;
     right: 0;
     background: var(--vert-fonce);
     border-top: 1px solid rgba(255,255,255,0.1);
-    z-index: 100;
+    z-index: 999;
   }
 
   nav.open {

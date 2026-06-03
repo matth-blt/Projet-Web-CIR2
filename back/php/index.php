@@ -1,5 +1,5 @@
 <?php
-require_once '../../utils/database.php';
+require_once '../../api/database.php';
 
 $page_active = 'accueil';
 
