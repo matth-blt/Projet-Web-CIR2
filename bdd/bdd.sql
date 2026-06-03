@@ -104,6 +104,7 @@ CREATE TABLE point_de_charge (
   cable_t2_attache TINYINT(1),
   gratuit TINYINT(1),
   pdc_condition VARCHAR(50),
+  tarification VARCHAR(255),
   CONSTRAINT point_de_charge_PK PRIMARY KEY (id_pdc),
   CONSTRAINT point_de_charge_pdc_condition_FK FOREIGN KEY (pdc_condition) REFERENCES condition_acces (pdc_condition)
 )ENGINE=InnoDB;

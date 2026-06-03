@@ -25,8 +25,8 @@ if ($requestRessource == 'pdcs' && $id_pdc === null) {
     if ($accueil) {
         $data = dbRequestPDCS($db, true);
     } else {
-        $limit  = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
-        $page   = isset($_GET['page'])  ? max(1, (int)$_GET['page']) : 1;
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
+        $page = isset($_GET['page'])  ? max(1, (int)$_GET['page']) : 1;
         $offset = ($page - 1) * $limit;
 
         $total = dbCountPDCS($db);
@@ -38,6 +38,14 @@ if ($requestRessource == 'pdcs' && $id_pdc === null) {
 }
 
 if ($requestMethod == 'GET') {
+    $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : null;
+
+    if ($id_pdc !== null) {
+        $data = dbRequestPDC($db, $id_pdc, $type_prise);
+    }
+}
+
+if ($requestMethod == 'POST') {
     $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : null;
 
     if ($id_pdc !== null) {
