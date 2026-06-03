@@ -204,8 +204,8 @@ function dbAddPDC($db, $data) {
         $id_acteur_am = $db->lastInsertId();
 
         // 4. Acteur opérateur
-        $stmtOp = $db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, role_acteur) VALUES (:siren, :nom, :contact, :role)');
-        $stmtOp->execute([':siren' => $data['siren_operateur'] ?? 0, ':nom' => $data['nom_operateur'], ':contact' => $data['contact_operateur'] ?? null, ':role' => 'operateur']);
+        $stmtOp = $db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, telephone_acteur, role_acteur) VALUES (:siren, :nom, :contact, :telephone, :role)');
+        $stmtOp->execute([':siren' => 0, ':nom' => $data['nom_operateur'], ':contact' => $data['contact_operateur'] ?? null, ':telephone' => $data['telephone_operateur'] ?? null, ':role' => 'operateur']);
         $id_acteur_op = $db->lastInsertId();
 
         // 5. ID station : généré si non fourni

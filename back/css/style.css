@@ -231,6 +231,32 @@ tbody tr:last-child td { border-bottom: none; }
     min-height: 120px;
     padding: 8px 14px;
 }
+.form-group--full { grid-column: 1 / -1; }
+.toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.toggle-btn {
+    cursor: pointer;
+}
+.toggle-btn span {
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    user-select: none;
+}
+.toggle-btn:has(:checked) span {
+    background: var(--blue-dark);
+    color: #fff;
+    border-color: var(--blue-dark);
+}
 
 /* ── PAGE DÉTAIL ── */
 .detail-card {

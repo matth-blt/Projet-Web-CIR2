@@ -3,11 +3,11 @@ require_once '../../utils/database.php';
 
 $page_active = 'nouveau';
 
-$db             = dbConnect();
-$types_prises   = $db ? dbTypesDePrises($db)   : [];
+$db = dbConnect();
+$types_prises = $db ? dbTypesDePrises($db) : [];
 $types_paiement = $db ? dbTypesDePaiements($db) : [];
 
-$error   = false;
+$error = false;
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
@@ -20,27 +20,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
         'date_service' => $_POST['date_service'] ?? '',
         // Aménageur
         'nom_amenageur' => $_POST['nom_amenageur'] ?? '',
-        'siren_amenageur'       => (int)($_POST['siren_amenageur'] ?? 0),
-        'contact_amenageur'     => $_POST['contact_amenageur']     ?? '',
+        'siren_amenageur' => (int)($_POST['siren_amenageur'] ?? 0),
+        'contact_amenageur' => $_POST['contact_amenageur'] ?? '',
         // Opérateur
         'nom_operateur'         => $_POST['nom_operateur']         ?? '',
-        'siren_operateur'       => (int)($_POST['siren_operateur'] ?? 0),
         'contact_operateur'     => $_POST['contact_operateur']     ?? '',
+        'telephone_operateur'   => $_POST['telephone_operateur']   ?? '',
         // Localisation
-        'code_insee'            => (int)($_POST['code_insee']      ?? 0),
-        'nom_commune'           => $_POST['nom_commune']           ?? '',
-        'code_dep'              => (int)($_POST['code_dep']        ?? 0),
-        'nom_departement'       => $_POST['nom_departement']       ?? '',
-        'latitude'              => $_POST['latitude']              ?? 0,
-        'longitude'             => $_POST['longitude']             ?? 0,
+        'code_insee' => (int)($_POST['code_insee'] ?? 0),
+        'nom_commune' => $_POST['nom_commune'] ?? '',
+        'code_dep' => (int)($_POST['code_dep'] ?? 0),
+        'nom_departement' => $_POST['nom_departement'] ?? '',
+        'latitude' => $_POST['latitude'] ?? 0,
+        'longitude' => $_POST['longitude'] ?? 0,
         // PDC
-        'puissance'             => $_POST['puissance']             ?? 0,
-        'cable_t2_attache'      => (int)($_POST['cable_t2_attache'] ?? 0),
-        'gratuit'               => (int)($_POST['gratuit']          ?? 0),
-        'tarification'          => $_POST['tarification']          ?? '',
+        'puissance' => $_POST['puissance'] ?? 0,
+        'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
+        'gratuit' => (int)($_POST['gratuit'] ?? 0),
+        'tarification' => $_POST['tarification'] ?? '',
         // Relations
-        'type_prise'            => $_POST['type_prise']            ?? '',
-        'types_paiement'        => $_POST['types_paiement']        ?? [],
+        'type_prise' => $_POST['type_prise'] ?? '',
+        'types_paiement' => $_POST['types_paiement'] ?? [],
     ]);
 
     if ($id_pdc !== false) {
@@ -73,13 +73,6 @@ include 'header.php';
   <?php endif; ?>
 
   <div class="edit-card">
-    <div class="edit-card-header">
-      <div>
-        <h2>Nouveau PDC</h2>
-        <p>Remplissez tous les champs pour créer un point de recharge</p>
-      </div>
-    </div>
-
     <div class="edit-card-body">
       <form class="form-card" method="POST" action="create.php">
 
@@ -139,16 +132,16 @@ include 'header.php';
                    value="<?= htmlspecialchars($_POST['nom_operateur'] ?? '') ?>" required>
           </div>
           <div class="form-group">
-            <label class="form-label">SIREN</label>
-            <input class="form-input" type="number" name="siren_operateur"
-                   placeholder="000000000"
-                   value="<?= htmlspecialchars($_POST['siren_operateur'] ?? '') ?>">
-          </div>
-          <div class="form-group">
             <label class="form-label">Contact</label>
             <input class="form-input" type="text" name="contact_operateur"
                    placeholder="contact@operateur.fr"
                    value="<?= htmlspecialchars($_POST['contact_operateur'] ?? '') ?>">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input class="form-input" type="tel" name="telephone_operateur"
+                   placeholder="0368781435"
+                   value="<?= htmlspecialchars($_POST['telephone_operateur'] ?? '') ?>">
           </div>
         </div>
 
@@ -244,19 +237,21 @@ include 'header.php';
                    placeholder="Ex : 0,30 €/kWh"
                    value="<?= htmlspecialchars($_POST['tarification'] ?? '') ?>">
           </div>
-          <div class="form-group">
-            <label class="form-label">Types de paiement <small style="color:var(--text3)">(Ctrl+clic pour plusieurs)</small></label>
-            <select class="form-select form-select--multi" name="types_paiement[]" multiple>
+          <div class="form-group form-group--full">
+            <label class="form-label">Types de paiement</label>
+            <div class="toggle-group">
               <?php
                 $selected_pay = $_POST['types_paiement'] ?? [];
                 foreach ($types_paiement as $tp):
+                  $val     = htmlspecialchars($tp['type_paiement']);
+                  $checked = in_array($tp['type_paiement'], $selected_pay) ? 'checked' : '';
               ?>
-                <option value="<?= htmlspecialchars($tp['type_paiement']) ?>"
-                  <?= in_array($tp['type_paiement'], $selected_pay) ? 'selected' : '' ?>>
-                  <?= htmlspecialchars($tp['type_paiement']) ?>
-                </option>
+                <label class="toggle-btn">
+                  <input type="checkbox" name="types_paiement[]" value="<?= $val ?>" <?= $checked ?> hidden>
+                  <span><?= $val ?></span>
+                </label>
               <?php endforeach; ?>
-            </select>
+            </div>
           </div>
         </div>
 
