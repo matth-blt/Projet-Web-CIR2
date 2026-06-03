@@ -80,6 +80,10 @@
 }
 
 /* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .map-section { padding: 40px 32px; }
+}
+
 @media (max-width: 480px) {
   .map-section      { padding: 40px 16px; }
   .map-controls     { padding: 16px; }

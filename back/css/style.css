@@ -206,3 +206,59 @@ footer {
   display: flex; align-items: center; justify-content: space-between;
 }
 footer span { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+/* ── TABLETTE (≤ 900px) ── */
+@media (max-width: 900px) {
+  header { padding: 0 32px; }
+  nav { gap: 20px; }
+
+  .content { padding: 32px; }
+
+  footer { padding: 20px 32px; }
+
+  .form-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .detail-grid-2 { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .table-wrap { overflow-x: auto; }
+}
+
+/* ── SMARTPHONE (≤ 600px) ── */
+@media (max-width: 600px) {
+  header {
+    padding: 0 16px;
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .logo-name { font-size: 14px; }
+  nav { gap: 16px; width: 100%; padding-bottom: 6px; }
+  nav a { font-size: 13px; }
+
+  .content { padding: 20px 16px; }
+
+  .page-header { flex-direction: column; gap: 16px; }
+  .page-title { font-size: 20px; }
+
+  .form-card { padding: 20px 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+
+  .detail-card-header { padding: 20px 16px; flex-direction: column; gap: 12px; }
+  .detail-card-body { padding: 20px 16px; }
+  .detail-grid-2 { grid-template-columns: 1fr; }
+
+  .table-wrap { overflow-x: auto; }
+  thead th, tbody td { padding: 10px 12px; font-size: 13px; }
+
+  .form-actions { flex-direction: column; }
+  .btn-save, .btn-cancel { width: 100%; text-align: center; }
+
+  footer {
+    padding: 16px;
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

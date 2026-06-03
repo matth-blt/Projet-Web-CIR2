@@ -126,7 +126,13 @@
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero          { padding: 48px 32px; }
+  .stats-section { padding: 40px 32px; }
+  .stats-grid    { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 540px) {
+  .stats-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -134,6 +140,5 @@
   .hero h1     { font-size: 28px; }
   .hero p      { font-size: 14px; }
   .stats-section { padding: 40px 16px; }
-  .stats-grid  { grid-template-columns: 1fr; }
   .stat-value  { font-size: 26px; }
 }

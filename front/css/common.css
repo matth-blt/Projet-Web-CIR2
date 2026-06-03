@@ -181,6 +181,11 @@ footer span {
 /* =============================================
    RESPONSIVE — ajustements mobile (< 600px)
    ============================================= */
+@media (max-width: 768px) {
+  header  { padding: 14px 32px; }
+  footer  { padding: 20px 32px; }
+}
+
 @media (max-width: 600px) {
   header  { padding: 14px 16px; }
   footer  { padding: 20px 16px; }
