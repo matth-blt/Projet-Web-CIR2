@@ -32,6 +32,6 @@ include 'header.php';
     </table>
   </div>
 </div>
-<script src="../js/request.js"></script>
+<script src="../js/request_index.js"></script>
 <?php include 'footer.php'; ?>
 

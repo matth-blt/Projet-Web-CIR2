@@ -24,6 +24,7 @@ include 'header.php';
   </div>
 </div>
 
+<script src="../js/request_detail.js"></script>
 <?php include 'footer.php'; ?>
 
 
