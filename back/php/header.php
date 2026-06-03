@@ -25,5 +25,23 @@
     <a href="liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
     <a href="create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
   </nav>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"></path>
+    </svg>
+  </button>
 </header>
+
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
+  <a href="liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
+  <a href="create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+</nav>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  });
+</script>
 

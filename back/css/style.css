@@ -23,16 +23,18 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* ── HEADER ── */
 header {
   background: var(--blue-dark);
-  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 80px;
+  min-height: 64px;
+  transition: padding 0.3s ease, min-height 0.3s ease;
 }
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-icon {
@@ -55,6 +57,45 @@ header {
 nav { display: flex; gap: 36px; }
 nav a { font-size: 14px; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 500; }
 nav a.active { color: var(--blue-accent); }
+
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  background: none; border: none;
+  color: #fff; cursor: pointer;
+  padding: 4px;
+}
+
+/* ── MENU MOBILE ── */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: var(--blue-dark);
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.mobile-nav.open {
+  max-height: 200px;
+  padding: 12px 16px 16px;
+}
+.mobile-nav a {
+  font-size: 15px; font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a.active { color: var(--blue-accent); }
 
 /* ── CONTENU ── */
 .content { padding: 48px 80px; flex: 1; }
@@ -226,16 +267,12 @@ footer span { font-size: 13px; color: rgba(255,255,255,0.4); }
 @media (max-width: 600px) {
   header {
     padding: 0 16px;
-    height: auto;
-    min-height: 56px;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    min-height: 64px;
   }
   .logo-name { font-size: 14px; }
-  nav { gap: 16px; width: 100%; padding-bottom: 6px; }
-  nav a { font-size: 13px; }
+  nav { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav { display: flex; }
 
   .content { padding: 20px 16px; }
 
