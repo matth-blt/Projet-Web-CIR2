@@ -1,7 +1,17 @@
 <?php
-// PAGE 2 â€” Liste complÃ¨te des installations (avec pagination)
+require_once '../../utils/database.php';
 
 $page_active = 'liste';
+
+$db = dbConnect();
+$limit = 100;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+$total = $db ? dbCountPDCS($db) : 0;
+$pdcs = $db ? dbRequestPDCS($db, false, $limit, $offset) : [];
+
+$totalPages = $total > 0 ? (int)ceil($total / $limit) : 1;
+
 include 'header.php';
 ?>
 
@@ -9,9 +19,9 @@ include 'header.php';
   <div class="page-header">
     <div>
       <div class="page-title">Tous les Points de Charge</div>
-      <div class="page-sub">Affichage 100 par 100</div>
+      <div class="page-sub">Affichage 100 par 100 — <?= $total ?> résultats</div>
     </div>
-    <a href="/php/create.php"><button class="btn-add">+ Ajouter</button></a>
+    <a href="create.php"><button class="btn-add">+ Ajouter</button></a>
   </div>
 
   <div class="table-wrap">
@@ -27,15 +37,76 @@ include 'header.php';
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody id="pdcs-table-body">
-        <!-- contenu injecté par request.js -->
+      <tbody>
+        <?php if (empty($pdcs)): ?>
+          <tr><td colspan="7" style="text-align:center;color:var(--text3)">Aucun résultat</td></tr>
+        <?php else: ?>
+          <?php foreach ($pdcs as $pdc): ?>
+            <tr>
+              <td><?= htmlspecialchars($pdc['nom_station'] ?? '') ?></td>
+              <td><?= htmlspecialchars($pdc['amenageur'] ?? '') ?></td>
+              <td><?= htmlspecialchars($pdc['operateur'] ?? '') ?></td>
+              <td><?= htmlspecialchars($pdc['type_prise'] ?? '') ?></td>
+              <td><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
+              <td><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
+              <td>
+                <a href="detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                  <button class="btn-view">Voir</button>
+                </a>
+                <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                  <button class="btn-edit">Modifier</button>
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </tbody>
     </table>
 
-    <!-- Pagination générée dynamiquement par request_liste.js -->
-    <div class="pager" id="pager"></div>
-  </div>
-</div>
-<script src="../js/request_liste.js"></script>
-<?php include 'footer.php'; ?>
+    <!-- Pagination -->
+    <?php if ($totalPages > 1): ?>
+    <div class="pager">
+        <?php if ($page > 1): ?>
+            <a href="?page=<?= $page - 1 ?>"><button class="pager-btn">←</button></a>
+        <?php else: ?>
+            <button class="pager-btn" disabled>←</button>
+        <?php endif; ?>
 
+        <?php
+            $range = [];
+            if ($totalPages <= 7) {
+                $range = range(1, $totalPages);
+            } else {
+                $range = [1];
+                if ($page > 3) $range[] = '...';
+                for ($p = max(2, $page - 1); $p <= min($totalPages - 1, $page + 1); $p++) {
+                    $range[] = $p;
+                }
+                if ($page < $totalPages - 2) $range[] = '...';
+                $range[] = $totalPages;
+            }
+
+            foreach ($range as $p):
+            if ($p === '...'):
+        ?>
+            <span class="pager-dots">…</span>
+        <?php else: ?>
+            <a href="?page=<?= $p ?>">
+            <button class="pager-btn <?= ($p === $page) ? 'active' : '' ?>"><?= $p ?></button>
+            </a>
+        <?php
+            endif;
+            endforeach;
+        ?>
+
+        <?php if ($page < $totalPages): ?>
+            <a href="?page=<?= $page + 1 ?>"><button class="pager-btn">→</button></a>
+        <?php else: ?>
+            <button class="pager-btn" disabled>→</button>
+        <?php endif; ?>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<?php include 'footer.php'; ?>
