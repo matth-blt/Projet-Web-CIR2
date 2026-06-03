@@ -4,7 +4,8 @@ require_once '../../api/models/PointDeCharge.php';
 
 $page_active = 'liste';
 
-$pdcModel = new PointDeCharge();
+$db = Database::getConnection();
+$pdcModel = new PointDeCharge($db);
 $limit = 100;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $limit;

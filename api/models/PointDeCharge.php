@@ -1,11 +1,10 @@
-<?php
-require_once __DIR__ . '/../Database.php';
+<?php require_once __DIR__ . '/../Database.php';
 
 class PointDeCharge {
     private PDO $db;
 
-    public function __construct() {
-        $this->db = Database::getInstance()->getConnection();
+    public function __construct(PDO $db) {
+        $this->db = $db;
     }
 
     /**

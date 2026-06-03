@@ -7,7 +7,8 @@ $page_active = 'liste';
 $id_pdc = $_GET['id_pdc'] ?? '';
 $type_prise = $_GET['type_prise'] ?? '';
 
-$pdcModel = new PointDeCharge();
+$db = Database::getConnection();
+$pdcModel = new PointDeCharge($db);
 $pdc = ($id_pdc && $type_prise) ? $pdcModel->getById((int)$id_pdc, $type_prise) : null;
 
 $success = false;

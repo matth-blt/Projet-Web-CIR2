@@ -5,7 +5,8 @@ require_once '../../api/models/Referentiel.php';
 
 $page_active = 'nouveau';
 
-$ref = new Referentiel();
+$db = Database::getConnection();
+$ref = new Referentiel($db);
 $types_prises = $ref->getTypesPrise();
 $types_paiement = $ref->getTypesPaiement();
 
@@ -14,7 +15,7 @@ $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $pdcModel = new PointDeCharge();
+    $pdcModel = new PointDeCharge($db);
     $id_pdc = $pdcModel->create([
         // Station
         'nom_station' => $_POST['nom_station'] ?? '',

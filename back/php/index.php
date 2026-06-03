@@ -4,7 +4,8 @@ require_once '../../api/models/PointDeCharge.php';
 
 $page_active = 'accueil';
 
-$pdcModel = new PointDeCharge();
+$db = Database::getConnection();
+$pdcModel = new PointDeCharge($db);
 $pdcs = $pdcModel->getAll(accueil: true);
 
 include 'header.php';

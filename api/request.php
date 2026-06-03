@@ -2,9 +2,9 @@
 require_once __DIR__ . '/Database.php';
 require_once __DIR__ . '/models/PointDeCharge.php';
 
-// Vérification de la connexion
 try {
-    $pdcModel = new PointDeCharge();
+    $db = Database::getConnection();
+    $pdcModel = new PointDeCharge($db);
 } catch (Exception $e) {
     header('HTTP/1.1 503 Service Unavailable');
     echo json_encode(['error' => 'Database unavailable']);
