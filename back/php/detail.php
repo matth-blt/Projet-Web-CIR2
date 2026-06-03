@@ -29,7 +29,7 @@ include 'header.php';
 ?>
 
 <div class="content">
-  <a href="/php/liste.php" class="back-link"><- Retour à la liste</a>
+  <a href="liste.php" class="back-link"><- Retour à la liste</a>
 
   <div class="detail-card">
 

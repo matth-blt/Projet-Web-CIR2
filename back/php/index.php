@@ -43,7 +43,6 @@ $installations = [
     </table>
   </div>
 </div>
-<script src="../js/test.js"></script>
 
 <?php include 'footer.php'; ?>
 
