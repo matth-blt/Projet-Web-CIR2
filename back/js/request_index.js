@@ -21,7 +21,7 @@ async function requestPDCS() {
                 <td>${pdc.tarification || ''}</td>
                 <td>
                     <a href="detail.php?id_pdc=${encodeURIComponent(pdc.id_pdc)}&type_prise=${encodeURIComponent(pdc.type_prise)}"><button class="btn-view">Voir</button></a>
-                    <a href="edit.php?id=${encodeURIComponent(pdc.id_pdc)}"><button class="btn-edit">Éditer</button></a>
+                    <a href="edit.php?id_pdc=${encodeURIComponent(pdc.id_pdc)}&type_prise=${encodeURIComponent(pdc.type_prise)}"><button class="btn-edit">Modifier</button></a>
                 </td>
             `;
 
