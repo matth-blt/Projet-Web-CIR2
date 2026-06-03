@@ -171,14 +171,32 @@ nav a.active { color: var(--blue-accent); }
   border: 1px solid var(--border);
   overflow: hidden;
 }
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+/* Largeurs des colonnes : Station | Aménageur | Opérateur | Type prise | Commune | Tarif | Actions */
+table thead th:nth-child(1) { width: 22%; }
+table thead th:nth-child(2) { width: 14%; }
+table thead th:nth-child(3) { width: 14%; }
+table thead th:nth-child(4) { width: 11%; }
+table thead th:nth-child(5) { width: 11%; }
+table thead th:nth-child(6) { width: 16%; }
+table thead th:nth-child(7) { width: 15%; }
+
 thead th {
   background: var(--surface2); padding: 14px 20px;
   text-align: left; font-size: 12px; font-weight: 600;
   color: var(--text3); text-transform: uppercase;
   letter-spacing: 0.05em; border-bottom: 1px solid var(--border);
+  overflow: hidden;
 }
-tbody td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid var(--border); }
+tbody td {
+  padding: 14px 20px; font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  word-break: break-word;
+}
+/* Colonne Actions : nowrap pour garder les boutons sur une ligne */
+tbody td:last-child { white-space: nowrap; }
+/* Supprime le soulignement des <a> dans le tableau (cause du tiret visuel) */
+tbody td a { text-decoration: none; vertical-align: middle; }
 tbody tr:last-child td { border-bottom: none; }
 
 /* ── PAGINATION ── */
