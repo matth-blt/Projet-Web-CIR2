@@ -1,20 +1,20 @@
 <?php
-require_once '../../api/Database.php';
-require_once '../../api/models/PointDeCharge.php';
+require_once '../../api/database.php';
 
 $page_active = 'liste';
 
 $id_pdc = $_GET['id_pdc'] ?? '';
 $type_prise = $_GET['type_prise'] ?? '';
 
-$pdcModel = new PointDeCharge();
-$pdc = ($id_pdc && $type_prise) ? $pdcModel->getById((int)$id_pdc, $type_prise) : null;
+$db  = dbConnect();
+$res = ($db && $id_pdc && $type_prise) ? dbRequestPDC($db, $id_pdc, $type_prise) : [];
+$pdc = $res[0] ?? null;
 
 $success = false;
 $error   = false;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc) {
-    $result = $pdcModel->update([
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc && $db) {
+    $result = dbUpdatePDC($db, [
         'id_pdc' => $id_pdc,
         'puissance' => $_POST['puissance'] ?: null,
         'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),

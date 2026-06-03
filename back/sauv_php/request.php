@@ -1,13 +1,8 @@
-<?php
-require_once __DIR__ . '/Database.php';
-require_once __DIR__ . '/models/PointDeCharge.php';
+<?php require_once('database.php');
 
-// Vérification de la connexion
-try {
-    $pdcModel = new PointDeCharge();
-} catch (Exception $e) {
+$db = dbConnect();
+if (!$db) {
     header('HTTP/1.1 503 Service Unavailable');
-    echo json_encode(['error' => 'Database unavailable']);
     exit;
 }
 
@@ -28,17 +23,17 @@ if ($requestRessource == 'pdcs' && $id_pdc === null) {
     $accueil = isset($_GET['accueil']) && $_GET['accueil'] === 'true';
 
     if ($accueil) {
-        $data = $pdcModel->getAll(accueil: true);
+        $data = dbRequestPDCS($db, true);
     } else {
         $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
         $page = isset($_GET['page'])  ? max(1, (int)$_GET['page']) : 1;
         $offset = ($page - 1) * $limit;
 
-        $total = $pdcModel->count();
+        $total = dbCountPDCS($db);
         header('X-Total-Count: ' . $total);
         header('Access-Control-Expose-Headers: X-Total-Count');
 
-        $data = $pdcModel->getAll(false, $limit, $offset);
+        $data = dbRequestPDCS($db, false, $limit, $offset);
     }
 }
 
@@ -46,7 +41,7 @@ if ($requestMethod == 'GET') {
     $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : null;
 
     if ($id_pdc !== null) {
-        $data = $pdcModel->getById((int)$id_pdc, $type_prise);
+        $data = dbRequestPDC($db, $id_pdc, $type_prise);
     }
 }
 
@@ -59,7 +54,7 @@ if ($requestMethod == 'POST') {
             exit;
         }
 
-        $data = $pdcModel->update([
+        $data = dbUpdatePDC($db, [
             'id_pdc' => $id_pdc,
             'puissance' => $body['puissance'] ?? null,
             'cable_t2_attache' => $body['cable_t2_attache'] ?? 0,

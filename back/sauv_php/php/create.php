@@ -1,21 +1,18 @@
 <?php
-require_once '../../api/Database.php';
-require_once '../../api/models/PointDeCharge.php';
-require_once '../../api/models/Referentiel.php';
+require_once '../../api/database.php';
 
 $page_active = 'nouveau';
 
-$ref = new Referentiel();
-$types_prises = $ref->getTypesPrise();
-$types_paiement = $ref->getTypesPaiement();
+$db = dbConnect();
+$types_prises = $db ? dbTypesDePrises($db) : [];
+$types_paiement = $db ? dbTypesDePaiements($db) : [];
 
 $error = false;
 $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $db) {
 
-    $pdcModel = new PointDeCharge();
-    $id_pdc = $pdcModel->create([
+    $id_pdc = dbAddPDC($db, [
         // Station
         'nom_station' => $_POST['nom_station'] ?? '',
         'adresse_station' => $_POST['adresse_station'] ?? '',

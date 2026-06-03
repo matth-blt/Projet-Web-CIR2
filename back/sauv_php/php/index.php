@@ -1,11 +1,10 @@
 <?php
-require_once '../../api/Database.php';
-require_once '../../api/models/PointDeCharge.php';
+require_once '../../api/database.php';
 
 $page_active = 'accueil';
 
-$pdcModel = new PointDeCharge();
-$pdcs = $pdcModel->getAll(accueil: true);
+$db = dbConnect();
+$pdcs = $db ? dbRequestPDCS($db, true) : [];
 
 include 'header.php';
 ?>

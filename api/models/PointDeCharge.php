@@ -1,0 +1,396 @@
+<?php
+require_once __DIR__ . '/../Database.php';
+
+class PointDeCharge {
+    private PDO $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance()->getConnection();
+    }
+
+    /**
+     * Compte le nombre total de points de charge.
+     */
+    public function count(): int {
+        try {
+            $request = '
+                SELECT COUNT(*) AS total
+                FROM point_de_charge pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+            ';
+            $statement = $this->db->prepare($request);
+            $statement->execute();
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return (int) $row['total'];
+        } catch (PDOException $exception) {
+            error_log('Count error: ' . $exception->getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Récupère la liste des PDC.
+     * @param bool $accueil  Si true, retourne 5 PDC aléatoires (aperçu accueil).
+     * @param int|null $limit  Nombre max de résultats (pagination).
+     * @param int $offset  Décalage (pagination).
+     */
+    public function getAll(bool $accueil = false, ?int $limit = null, int $offset = 0): array {
+        try {
+            // 1. Récupération de la liste de base (PDC + type de prise)
+            $request = '
+                SELECT pdc.id_pdc, pdc.tarification, ad.type_prise
+                FROM point_de_charge pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+            ';
+
+            if ($accueil) {
+                $request .= ' ORDER BY RAND() LIMIT 5';
+            } else if ($limit !== null) {
+                $request .= ' LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+            }
+
+            $statement = $this->db->prepare($request);
+            $statement->execute();
+            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            if (empty($rows)) {
+                return [];
+            }
+
+            // Extraction des IDs de points de charge uniques pour charger les relations en lot
+            $pdcIds = array_filter(array_unique(array_column($rows, 'id_pdc')));
+            if (empty($pdcIds)) {
+                return array_map(function($row) {
+                    return [
+                        'nom_station' => null,
+                        'id_pdc' => $row['id_pdc'],
+                        'amenageur' => null,
+                        'operateur' => null,
+                        'type_prise' => $row['type_prise'],
+                        'commune' => null,
+                        'tarification' => $row['tarification']
+                    ];
+                }, $rows);
+            }
+
+            // 2. Récupération des infos des stations liées à ces PDC
+            $placeholders = implode(',', array_fill(0, count($pdcIds), '?'));
+            $stationQuery = "
+                SELECT pd.id_pdc, s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
+                FROM possede_des pd
+                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                WHERE pd.id_pdc IN ($placeholders)
+            ";
+            $stmtS = $this->db->prepare($stationQuery);
+            $stmtS->execute(array_values($pdcIds));
+            $stationRows = $stmtS->fetchAll(PDO::FETCH_ASSOC);
+
+            $stationsByPdc = [];
+            $actorIds = [];
+            $communeCodes = [];
+            foreach ($stationRows as $sRow) {
+                $stationsByPdc[$sRow['id_pdc']] = $sRow;
+                if (!empty($sRow['id_acteur'])) {
+                    $actorIds[] = $sRow['id_acteur'];
+                }
+                if (!empty($sRow['id_acteur_est_utiliser_par'])) {
+                    $actorIds[] = $sRow['id_acteur_est_utiliser_par'];
+                }
+                if (!empty($sRow['code_insee_commune'])) {
+                    $communeCodes[] = $sRow['code_insee_commune'];
+                }
+            }
+
+            // 3. Récupération des noms des acteurs en lot
+            $actorsById = [];
+            if (!empty($actorIds)) {
+                $actorIds = array_unique($actorIds);
+                $actorPlaceholders = implode(',', array_fill(0, count($actorIds), '?'));
+                $actorQuery = "SELECT id_acteur, nom_acteur FROM acteur WHERE id_acteur IN ($actorPlaceholders)";
+                $stmtA = $this->db->prepare($actorQuery);
+                $stmtA->execute(array_values($actorIds));
+                $actorRows = $stmtA->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($actorRows as $aRow) {
+                    $actorsById[$aRow['id_acteur']] = $aRow['nom_acteur'];
+                }
+            }
+
+            // 4. Récupération des noms de communes en lot
+            $communesByInsee = [];
+            if (!empty($communeCodes)) {
+                $communeCodes = array_unique($communeCodes);
+                $communePlaceholders = implode(',', array_fill(0, count($communeCodes), '?'));
+                $communeQuery = "SELECT code_insee_commune, nom_commune FROM commune WHERE code_insee_commune IN ($communePlaceholders)";
+                $stmtC = $this->db->prepare($communeQuery);
+                $stmtC->execute(array_values($communeCodes));
+                $communeRows = $stmtC->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($communeRows as $cRow) {
+                    $communesByInsee[$cRow['code_insee_commune']] = $cRow['nom_commune'];
+                }
+            }
+
+            // 5. Assemblage final en mémoire
+            $results = [];
+            foreach ($rows as $row) {
+                $idPdc = $row['id_pdc'];
+                $station = $stationsByPdc[$idPdc] ?? null;
+
+                $nomStation = $station ? $station['nom_station'] : null;
+                $idAmenageur = $station ? $station['id_acteur'] : null;
+                $idOperateur = $station ? $station['id_acteur_est_utiliser_par'] : null;
+                $codeCommune = $station ? $station['code_insee_commune'] : null;
+
+                $results[] = [
+                    'nom_station' => $nomStation,
+                    'id_pdc' => $idPdc,
+                    'amenageur' => $idAmenageur !== null ? ($actorsById[$idAmenageur] ?? null) : null,
+                    'operateur' => $idOperateur !== null ? ($actorsById[$idOperateur] ?? null) : null,
+                    'type_prise' => $row['type_prise'],
+                    'commune' => $codeCommune !== null ? ($communesByInsee[$codeCommune] ?? null) : null,
+                    'tarification' => $row['tarification']
+                ];
+            }
+
+            return $results;
+        } catch (PDOException $exception) {
+            error_log('Request error: ' . $exception->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Récupère le détail d'un PDC par son ID et type de prise.
+     */
+    public function getById(int $id_pdc, ?string $type_prise = null): ?array {
+        try {
+            // 1. Récupération des infos de base du PDC et type de prise
+            $request = '
+                SELECT pdc.*, ad.type_prise
+                FROM point_de_charge pdc
+                JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                WHERE pdc.id_pdc = :id_pdc
+            ';
+            $params = [':id_pdc' => $id_pdc];
+            if ($type_prise !== null) {
+                $request .= ' AND ad.type_prise = :type_prise';
+                $params[':type_prise'] = $type_prise;
+            }
+
+            $statement = $this->db->prepare($request);
+            $statement->execute($params);
+            $pdc = $statement->fetch(PDO::FETCH_ASSOC);
+
+            if (!$pdc) {
+                return null;
+            }
+
+            // Initialisation de la structure de retour attendue par les vues
+            $res = [
+                'id_pdc' => (int) $pdc['id_pdc'],
+                'type_prise' => $pdc['type_prise'],
+                'puissance' => $pdc['puissance'] !== null ? (float)$pdc['puissance'] : null,
+                'cable_t2_attache' => (int)($pdc['cable_t2_attache'] ?? 0),
+                'latitude' => $pdc['lat'] !== null ? (float)$pdc['lat'] : null,
+                'longitude' => $pdc['lon'] !== null ? (float)$pdc['lon'] : null,
+                'tarification' => $pdc['tarification'],
+                'condition_acces' => $pdc['pdc_condition'],
+                'gratuit' => (int)($pdc['gratuit'] ?? 0),
+                'nom_station' => null,
+                'amenageur' => null,
+                'siren_amenageur' => null,
+                'operateur' => null,
+                'contact_operateur' => null,
+                'commune' => null,
+                'departement' => null,
+                'types_paiement' => 'Aucun moyen spécifié'
+            ];
+
+            // 2. Récupération de la station associée
+            $stmtS = $this->db->prepare('
+                SELECT s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
+                FROM possede_des pd
+                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                WHERE pd.id_pdc = :id_pdc
+                LIMIT 1
+            ');
+            $stmtS->execute([':id_pdc' => $id_pdc]);
+            $station = $stmtS->fetch(PDO::FETCH_ASSOC);
+
+            if ($station) {
+                $res['nom_station'] = $station['nom_station'];
+
+                // 2.1 Acteur aménageur
+                if (!empty($station['id_acteur'])) {
+                    $stmtA = $this->db->prepare('SELECT nom_acteur, siren_acteur FROM acteur WHERE id_acteur = :id');
+                    $stmtA->execute([':id' => $station['id_acteur']]);
+                    $acteurAm = $stmtA->fetch(PDO::FETCH_ASSOC);
+                    if ($acteurAm) {
+                        $res['amenageur'] = $acteurAm['nom_acteur'];
+                        $res['siren_amenageur'] = $acteurAm['siren_acteur'];
+                    }
+                }
+
+                // 2.2 Acteur opérateur
+                if (!empty($station['id_acteur_est_utiliser_par'])) {
+                    $stmtO = $this->db->prepare('SELECT nom_acteur, contact_acteur FROM acteur WHERE id_acteur = :id');
+                    $stmtO->execute([':id' => $station['id_acteur_est_utiliser_par']]);
+                    $acteurOp = $stmtO->fetch(PDO::FETCH_ASSOC);
+                    if ($acteurOp) {
+                        $res['operateur'] = $acteurOp['nom_acteur'];
+                        $res['contact_operateur'] = $acteurOp['contact_acteur'];
+                    }
+                }
+
+                // 2.3 Commune & Département
+                if (!empty($station['code_insee_commune'])) {
+                    $stmtC = $this->db->prepare('SELECT nom_commune, code_dep FROM commune WHERE code_insee_commune = :code_insee');
+                    $stmtC->execute([':code_insee' => $station['code_insee_commune']]);
+                    $commune = $stmtC->fetch(PDO::FETCH_ASSOC);
+                    if ($commune) {
+                        $res['commune'] = $commune['nom_commune'];
+
+                        if (!empty($commune['code_dep'])) {
+                            $stmtD = $this->db->prepare('SELECT nom_departement FROM departement WHERE code_dep = :code_dep');
+                            $stmtD->execute([':code_dep' => $commune['code_dep']]);
+                            $dep = $stmtD->fetch(PDO::FETCH_ASSOC);
+                            if ($dep) {
+                                $res['departement'] = $dep['nom_departement'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 3. Récupération des modes de paiement
+            $stmtP = $this->db->prepare('SELECT type_paiement FROM est_payer_avec WHERE id_pdc = :id_pdc');
+            $stmtP->execute([':id_pdc' => $id_pdc]);
+            $payments = $stmtP->fetchAll(PDO::FETCH_COLUMN);
+            if (!empty($payments)) {
+                $res['types_paiement'] = implode(', ', $payments);
+            }
+
+            return $res;
+        } catch (PDOException $exception) {
+            error_log('Request error: ' . $exception->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Met à jour les champs modifiables d'un PDC existant.
+     */
+    public function update(array $data): bool {
+        try {
+            $stmt = $this->db->prepare('
+                UPDATE point_de_charge
+                SET
+                    puissance = :puissance,
+                    cable_t2_attache = :cable_t2_attache,
+                    lat = :latitude,
+                    lon = :longitude,
+                    tarification = :tarification
+                WHERE id_pdc = :id_pdc
+            ');
+            $stmt->execute([
+                ':puissance' => $data['puissance'] ?? null,
+                ':cable_t2_attache' => $data['cable_t2_attache'] ?? 0,
+                ':latitude' => $data['latitude'] ?? null,
+                ':longitude' => $data['longitude'] ?? null,
+                ':tarification' => $data['tarification'] ?? null,
+                ':id_pdc' => $data['id_pdc'],
+            ]);
+
+            return true;
+        } catch (PDOException $exception) {
+            error_log('Update error: ' . $exception->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Crée un nouveau PDC complet (transaction : département, commune, acteurs, station, pdc, relations).
+     * @return int|false  L'ID du PDC créé, ou false en cas d'erreur.
+     */
+    public function create(array $data): int|false {
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Département (INSERT IGNORE : peut déjà exister)
+            $this->db->prepare('INSERT IGNORE INTO departement (code_dep, nom_departement) VALUES (:code_dep, :nom_dep)')
+               ->execute([':code_dep' => $data['code_dep'], ':nom_dep' => $data['nom_departement']]);
+
+            // 2. Commune (INSERT IGNORE : peut déjà exister)
+            $this->db->prepare('INSERT IGNORE INTO commune (code_insee_commune, nom_commune, code_dep) VALUES (:code_insee, :nom_commune, :code_dep)')
+               ->execute([':code_insee' => $data['code_insee'], ':nom_commune' => $data['nom_commune'], ':code_dep' => $data['code_dep']]);
+
+            // 3. Acteur aménageur
+            $stmtAm = $this->db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, role_acteur) VALUES (:siren, :nom, :contact, :role)');
+            $stmtAm->execute([':siren' => $data['siren_amenageur'], ':nom' => $data['nom_amenageur'], ':contact' => $data['contact_amenageur'] ?? null, ':role' => 'amenageur']);
+            $id_acteur_am = $this->db->lastInsertId();
+
+            // 4. Acteur opérateur
+            $stmtOp = $this->db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, telephone_acteur, role_acteur) VALUES (:siren, :nom, :contact, :telephone, :role)');
+            $stmtOp->execute([':siren' => 0, ':nom' => $data['nom_operateur'], ':contact' => $data['contact_operateur'] ?? null, ':telephone' => $data['telephone_operateur'] ?? null, ':role' => 'operateur']);
+            $id_acteur_op = $this->db->lastInsertId();
+
+            // 5. ID station : généré si non fourni
+            $id_station = !empty($data['id_station_itinerance']) ? $data['id_station_itinerance'] : 'STA_' . time() . '_' . rand(100, 999);
+
+            // 6. Station
+            $this->db->prepare('
+                INSERT INTO station (id_station_itinerance, nom_station, adresse_station, nbr_pdc, date_mise_en_service, code_insee_commune, id_acteur, id_acteur_est_utiliser_par)
+                VALUES (:id_sta, :nom, :adresse, 1, :date_service, :code_insee, :id_am, :id_op)
+            ')->execute([
+                ':id_sta' => $id_station,
+                ':nom' => $data['nom_station'],
+                ':adresse' => $data['adresse_station'],
+                ':date_service' => $data['date_service'] ?: null,
+                ':code_insee' => $data['code_insee'],
+                ':id_am' => $id_acteur_am,
+                ':id_op' => $id_acteur_op,
+            ]);
+
+            // 7. id_pdc : MAX + 1
+            $row = $this->db->query('SELECT COALESCE(MAX(id_pdc), 0) + 1 AS next_id FROM point_de_charge')->fetch(PDO::FETCH_ASSOC);
+            $id_pdc = (int) $row['next_id'];
+
+            // 8. Point de charge
+            $this->db->prepare('
+                INSERT INTO point_de_charge (id_pdc, lon, lat, puissance, cable_t2_attache, gratuit, tarification)
+                VALUES (:id_pdc, :lon, :lat, :puissance, :cable, :gratuit, :tarification)
+            ')->execute([
+                ':id_pdc' => $id_pdc,
+                ':lon' => $data['longitude'],
+                ':lat' => $data['latitude'],
+                ':puissance' => $data['puissance'],
+                ':cable' => (int)($data['cable_t2_attache'] ?? 0),
+                ':gratuit' => (int)($data['gratuit'] ?? 0),
+                ':tarification' => $data['tarification'] ?: null,
+            ]);
+
+            // 9. Relation pdc ↔ type de prise
+            $this->db->prepare('INSERT INTO a_des (id_pdc, type_prise) VALUES (:id_pdc, :type_prise)')
+               ->execute([':id_pdc' => $id_pdc, ':type_prise' => $data['type_prise']]);
+
+            // 10. Relation station ↔ pdc
+            $this->db->prepare('INSERT INTO possede_des (id_pdc, id_station_itinerance) VALUES (:id_pdc, :id_sta)')
+               ->execute([':id_pdc' => $id_pdc, ':id_sta' => $id_station]);
+
+            // 11. Types de paiement (0 ou plusieurs)
+            if (!empty($data['types_paiement'])) {
+                $stmtPay = $this->db->prepare('INSERT IGNORE INTO est_payer_avec (type_paiement, id_pdc) VALUES (:type, :id_pdc)');
+                foreach ($data['types_paiement'] as $type) {
+                    $stmtPay->execute([':type' => $type, ':id_pdc' => $id_pdc]);
+                }
+            }
+
+            $this->db->commit();
+            return $id_pdc;
+        } catch (PDOException $exception) {
+            $this->db->rollBack();
+            error_log('Insert error: ' . $exception->getMessage());
+            return false;
+        }
+    }
+}
+?>
