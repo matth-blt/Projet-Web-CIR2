@@ -121,7 +121,8 @@ tbody tr:hover {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .filter-row { grid-template-columns: 1fr; }
+  .search-section { padding: 40px 32px; }
+  .filter-row     { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
