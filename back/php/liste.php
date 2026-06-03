@@ -41,8 +41,8 @@ include 'header.php';
             <?php if (empty($pdcs)): ?>
             <tr><td colspan="7" style="text-align:center;color:var(--text3)">Aucun résultat</td></tr>
             <?php else: ?>
-            <?php foreach ($pdcs as $pdc): ?>
-                <tr>
+            <?php $i = 0; foreach ($pdcs as $pdc): $i++; ?>
+                <tr style="animation-delay: <?= min($i * 0.05, 1) ?>s">
                 <td><?= htmlspecialchars($pdc['nom_station'] ?? '') ?></td>
                 <td><?= htmlspecialchars($pdc['amenageur'] ?? '') ?></td>
                 <td><?= htmlspecialchars($pdc['operateur'] ?? '') ?></td>
