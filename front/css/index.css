@@ -4,7 +4,7 @@
 
 /* ── HERO (bandeau principal) ── */
 .hero {
-  background: linear-gradient(135deg, #1a3a2a 0%, #0d2118 100%);
+  background: linear-gradient(160deg, #0d2118 0%, #0a2e22 40%, #082619 100%);
   padding: 64px 80px;
 }
 
