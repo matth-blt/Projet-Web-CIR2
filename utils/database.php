@@ -34,6 +34,28 @@ function dbCountPDCS($db) {
     }
 }
 
+function dbTypesDePrises($db) {
+    try {
+        $statement = $db->prepare('SELECT type_prise FROM prise ORDER BY type_prise;');
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $exception) {
+        error_log('Request error: ' . $exception->getMessage());
+        return [];
+    }
+}
+
+function dbTypesDePaiements($db) {
+    try {
+        $statement = $db->prepare('SELECT type_paiement FROM paiement ORDER BY type_paiement;');
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $exception) {
+        error_log('Request error: ' . $exception->getMessage());
+        return [];
+    }
+}
+
 function dbRequestPDCS($db, $accueil = false, $limit = null, $offset = 0) {
     try {
         $request = '
@@ -160,6 +182,91 @@ function dbUpdatePDC($db, $data) {
         return true;
     } catch (PDOException $exception) {
         error_log('Update error: ' . $exception->getMessage());
+        return false;
+    }
+}
+
+function dbAddPDC($db, $data) {
+    try {
+        $db->beginTransaction();
+
+        // 1. Département (INSERT IGNORE : peut déjà exister)
+        $db->prepare('INSERT IGNORE INTO departement (code_dep, nom_departement) VALUES (:code_dep, :nom_dep)')
+           ->execute([':code_dep' => $data['code_dep'], ':nom_dep' => $data['nom_departement']]);
+
+        // 2. Commune (INSERT IGNORE : peut déjà exister)
+        $db->prepare('INSERT IGNORE INTO commune (code_insee_commune, nom_commune, code_dep) VALUES (:code_insee, :nom_commune, :code_dep)')
+           ->execute([':code_insee' => $data['code_insee'], ':nom_commune' => $data['nom_commune'], ':code_dep' => $data['code_dep']]);
+
+        // 3. Acteur aménageur
+        $stmtAm = $db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, role_acteur) VALUES (:siren, :nom, :contact, :role)');
+        $stmtAm->execute([':siren' => $data['siren_amenageur'], ':nom' => $data['nom_amenageur'], ':contact' => $data['contact_amenageur'] ?? null, ':role' => 'amenageur']);
+        $id_acteur_am = $db->lastInsertId();
+
+        // 4. Acteur opérateur
+        $stmtOp = $db->prepare('INSERT INTO acteur (siren_acteur, nom_acteur, contact_acteur, role_acteur) VALUES (:siren, :nom, :contact, :role)');
+        $stmtOp->execute([':siren' => $data['siren_operateur'] ?? 0, ':nom' => $data['nom_operateur'], ':contact' => $data['contact_operateur'] ?? null, ':role' => 'operateur']);
+        $id_acteur_op = $db->lastInsertId();
+
+        // 5. ID station : généré si non fourni
+        $id_station = !empty($data['id_station_itinerance'])
+            ? $data['id_station_itinerance']
+            : 'STA_' . time() . '_' . rand(100, 999);
+
+        // 6. Station
+        $db->prepare('
+            INSERT INTO station (id_station_itinerance, nom_station, adresse_station, nbr_pdc, date_mise_en_service, code_insee_commune, id_acteur, id_acteur_est_utiliser_par)
+            VALUES (:id_sta, :nom, :adresse, 1, :date_service, :code_insee, :id_am, :id_op)
+        ')->execute([
+            ':id_sta'       => $id_station,
+            ':nom'          => $data['nom_station'],
+            ':adresse'      => $data['adresse_station'],
+            ':date_service' => $data['date_service'] ?: null,
+            ':code_insee'   => $data['code_insee'],
+            ':id_am'        => $id_acteur_am,
+            ':id_op'        => $id_acteur_op,
+        ]);
+
+        // 7. id_pdc : MAX + 1
+        $row    = $db->query('SELECT COALESCE(MAX(id_pdc), 0) + 1 AS next_id FROM point_de_charge')->fetch(PDO::FETCH_ASSOC);
+        $id_pdc = (int) $row['next_id'];
+
+        // 8. Point de charge
+        $db->prepare('
+            INSERT INTO point_de_charge (id_pdc, lon, lat, puissance, cable_t2_attache, gratuit, tarification)
+            VALUES (:id_pdc, :lon, :lat, :puissance, :cable, :gratuit, :tarification)
+        ')->execute([
+            ':id_pdc'      => $id_pdc,
+            ':lon'         => $data['longitude'],
+            ':lat'         => $data['latitude'],
+            ':puissance'   => $data['puissance'],
+            ':cable'       => (int)($data['cable_t2_attache'] ?? 0),
+            ':gratuit'     => (int)($data['gratuit'] ?? 0),
+            ':tarification'=> $data['tarification'] ?: null,
+        ]);
+
+        // 9. Relation pdc ↔ type de prise
+        $db->prepare('INSERT INTO a_des (id_pdc, type_prise) VALUES (:id_pdc, :type_prise)')
+           ->execute([':id_pdc' => $id_pdc, ':type_prise' => $data['type_prise']]);
+
+        // 10. Relation station ↔ pdc
+        $db->prepare('INSERT INTO possede_des (id_pdc, id_station_itinerance) VALUES (:id_pdc, :id_sta)')
+           ->execute([':id_pdc' => $id_pdc, ':id_sta' => $id_station]);
+
+        // 11. Types de paiement (0 ou plusieurs)
+        if (!empty($data['types_paiement'])) {
+            $stmtPay = $db->prepare('INSERT IGNORE INTO est_payer_avec (type_paiement, id_pdc) VALUES (:type, :id_pdc)');
+            foreach ($data['types_paiement'] as $type) {
+                $stmtPay->execute([':type' => $type, ':id_pdc' => $id_pdc]);
+            }
+        }
+
+        $db->commit();
+        return $id_pdc;
+
+    } catch (PDOException $exception) {
+        $db->rollBack();
+        error_log('Insert error: ' . $exception->getMessage());
         return false;
     }
 }

@@ -227,6 +227,10 @@ tbody tr:last-child td { border-bottom: none; }
     cursor: not-allowed;
     background: var(--surface-2, #f5f5f5);
 }
+.form-select--multi {
+    min-height: 120px;
+    padding: 8px 14px;
+}
 
 /* ── PAGE DÉTAIL ── */
 .detail-card {

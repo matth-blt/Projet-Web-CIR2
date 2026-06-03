@@ -3,10 +3,10 @@ require_once '../../utils/database.php';
 
 $page_active = 'liste';
 
-$id_pdc    = $_GET['id_pdc']    ?? '';
+$id_pdc = $_GET['id_pdc'] ?? '';
 $type_prise = $_GET['type_prise'] ?? '';
 
-$db  = dbConnect();
+$db = dbConnect();
 $res = ($db && $id_pdc && $type_prise) ? dbRequestPDC($db, $id_pdc, $type_prise) : [];
 $pdc = $res[0] ?? null;
 
@@ -37,9 +37,9 @@ include 'header.php';
         <div class="detail-group">
             <div class="detail-group-title">Aménageur &amp; Opérateur</div>
             <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Aménageur</span><span class="detail-val"><?= htmlspecialchars($pdc['amenageur']        ?? 'Non renseigné') ?></span></div>
-            <div class="detail-field"><span class="detail-key">SIREN</span><span class="detail-val"><?= htmlspecialchars($pdc['siren_amenageur']  ?? 'Non renseigné') ?></span></div>
-            <div class="detail-field"><span class="detail-key">Opérateur</span><span class="detail-val"><?= htmlspecialchars($pdc['operateur']        ?? 'Non renseigné') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Aménageur</span><span class="detail-val"><?= htmlspecialchars($pdc['amenageur'] ?? 'Non renseigné') ?></span></div>
+            <div class="detail-field"><span class="detail-key">SIREN</span><span class="detail-val"><?= htmlspecialchars($pdc['siren_amenageur'] ?? 'Non renseigné') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Opérateur</span><span class="detail-val"><?= htmlspecialchars($pdc['operateur'] ?? 'Non renseigné') ?></span></div>
             <div class="detail-field"><span class="detail-key">Contact</span><span class="detail-val"><?= htmlspecialchars($pdc['contact_operateur'] ?? 'Non renseigné') ?></span></div>
             </div>
         </div>
@@ -56,17 +56,17 @@ include 'header.php';
         <div class="detail-group">
             <div class="detail-group-title">Localisation</div>
             <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val"><?= htmlspecialchars($pdc['latitude']    ?? 'Non renseignée') ?></span></div>
-            <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val"><?= htmlspecialchars($pdc['longitude']   ?? 'Non renseignée') ?></span></div>
-            <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val"><?= htmlspecialchars($pdc['commune']      ?? 'Non renseignée') ?></span></div>
-            <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val"><?= htmlspecialchars($pdc['departement'] ?? 'Non renseigné')  ?></span></div>
+            <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val"><?= htmlspecialchars($pdc['latitude'] ?? 'Non renseignée') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val"><?= htmlspecialchars($pdc['longitude'] ?? 'Non renseignée') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val"><?= htmlspecialchars($pdc['commune'] ?? 'Non renseignée') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val"><?= htmlspecialchars($pdc['departement'] ?? 'Non renseigné') ?></span></div>
             </div>
         </div>
 
         <div class="detail-group">
             <div class="detail-group-title">Paiement</div>
             <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Tarification</span><span class="detail-val"><?= htmlspecialchars($pdc['tarification']   ?? 'Non renseignée') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Tarification</span><span class="detail-val"><?= htmlspecialchars($pdc['tarification'] ?? 'Non renseignée') ?></span></div>
             <div class="detail-field"><span class="detail-key">Types de paiement</span><span class="detail-val"><?= htmlspecialchars($pdc['types_paiement'] ?? 'Aucun moyen spécifié') ?></span></div>
             <div class="detail-field"><span class="detail-key">Gratuit</span><span class="detail-val"><?= ($pdc['gratuit'] ?? null) ? 'Oui' : 'Non' ?></span></div>
             </div>
