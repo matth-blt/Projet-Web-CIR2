@@ -3,8 +3,8 @@
 ?>
 
 <footer>
-  <span>Matthieu Ballout / Noah Guichard · CIR2</span>
-  <span>ISEN Ouest</span>
+    <span>Matthieu Ballout / Noah Guichard · CIR2</span>
+    <span>ISEN Ouest</span>
 </footer>
 
 </body>
