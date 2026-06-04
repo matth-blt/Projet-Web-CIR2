@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="page">
@@ -28,11 +29,19 @@
         </header>
     
         <div class="hero">
-            <h1>Points de recharge en Bretagne</h1>
-            <p>Explorez les infrastructures de recharge pour véhicules électriques (IRVE) en Bretagne. Recherchez par critères ou visualisez sur une carte interactive.</p>
-            <div class="hero-btns">
-                <a href="recherche.html" class="btn-primary">Rechercher une borne</a>
-                <a href="carte.html" class="btn-outline">Voir la carte</a>
+            <div class="hero-left">
+                <h1>Points de recharge en Bretagne</h1>
+                <p>Explorez les infrastructures de recharge pour véhicules électriques (IRVE) en Bretagne. Recherchez par critères ou visualisez sur une carte interactive.</p>
+                <div class="hero-btns">
+                    <a href="recherche.html" class="btn-primary">Rechercher une borne</a>
+                    <a href="carte.html" class="btn-outline">Voir la carte</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-chart-label">Bornes mises en service / an</div>
+                <div class="hero-chart-wrap">
+                    <canvas id="heroChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -73,10 +82,123 @@
             </div>
         </div>
 
+        <div class="charts-section">
+
+            <!-- Graphique 1 : points par année ET par département (barres groupées) -->
+            <div class="chart-block">
+                <div class="chart-block-title">Points de charge par année et par département</div>
+                <div class="chart-block-sub">4 barres par année — un département breton par couleur</div>
+                <div class="chart-block-wrap">
+                    <canvas id="chartGroupedBar"></canvas>
+                </div>
+            </div>
+
+        </div>
+
         <footer>
             <span>Matthieu Ballout / Noah Guichard · CIR2</span>
             <span>ISEN Ouest</span>
         </footer>
     </div>
+    <script>
+        /* ── Hero line chart ── */
+        const ctx = document.getElementById('heroChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'Bornes mises en service',
+                    data: [120, 210, 380, 540, 890, 1450, 2100],
+                    borderColor: '#4caf7d',
+                    backgroundColor: 'rgba(76,175,125,0.12)',
+                    pointBackgroundColor: '#4caf7d',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    borderWidth: 2.5,
+                    tension: 0.4,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(10,46,34,0.95)',
+                        titleColor: '#ffffff',
+                        bodyColor: 'rgba(255,255,255,0.7)',
+                        borderColor: 'rgba(76,175,125,0.4)',
+                        borderWidth: 1,
+                        padding: 10,
+                        callbacks: {
+                            label: item => '  ' + item.formattedValue + ' bornes',
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.07)' },
+                        ticks: { color: 'rgba(255,255,255,0.45)', font: { family: 'DM Sans', size: 11 } },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.07)' },
+                        ticks: { color: 'rgba(255,255,255,0.45)', font: { family: 'DM Sans', size: 11 }, precision: 0 },
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        /* ── Couleurs départements ── */
+        const DEP_COLORS = {
+            '22': { bg: 'rgba(76,175,125,0.8)',  border: '#4caf7d' },
+            '29': { bg: 'rgba(59,130,246,0.8)',  border: '#3b82f6' },
+            '35': { bg: 'rgba(245,158,11,0.8)',  border: '#f59e0b' },
+            '56': { bg: 'rgba(168,85,247,0.8)',  border: '#a855f7' },
+        };
+
+        const YEARS = ['2018','2019','2020','2021','2022','2023','2024'];
+
+        /* ── Graphique 1 : barres groupées année × département ── */
+        new Chart(document.getElementById('chartGroupedBar'), {
+            type: 'bar',
+            data: {
+                labels: YEARS,
+                datasets: [
+                    { label: "Côtes-d'Armor (22)", data: [18, 32, 55, 80, 130, 210, 310],  backgroundColor: DEP_COLORS['22'].bg, borderColor: DEP_COLORS['22'].border, borderWidth: 1, borderRadius: 4 },
+                    { label: 'Finistère (29)',       data: [40, 65, 110, 160, 260, 420, 610], backgroundColor: DEP_COLORS['29'].bg, borderColor: DEP_COLORS['29'].border, borderWidth: 1, borderRadius: 4 },
+                    { label: 'Ille-et-Vilaine (35)', data: [35, 60, 105, 155, 250, 400, 590], backgroundColor: DEP_COLORS['35'].bg, borderColor: DEP_COLORS['35'].border, borderWidth: 1, borderRadius: 4 },
+                    { label: 'Morbihan (56)',         data: [27, 53, 110, 145, 250, 420, 590], backgroundColor: DEP_COLORS['56'].bg, borderColor: DEP_COLORS['56'].border, borderWidth: 1, borderRadius: 4 },
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: '#4a5c50', font: { family: 'DM Sans', size: 12 }, usePointStyle: true, padding: 20 }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1a3a2a',
+                        titleColor: '#fff',
+                        bodyColor: 'rgba(255,255,255,0.75)',
+                        borderColor: 'rgba(76,175,125,0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                    }
+                },
+                scales: {
+                    x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 } } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 }, precision: 0 } }
+                }
+            }
+        });
+
+    </script>
 </body>
 </html>
