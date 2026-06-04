@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRVE Bretagne — Carte</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Leaflet (carte OpenStreetMap) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/carte.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
     <script src="../js/carte.js" defer></script>
 </head>
 <body>
@@ -48,19 +53,10 @@
             <button class="search-btn">Afficher</button>
         </div>
 
-        <div class="map-placeholder">
-            <div class="map-grid-lines"></div>
-            <div class="map-pin" style="left:18%;top:38%"></div>
-            <div class="map-pin" style="left:28%;top:62%"></div>
-            <div class="map-pin" style="left:42%;top:45%"></div>
-            <div class="map-pin" style="left:55%;top:30%"></div>
-            <div class="map-pin" style="left:60%;top:58%"></div>
-            <div class="map-pin" style="left:72%;top:42%"></div>
-            <div class="map-pin" style="left:80%;top:65%"></div>
-            <div class="map-pin" style="left:35%;top:75%"></div>
-            <span class="map-label-center">🗺 OpenStreetMap · Leaflet.js</span>
-            </div>
-            <p class="map-note">Cliquer sur un marqueur pour afficher une bulle avec la localité, la puissance et un lien vers la page détail.</p>
+        <!-- Carte OpenStreetMap (Leaflet) — pleine largeur -->
+        <div id="map" class="map-canvas"></div>
+
+        <p class="map-note">Cliquez sur un marqueur : la carte se centre dessus et affiche la localité, la puissance et un lien vers la page détail.</p>
         </div>
 
         <footer>

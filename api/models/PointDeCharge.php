@@ -493,5 +493,65 @@ class PointDeCharge {
             return false;
         }
     }
+
+    public function getMapPoints(array $filters): array {
+        try {
+            $request = '
+                SELECT 
+                    pdc.id_pdc AS id, 
+                    c.nom_commune AS localite, 
+                    c.code_dep AS dept, 
+                    YEAR(s.date_mise_en_service) AS annee, 
+                    pdc.puissance, 
+                    pdc.lat, 
+                    pdc.lon AS lng,
+                    ad.type_prise
+                FROM point_de_charge pdc
+                JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                JOIN commune c ON s.code_insee_commune = c.code_insee_commune
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
+            ';
+
+            $whereClauses = [];
+            $queryParams = [];
+
+            if (!empty($filters['annee'])) {
+                $whereClauses[] = 'YEAR(s.date_mise_en_service) = :annee';
+                $queryParams[':annee'] = (int)$filters['annee'];
+            }
+            if (!empty($filters['code_dep'])) {
+                $whereClauses[] = 'c.code_dep = :code_dep';
+                $queryParams[':code_dep'] = $filters['code_dep'];
+            }
+
+            if (!empty($whereClauses)) {
+                $request .= ' AND ' . implode(' AND ', $whereClauses);
+            }
+
+            $statement = $this->db->prepare($request);
+            $statement->execute($queryParams);
+            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            // Conversion des types numériques pour le JSON
+            return array_map(function($row) {
+                return [
+                    'id' => (int)$row['id'],
+                    'localite' => $row['localite'],
+                    'dept' => (int)$row['dept'],
+                    'annee' => $row['annee'] !== null ? (int)$row['annee'] : null,
+                    'puissance' => $row['puissance'] !== null ? (float)$row['puissance'] : null,
+                    'lat' => (float)$row['lat'],
+                    'lng' => (float)$row['lng'],
+                    'type_prise' => $row['type_prise']
+                ];
+            }, $rows);
+        } catch (PDOException $exception) {
+            error_log('getMapPoints error: ' . $exception->getMessage());
+            return [];
+        }
+    }
 }
 ?>
+

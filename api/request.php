@@ -65,6 +65,12 @@ if ($requestRessource === 'pdc' && $requestMethod === 'GET') {
             } else {
                 $data = false;
             }
+        } else if ($subResource === 'map') {
+            $filters = [
+                'annee' => isset($_GET['annee']) ? trim($_GET['annee']) : '',
+                'code_dep' => isset($_GET['code_dep']) ? trim($_GET['code_dep']) : ''
+            ];
+            $data = $pdcModel->getMapPoints($filters);
         } else {
             $limit = 100;
             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
