@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/carte.css">
+    <script src="../js/carte.js" defer></script>
 </head>
 <body>
     <div class="page">
@@ -34,19 +35,14 @@
         <div class="map-controls">
             <div class="field-group">
                 <label class="field-label">Année d'installation</label>
-                <select class="field-select">
-                    <option>— Toutes les années —</option>
-                    <option>2021</option><option>2022</option><option>2023</option><option>2024</option>
+                <select class="field-select" id="select-annee">
+                    <option value="">— Toutes les années —</option>
                 </select>
             </div>
             <div class="field-group">
                 <label class="field-label">Département</label>
-                <select class="field-select">
-                <option>— Tous les départements —</option>
-                <option>22 — Côtes-d'Armor</option>
-                <option>29 — Finistère</option>
-                <option>35 — Ille-et-Vilaine</option>
-                <option>56 — Morbihan</option>
+                <select class="field-select" id="select-departement">
+                    <option value="">— Tous les départements —</option>
                 </select>
             </div>
             <button class="search-btn">Afficher</button>

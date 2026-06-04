@@ -84,5 +84,16 @@ class Referentiel {
             return [];
         }
     }
+
+    public function getAnneeMiseEnService(): array {
+        try {
+            $stmt = $this->db->prepare('SELECT DISTINCT YEAR(date_mise_en_service) AS annee FROM station ORDER BY annee ASC;');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            error_log('Referentiel error: ' . $exception->getMessage());
+            return [];
+        }
+    }
 }
 ?>

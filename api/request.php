@@ -41,7 +41,8 @@ if ($requestRessource === 'referentiel' && $requestMethod === 'GET') {
         $data = [
             'types_prise' => $refModel->getTypesPrise(),
             'amenageurs' => $refModel->getAmenageurs(),
-            'departements' => $refModel->getDepartements()
+            'departements' => $refModel->getDepartements(),
+            'annees' => $refModel->getAnneeMiseEnService()
         ];
     } catch (Exception $e) {
         $data = false;
