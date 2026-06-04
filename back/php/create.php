@@ -1,7 +1,7 @@
 <?php
-require_once '../../api/Database.php';
-require_once '../../api/models/PointDeCharge.php';
-require_once '../../api/models/Referentiel.php';
+require_once __DIR__ . '/../../api/Database.php';
+require_once __DIR__ . '/../../api/models/PointDeCharge.php';
+require_once __DIR__ . '/../../api/models/Referentiel.php';
 
 $page_active = 'nouveau';
 

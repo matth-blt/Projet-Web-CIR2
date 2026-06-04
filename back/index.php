@@ -1,6 +1,6 @@
 <?php
-require_once '../api/Database.php';
-require_once '../api/models/PointDeCharge.php';
+require_once __DIR__ . '/../api/Database.php';
+require_once __DIR__ . '/../api/models/PointDeCharge.php';
 
 $page_active = 'accueil';
 
