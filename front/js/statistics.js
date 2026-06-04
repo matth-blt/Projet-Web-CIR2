@@ -58,9 +58,9 @@ function updateStatsUI(data) {
         renderHeroChart(data.pdc_par_annee);
     }
 
-    // 5. Rendu du graphique par année et département
+    // 5. Rendu du tableau par année et département
     if (data.pdc_par_annee_departement && Array.isArray(data.pdc_par_annee_departement)) {
-        renderGroupedBarChart(data.pdc_par_annee_departement);
+        renderStatsTable(data.pdc_par_annee_departement);
     }
 }
 
@@ -125,16 +125,46 @@ function renderHeroChart(pdcParAnnee) {
         }
     });
 }
+
 /**
- * Génère le graphique à barres groupées chartGroupedBar avec Chart.js
+ * Génère le tableau avec les points de charge par année et par département
  */
-function renderGroupedBarChart(pdcParAnneeDep) {
-    const canvas = document.getElementById('chartGroupedBar');
-    if (!canvas) return;
+function renderStatsTable(pdcParAnneeDep) {
+    const tbody = document.getElementById('tableGroupedStatsBody');
+    if (!tbody) return;
 
-    const ctx = canvas.getContext('2d');
+    tbody.innerHTML = '';
 
-    // 1. Définir les années de manière dynamique à partir des données
+    // 1. Extraire les départements uniques (code + nom) de manière dynamique
+    const departmentsMap = new Map();
+    pdcParAnneeDep.forEach(item => {
+        if (item.numero_departement) {
+            const code = item.numero_departement.toString();
+            const name = item.nom_departement || `Département ${code}`;
+            if (!departmentsMap.has(code)) {
+                departmentsMap.set(code, name);
+            }
+        }
+    });
+
+    // Trier les codes de département pour un affichage ordonné
+    const sortedDepCodes = Array.from(departmentsMap.keys()).sort((a, b) => {
+        return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    // 2. Mettre à jour l'en-tête du tableau (les colonnes) de manière dynamique
+    const theadTr = document.querySelector('#tableGroupedStats thead tr');
+    if (theadTr) {
+        theadTr.innerHTML = '<th>Année</th>';
+        sortedDepCodes.forEach(code => {
+            const name = departmentsMap.get(code);
+            const th = document.createElement('th');
+            th.textContent = `${name} (${code})`;
+            theadTr.appendChild(th);
+        });
+    }
+
+    // 3. Définir les années de manière dynamique à partir des données
     const yearsSet = new Set();
     pdcParAnneeDep.forEach(item => {
         if (item.annee) {
@@ -143,87 +173,29 @@ function renderGroupedBarChart(pdcParAnneeDep) {
     });
     const YEARS = Array.from(yearsSet).sort();
 
-    // Si aucune année trouvée, par défaut on prend 2018-2026
-    if (YEARS.length === 0) {
-        for (let y = 2018; y <= 2026; y++) YEARS.push(y.toString());
-    }
-
-    // 2. Préparer les données pour chaque département
-    const depCodes = ['22', '29', '35', '56'];
-    const depData = {
-        '22': [],
-        '29': [],
-        '35': [],
-        '56': []
-    };
-
+    // 4. Générer les lignes du tableau
     YEARS.forEach(year => {
-        depCodes.forEach(code => {
+        const tr = document.createElement('tr');
+        
+        // Colonne Année
+        const tdYear = document.createElement('td');
+        tdYear.innerHTML = `<strong>${year}</strong>`;
+        tr.appendChild(tdYear);
+
+        // Colonnes Départements
+        sortedDepCodes.forEach(code => {
             const match = pdcParAnneeDep.find(item => 
-                item.numero_departement.toString() === code && 
-                item.annee.toString() === year
+                item.annee.toString() === year && 
+                item.numero_departement.toString() === code
             );
-            depData[code].push(match ? parseInt(match.nombre_points_de_charge, 10) : 0);
+            const count = match ? parseInt(match.nombre_points_de_charge, 10) || 0 : 0;
+            
+            const tdCount = document.createElement('td');
+            tdCount.textContent = formatNumber(count);
+            tr.appendChild(tdCount);
         });
-    });
 
-    // 3. Palette dégradé de verts cohérente avec les cartes (fournie dans l'index.html téléchargé)
-    const DEP_COLORS = {
-        '22': '#1a3a2a',  // vert-fonce
-        '29': '#2d5c42',  // vert-moyen
-        '35': '#4caf7d',  // vert-accent
-        '56': '#9ad9bd',  // vert clair
-    };
-
-    // 4. Initialisation du graphique Chart.js
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: YEARS,
-            datasets: [
-                { label: "Côtes-d'Armor (22)", data: depData['22'], backgroundColor: DEP_COLORS['22'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                { label: 'Finistère (29)', data: depData['29'], backgroundColor: DEP_COLORS['29'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                { label: 'Ille-et-Vilaine (35)', data: depData['35'], backgroundColor: DEP_COLORS['35'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                { label: 'Morbihan (56)', data: depData['56'], backgroundColor: DEP_COLORS['56'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: '#1a3a2a',
-                    titleColor: '#ffffff',
-                    bodyColor: 'rgba(255,255,255,0.75)',
-                    borderColor: 'rgba(76,175,125,0.35)',
-                    borderWidth: 1,
-                    padding: 12,
-                    cornerRadius: 8,
-                    usePointStyle: true,
-                    callbacks: {
-                        title: items => 'Année ' + items[0].label,
-                        label: item => '  ' + item.dataset.label + ' : ' + item.formattedValue + ' PDC',
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    border: { color: '#d8e4dc' },
-                    ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 } },
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#e8efe9' },
-                    border: { display: false },
-                    ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 }, precision: 0 },
-                }
-            }
-        }
+        tbody.appendChild(tr);
     });
 }
 
