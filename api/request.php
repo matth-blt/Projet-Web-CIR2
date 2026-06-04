@@ -28,7 +28,8 @@ if ($requestRessource === 'stats' && $requestMethod === 'GET') {
             'total_amenageurs' => $statsModel->getNbrAmenageurs(),
             'total_prises' => $statsModel->getNbrTypeDePrises(),
             'departments' => $statsModel->getNbrPDCParDepartements(),
-            'pdc_par_annee' => $statsModel->getNbrPDCParAnnees()
+            'pdc_par_annee' => $statsModel->getNbrPDCParAnnees(),
+            'pdc_par_annee_departement' => $statsModel->getNbrPDCDepartementAnnees()
         ];
     } catch (Exception $e) {
         $data = false;

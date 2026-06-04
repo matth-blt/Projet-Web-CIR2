@@ -84,6 +84,7 @@ class Stats {
                 SELECT 
                     dep.code_dep AS numero_departement,
                     dep.nom_departement AS nom_departement,
+                    YEAR(s.date_mise_en_service) AS annee,
                     COUNT(pdc.id_pdc) AS nombre_points_de_charge
                 FROM point_de_charge pdc
                 INNER JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
@@ -92,9 +93,10 @@ class Stats {
                 INNER JOIN departement dep ON c.code_dep = dep.code_dep
                 GROUP BY 
                     dep.code_dep,
-                    dep.nom_departement
+                    dep.nom_departement,
+                    YEAR(s.date_mise_en_service)
                 ORDER BY 
-                    nombre_points_de_charge DESC;
+                    annee ASC;
             ');
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

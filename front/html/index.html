@@ -49,12 +49,39 @@
         <div class="stats-section">
             <div class="section-heading">Statistiques générales</div>
             <div class="section-sub">Données issues de la base IRVE Bretagne</div>
+
+            <!-- Graphique : points par année et par département -->
+            <div class="stat-chart-card">
+                <div class="stat-chart-head">
+                    <div>
+                        <div class="stat-chart-title">Points de charge par année et par département</div>
+                        <div class="stat-chart-sub">4 départements bretons · mise en service par année</div>
+                    </div>
+                    <div class="stat-chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #1a3a2a;"></span>
+                            <span>Côtes-d'Armor (22)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #2d5c42;"></span>
+                            <span>Finistère (29)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #4caf7d;"></span>
+                            <span>Ille-et-Vilaine (35)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #9ad9bd;"></span>
+                            <span>Morbihan (56)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-chart-wrap">
+                    <canvas id="chartGroupedBar"></canvas>
+                </div>
+            </div>
+
             <div class="stats-grid">
-                <!-- <div class="stat-card">
-                    <div class="stat-label">Total enregistrements</div>
-                    <div class="stat-value" id="stat-total-records">-</div>
-                    <span class="stat-tag">en base</span>
-                </div> -->
                 <div class="stat-card">
                     <div class="stat-label">Aménageurs</div>
                     <div class="stat-value" id="stat-amenageurs">-</div>
