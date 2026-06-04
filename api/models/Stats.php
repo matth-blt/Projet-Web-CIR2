@@ -108,7 +108,7 @@ class Stats {
 
     /**
      * Retourne le nombre d'amenageurs.
-     */
+    */
     public function getNbrAmenageurs(): int {
         try {
             $stmt = $this->db->prepare('
@@ -127,7 +127,7 @@ class Stats {
 
     /**
      * Retourne le nombre de types de prises.
-     */
+    */
     public function getNbrTypeDePrises(): int {
         try {
             $stmt = $this->db->prepare('

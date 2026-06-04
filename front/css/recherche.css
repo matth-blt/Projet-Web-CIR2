@@ -119,6 +119,57 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
+/* ── PAGINATION ── */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  background: var(--blanc);
+  border-top: 1px solid var(--bordure);
+}
+
+.pager-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--arrondi-sm);
+  border: 1px solid var(--bordure);
+  background: var(--blanc);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texte2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.pager-btn:hover:not(:disabled) {
+  border-color: var(--vert-accent);
+  color: var(--vert-accent);
+  background: var(--vert-clair);
+}
+
+.pager-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pager-btn.active {
+  background: var(--vert-fonce);
+  color: var(--blanc);
+  border-color: var(--vert-fonce);
+  font-weight: 600;
+}
+
+.pager-dots {
+  color: var(--texte3);
+  font-size: 14px;
+  padding: 0 4px;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .search-section { padding: 40px 32px; }

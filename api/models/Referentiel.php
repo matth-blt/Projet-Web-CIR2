@@ -62,5 +62,27 @@ class Referentiel {
             return [];
         }
     }
+
+    public function getAmenageurs(): array {
+        try {
+            $stmt = $this->db->prepare('SELECT nom_acteur FROM acteur WHERE role_acteur = \'Aménageur\'');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            error_log('Referentiel error: ' . $exception->getMessage());
+            return [];
+        }
+    }
+
+    public function getDepartements(): array {
+        try {
+            $stmt = $this->db->prepare('SELECT code_dep, nom_departement FROM departement');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            error_log('Referentiel error: ' . $exception->getMessage());
+            return [];
+        }
+    }
 }
 ?>

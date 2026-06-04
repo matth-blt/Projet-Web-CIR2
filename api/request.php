@@ -1,5 +1,4 @@
-<?php
-require_once __DIR__ . '/Database.php';
+<?php require_once __DIR__ . '/Database.php';
 
 // Connexion à la base de données
 try {
@@ -18,7 +17,6 @@ $requestRessource = array_shift($request);
 
 $data = false;
 
-// Endpoint : /stats (uniquement en GET)
 if ($requestRessource === 'stats' && $requestMethod === 'GET') {
     require_once __DIR__ . '/models/Stats.php';
     try {
@@ -30,6 +28,43 @@ if ($requestRessource === 'stats' && $requestMethod === 'GET') {
             'departments' => $statsModel->getNbrPDCParDepartements(),
             'pdc_par_annee' => $statsModel->getNbrPDCParAnnees(),
             'pdc_par_annee_departement' => $statsModel->getNbrPDCDepartementAnnees()
+        ];
+    } catch (Exception $e) {
+        $data = false;
+    }
+}
+
+if ($requestRessource === 'referentiel' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/models/Referentiel.php';
+    try {
+        $refModel = new Referentiel($db);
+        $data = [
+            'types_prise' => $refModel->getTypesPrise(),
+            'amenageurs' => $refModel->getAmenageurs(),
+            'departements' => $refModel->getDepartements()
+        ];
+    } catch (Exception $e) {
+        $data = false;
+    }
+}
+
+if ($requestRessource === 'pdc' && $requestMethod === 'GET') {
+    require_once __DIR__ . '/models/PointDeCharge.php';
+    try {
+        $pdcModel = new PointDeCharge($db);
+        $limit = 100;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($page - 1) * $limit;
+        
+        $total = $pdcModel->count();
+        $pdcs = $pdcModel->getAll(false, $limit, $offset);
+        
+        $data = [
+            'total' => $total,
+            'pages' => $total > 0 ? (int)ceil($total / $limit) : 1,
+            'page' => $page,
+            'limit' => $limit,
+            'pdcs' => $pdcs
         ];
     } catch (Exception $e) {
         $data = false;
