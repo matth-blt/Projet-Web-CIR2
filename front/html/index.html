@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="../js/statistics.js" defer></script>
 </head>
 <body>
     <div class="page">
@@ -28,11 +30,19 @@
         </header>
     
         <div class="hero">
-            <h1>Points de recharge en Bretagne</h1>
-            <p>Explorez les infrastructures de recharge pour véhicules électriques (IRVE) en Bretagne. Recherchez par critères ou visualisez sur une carte interactive.</p>
-            <div class="hero-btns">
-                <a href="recherche.html" class="btn-primary">Rechercher une borne</a>
-                <a href="carte.html" class="btn-outline">Voir la carte</a>
+            <div class="hero-left">
+                <h1>Points de recharge en Bretagne</h1>
+                <p>Explorez les infrastructures de recharge pour véhicules électriques (IRVE) en Bretagne. Recherchez par critères ou visualisez sur une carte interactive.</p>
+                <div class="hero-btns">
+                    <a href="recherche.html" class="btn-primary">Rechercher une borne</a>
+                    <a href="carte.html" class="btn-outline">Voir la carte</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-chart-label">Nombre de points par années</div>
+                <div class="hero-chart-wrap">
+                    <canvas id="heroChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -40,36 +50,41 @@
             <div class="section-heading">Statistiques générales</div>
             <div class="section-sub">Données issues de la base IRVE Bretagne</div>
             <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total enregistrements</div>
-                <div class="stat-value">12 847</div>
-                <span class="stat-tag">en base</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Aménageurs</div>
-                <div class="stat-value">284</div>
-                <span class="stat-tag">opérateurs actifs</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Types de prise</div>
-                <div class="stat-value">7</div>
-                <span class="stat-tag">nbre_pdc distincts</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Finistère (29)</div>
-                <div class="stat-value">4 210</div>
-                <span class="stat-tag">points</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Ille-et-Vilaine (35)</div>
-                <div class="stat-value">3 980</div>
-                <span class="stat-tag">points</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Nouveaux en 2024</div>
-                <div class="stat-value">3 650</div>
-                <span class="stat-tag">mise en service</span>
-            </div>
+                <!-- <div class="stat-card">
+                    <div class="stat-label">Total enregistrements</div>
+                    <div class="stat-value" id="stat-total-records">-</div>
+                    <span class="stat-tag">en base</span>
+                </div> -->
+                <div class="stat-card">
+                    <div class="stat-label">Aménageurs</div>
+                    <div class="stat-value" id="stat-amenageurs">-</div>
+                    <span class="stat-tag">actifs</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Types de prise</div>
+                    <div class="stat-value" id="stat-prises">-</div>
+                    <span class="stat-tag">types distincts</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Côtes-d'Armor (22)</div>
+                    <div class="stat-value" id="stat-dep-22">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Finistère (29)</div>
+                    <div class="stat-value" id="stat-dep-29">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ille-et-Vilaine (35)</div>
+                    <div class="stat-value" id="stat-dep-35">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Morbihan (56)</div>
+                    <div class="stat-value" id="stat-dep-56">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
             </div>
         </div>
 

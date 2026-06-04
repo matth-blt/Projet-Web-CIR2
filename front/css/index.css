@@ -2,14 +2,44 @@
    PAGE ACCUEIL (index.html)
    ============================================= */
 
-/* ── HERO (bandeau principal) ── */
 .hero {
   background: linear-gradient(160deg, #0d2118 0%, #0a2e22 40%, #082619 100%);
   padding: 0 80px;
   min-height: 100vh;
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 60px;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-chart-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero-chart-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(76,175,125,0.2);
+  border-radius: var(--arrondi-lg);
+  padding: 24px;
+  height: 300px;
 }
 
 /* Petit badge au-dessus du titre */
@@ -132,11 +162,12 @@
   border-radius: 20px;
 }
 
-/* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .hero          { padding: 48px 32px; min-height: 100vh; }
-  .stats-section { padding: 40px 32px; min-height: auto; }
-  .stats-grid    { grid-template-columns: repeat(2, 1fr); }
+  .hero            { padding: 48px 32px; min-height: auto; flex-direction: column; gap: 40px; }
+  .hero-right      { width: 100%; }
+  .hero-chart-wrap { height: 220px; }
+  .stats-section   { padding: 40px 32px; min-height: auto; }
+  .stats-grid      { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 540px) {

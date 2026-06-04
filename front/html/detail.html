@@ -1,77 +1,75 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IRVE Bretagne — Détail Station</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/common.css">
-  <link rel="stylesheet" href="../css/detail.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRVE Bretagne — Détail Station</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/detail.css">
 </head>
 <body>
-<div class="page">
+    <div class="page">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <span class="logo-name">IRVE Bretagne</span>
+            </div>
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('nav').classList.toggle('open')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+            </button>
+                <nav>
+                    <a href="index.html">Accueil</a>
+                    <a href="recherche.html" class="active">Recherche</a>
+                    <a href="carte.html">Carte</a>
+                </nav>
+        </header>
 
-  <header>
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <span class="logo-name">IRVE Bretagne</span>
+        <div class="detail-section">
+            <a href="recherche.html" class="back-link">← Retour aux résultats</a>
+            <div class="detail-card">
+            <div class="detail-card-header">
+                <h2>Station Brest — Rue de l'Alma</h2>
+                <p>ID : FRXXE7400123            Mise en service : 03 / 2023</p>
+            </div>
+            <div class="detail-card-body">
+                <div class="detail-group">
+                <div class="detail-group-title">Aménageur & Opérateur</div>
+                <div class="detail-grid-2">
+                    <div class="detail-field"><span class="detail-key">Nom aménageur</span><span class="detail-val">R3</span></div>
+                    <div class="detail-field"><span class="detail-key">SIREN aménageur</span><span class="detail-val">902 726 488</span></div>
+                    <div class="detail-field"><span class="detail-key">Nom opérateur</span><span class="detail-val">SPV COM</span></div>
+                    <div class="detail-field"><span class="detail-key">Contact opérateur</span><span class="detail-val">exploitation@r3-charge.fr</span></div>
+                </div>
+                </div>
+                <div class="detail-group">
+                <div class="detail-group-title">Caractéristiques techniques</div>
+                <div class="detail-grid-2">
+                    <div class="detail-field"><span class="detail-key">Type de prise</span><span class="detail-val">Combo CCS</span></div>
+                    <div class="detail-field"><span class="detail-key">Puissance nominale</span><span class="detail-val">22 kW</span></div>
+                    <div class="detail-field"><span class="detail-key">Nb points de charge</span><span class="detail-val">2</span></div>
+                    <div class="detail-field"><span class="detail-key">Accès</span><span class="detail-val">Accès libre</span></div>
+                </div>
+                </div>
+                <div class="detail-group">
+                <div class="detail-group-title">Localisation</div>
+                <div class="detail-grid-2">
+                    <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val">Brest</span></div>
+                    <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val">29 — Finistère</span></div>
+                    <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val">48.3904° N</span></div>
+                    <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val">4.4861° W</span></div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <footer>
+            <span>Groupe CIR2 — 2026</span>
+            <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
+        </footer>
     </div>
-    <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('nav').classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
-    </button>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="recherche.html" class="active">Recherche</a>
-      <a href="carte.html">Carte</a>
-    </nav>
-  </header>
-
-  <div class="detail-section">
-    <a href="recherche.html" class="back-link">← Retour aux résultats</a>
-    <div class="detail-card">
-      <div class="detail-card-header">
-        <h2>Station Brest — Rue de l'Alma</h2>
-        <p>ID : FRXXE7400123            Mise en service : 03 / 2023</p>
-      </div>
-      <div class="detail-card-body">
-        <div class="detail-group">
-          <div class="detail-group-title">Aménageur & Opérateur</div>
-          <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Nom aménageur</span><span class="detail-val">R3</span></div>
-            <div class="detail-field"><span class="detail-key">SIREN aménageur</span><span class="detail-val">902 726 488</span></div>
-            <div class="detail-field"><span class="detail-key">Nom opérateur</span><span class="detail-val">SPV COM</span></div>
-            <div class="detail-field"><span class="detail-key">Contact opérateur</span><span class="detail-val">exploitation@r3-charge.fr</span></div>
-          </div>
-        </div>
-        <div class="detail-group">
-          <div class="detail-group-title">Caractéristiques techniques</div>
-          <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Type de prise</span><span class="detail-val">Combo CCS</span></div>
-            <div class="detail-field"><span class="detail-key">Puissance nominale</span><span class="detail-val">22 kW</span></div>
-            <div class="detail-field"><span class="detail-key">Nb points de charge</span><span class="detail-val">2</span></div>
-            <div class="detail-field"><span class="detail-key">Accès</span><span class="detail-val">Accès libre</span></div>
-          </div>
-        </div>
-        <div class="detail-group">
-          <div class="detail-group-title">Localisation</div>
-          <div class="detail-grid-2">
-            <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val">Brest</span></div>
-            <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val">29 — Finistère</span></div>
-            <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val">48.3904° N</span></div>
-            <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val">4.4861° W</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <span>Groupe CIR2 — 2026</span>
-    <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
-  </footer>
-
-</div>
 </body>
 </html>
