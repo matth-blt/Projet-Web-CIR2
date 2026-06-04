@@ -68,7 +68,17 @@ table {
   width: 100%;
   border-collapse: collapse;
   min-width: 560px; /* évite que le tableau soit trop écrasé */
+  table-layout: fixed;
 }
+
+/* Largeurs des colonnes : Station | Aménageur | Opérateur | Type prise | Commune | Tarif | Actions */
+table thead th:nth-child(1) { width: 22%; }
+table thead th:nth-child(2) { width: 14%; }
+table thead th:nth-child(3) { width: 14%; }
+table thead th:nth-child(4) { width: 11%; }
+table thead th:nth-child(5) { width: 11%; }
+table thead th:nth-child(6) { width: 16%; }
+table thead th:nth-child(7) { width: 12%; }
 
 thead th {
   background: var(--surface);
@@ -87,11 +97,28 @@ tbody td {
   font-size: 14px;
   color: var(--texte);
   border-bottom: 1px solid var(--bordure);
+  word-break: break-word;
 }
 
 /* Pas de bordure sur la dernière ligne */
 tbody tr:last-child td {
   border-bottom: none;
+}
+
+/* ── ANIMATION LIGNES TABLEAU ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-wrap tbody tr {
+  animation: fadeSlideIn 0.3s ease both;
 }
 
 /* Survol d'une ligne */
@@ -117,6 +144,57 @@ tbody tr:hover {
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
+}
+
+/* ── PAGINATION ── */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  background: var(--blanc);
+  border-top: 1px solid var(--bordure);
+}
+
+.pager-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--arrondi-sm);
+  border: 1px solid var(--bordure);
+  background: var(--blanc);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--texte2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.pager-btn:hover:not(:disabled) {
+  border-color: var(--vert-accent);
+  color: var(--vert-accent);
+  background: var(--vert-clair);
+}
+
+.pager-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pager-btn.active {
+  background: var(--vert-fonce);
+  color: var(--blanc);
+  border-color: var(--vert-fonce);
+  font-weight: 600;
+}
+
+.pager-dots {
+  color: var(--texte3);
+  font-size: 14px;
+  padding: 0 4px;
 }
 
 /* ── RESPONSIVE ── */

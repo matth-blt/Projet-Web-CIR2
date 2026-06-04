@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/index.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="../js/statistics.js" defer></script>
 </head>
 <body>
     <div class="page">
@@ -38,7 +39,7 @@
                 </div>
             </div>
             <div class="hero-right">
-                <div class="hero-chart-label">Bornes mises en service / an</div>
+                <div class="hero-chart-label">Nombre de points par années</div>
                 <div class="hero-chart-wrap">
                     <canvas id="heroChart"></canvas>
                 </div>
@@ -49,50 +50,63 @@
             <div class="section-heading">Statistiques générales</div>
             <div class="section-sub">Données issues de la base IRVE Bretagne</div>
 
-            <!-- Graphique : points par année et par département -->
+            <!-- Tableau : points par année et par département -->
             <div class="stat-chart-card">
                 <div class="stat-chart-head">
                     <div>
                         <div class="stat-chart-title">Points de charge par année et par département</div>
-                        <div class="stat-chart-sub">4 départements bretons · mise en service par année</div>
                     </div>
                 </div>
-                <div class="stat-chart-wrap">
-                    <canvas id="chartGroupedBar"></canvas>
+                <div class="table-wrap">
+                    <table id="tableGroupedStats">
+                        <thead>
+                            <tr>
+                                <th>Année</th>
+                                <th>Côtes-d'Armor (22)</th>
+                                <th>Finistère (29)</th>
+                                <th>Ille-et-Vilaine (35)</th>
+                                <th>Morbihan (56)</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableGroupedStatsBody">
+                            <!-- Rempli en JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total enregistrements</div>
-                <div class="stat-value">12 847</div>
-                <span class="stat-tag">en base</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Aménageurs</div>
-                <div class="stat-value">284</div>
-                <span class="stat-tag">opérateurs actifs</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Types de prise</div>
-                <div class="stat-value">7</div>
-                <span class="stat-tag">nbre_pdc distincts</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Finistère (29)</div>
-                <div class="stat-value">4 210</div>
-                <span class="stat-tag">points</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Ille-et-Vilaine (35)</div>
-                <div class="stat-value">3 980</div>
-                <span class="stat-tag">points</span>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Nouveaux en 2024</div>
-                <div class="stat-value">3 650</div>
-                <span class="stat-tag">mise en service</span>
-            </div>
+                <div class="stat-card">
+                    <div class="stat-label">Aménageurs</div>
+                    <div class="stat-value" id="stat-amenageurs">-</div>
+                    <span class="stat-tag">actifs</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Types de prise</div>
+                    <div class="stat-value" id="stat-prises">-</div>
+                    <span class="stat-tag">types distincts</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Côtes-d'Armor (22)</div>
+                    <div class="stat-value" id="stat-dep-22">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Finistère (29)</div>
+                    <div class="stat-value" id="stat-dep-29">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ille-et-Vilaine (35)</div>
+                    <div class="stat-value" id="stat-dep-35">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Morbihan (56)</div>
+                    <div class="stat-value" id="stat-dep-56">-</div>
+                    <span class="stat-tag">points</span>
+                </div>
             </div>
         </div>
 

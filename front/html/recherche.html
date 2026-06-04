@@ -7,126 +7,86 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/common.css">
   <link rel="stylesheet" href="../css/recherche.css">
+  <script src="../js/recherche.js" defer></script>
 </head>
 <body>
-<div class="page">
+    <div class="page">
+        <header>
+            <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <span class="logo-name">IRVE Bretagne</span>
+            </div>
+            <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('nav').classList.toggle('open')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+            </button>
+            <nav>
+            <a href="index.html">Accueil</a>
+            <a href="recherche.html" class="active">Recherche</a>
+            <a href="carte.html">Carte</a>
+            </nav>
+        </header>
 
-  <header>
-    <div class="logo">
-      <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <span class="logo-name">IRVE Bretagne</span>
-    </div>
-    <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('nav').classList.toggle('open')">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
-    </button>
-    <nav>
-      <a href="index.html">Accueil</a>
-      <a href="recherche.html" class="active">Recherche</a>
-      <a href="carte.html">Carte</a>
-    </nav>
-  </header>
+        <div class="search-section">
+            <div class="section-heading">Recherche de bornes</div>
+            <div class="section-sub">Filtrez les points de recharge par aménageur, type de prise et département</div>
 
-  <div class="search-section">
-    <div class="section-heading">Recherche de bornes</div>
-    <div class="section-sub">Filtrez les points de recharge par aménageur, type de prise et département</div>
-
-    <div class="search-card">
-      <div class="search-card-title">Critères de recherche</div>
-      <div class="filter-row">
-        <div class="field-group">
-          <label class="field-label">Aménageur</label>
-          <select class="field-select">
-            <option>— Sélectionner (20 items) —</option>
-            <option>R3</option>
-            <option>ELECTRIC 55 CHARGING</option>
-            <option>LE ROUX LOISIRS</option>
-            <option>Freshmile</option>
-          </select>
+        <div class="search-card">
+        <div class="search-card-title">Critères de recherche</div>
+        <div class="filter-row">
+            <div class="field-group">
+            <label class="field-label">Aménageur</label>
+            <select class="field-select" id="select-amenageur">
+                <option value="">— Tous —</option>
+            </select>
+            </div>
+            <div class="field-group">
+            <label class="field-label">Type de prise</label>
+            <select class="field-select" id="select-prise">
+                <option value="">— Tous —</option>
+            </select>
+            </div>
+            <div class="field-group">
+            <label class="field-label">Département</label>
+            <select class="field-select" id="select-departement">
+                <option value="">— Tous —</option>
+            </select>
+            </div>
         </div>
-        <div class="field-group">
-          <label class="field-label">Type de prise</label>
-          <select class="field-select">
-            <option>— Sélectionner —</option>
-            <option>Combo CCS</option>
-            <option>CHAdeMO</option>
-            <option>Type 2</option>
-            <option>Type 3</option>
-          </select>
+        <button class="search-btn">Lancer la recherche</button>
         </div>
-        <div class="field-group">
-          <label class="field-label">Département</label>
-          <select class="field-select">
-            <option>— Sélectionner —</option>
-            <option>22 — Côtes-d'Armor</option>
-            <option>29 — Finistère</option>
-            <option>35 — Ille-et-Vilaine</option>
-            <option>56 — Morbihan</option>
-          </select>
+
+        <div class="results-header">
+        <span class="results-title">Résultats</span>
+        <span class="results-count" id="results-count">- bornes trouvées</span>
         </div>
-      </div>
-      <button class="search-btn">Lancer la recherche</button>
-    </div>
+        <div class="table-wrap">
+        <table id="results-table">
+            <thead>
+            <tr>
+                <th>Station</th>
+                <th>Aménageur</th>
+                <th>Opérateur</th>
+                <th>Type de prise</th>
+                <th>Commune</th>
+                <th>Tarif</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="results-body">
+                <!-- Rempli dynamiquement en JS -->
+            </tbody>
+        </table>
+        <div class="pager" id="results-pager">
+            <!-- Rempli dynamiquement en JS -->
+        </div>
+        </div>
 
-    <div class="results-header">
-      <span class="results-title">Résultats</span>
-      <span class="results-count">42 bornes trouvées</span>
+        <footer>
+            <span>Groupe CIR2 — 2026</span>
+            <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
+        </footer>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Mise en service</th>
-            <th>Nb points</th>
-            <th>Type prise</th>
-            <th>Puissance</th>
-            <th>Localisation</th>
-            <th>Département</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>03 / 2023</td><td>2</td>
-            <td><span class="tag-prise">Combo CCS</span></td>
-            <td>22 kW</td><td>Brest</td><td>29 — Finistère</td>
-            <td><a href="detail.html" class="link-detail">Voir le détail →</a></td>
-          </tr>
-          <tr>
-            <td>07 / 2022</td><td>4</td>
-            <td><span class="tag-prise">Type 2</span></td>
-            <td>50 kW</td><td>Rennes</td><td>35 — Ille-et-Vilaine</td>
-            <td><a href="detail.html" class="link-detail">Voir le détail →</a></td>
-          </tr>
-          <tr>
-            <td>11 / 2024</td><td>1</td>
-            <td><span class="tag-prise">CHAdeMO</span></td>
-            <td>150 kW</td><td>Vannes</td><td>56 — Morbihan</td>
-            <td><a href="detail.html" class="link-detail">Voir le détail →</a></td>
-          </tr>
-          <tr>
-            <td>01 / 2023</td><td>3</td>
-            <td><span class="tag-prise">Type 2</span></td>
-            <td>22 kW</td><td>Lorient</td><td>56 — Morbihan</td>
-            <td><a href="detail.html" class="link-detail">Voir le détail →</a></td>
-          </tr>
-          <tr>
-            <td>05 / 2024</td><td>2</td>
-            <td><span class="tag-prise">Combo CCS</span></td>
-            <td>100 kW</td><td>Quimper</td><td>29 — Finistère</td>
-            <td><a href="detail.html" class="link-detail">Voir le détail →</a></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer>
-    <span>Groupe CIR2 — 2026</span>
-    <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
-  </footer>
-
-</div>
 </body>
 </html>
