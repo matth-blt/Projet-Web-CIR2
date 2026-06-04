@@ -1,5 +1,8 @@
 <?php
 // $page_active doit être défini avant l'inclusion : 'accueil', 'liste' ou 'nouveau'
+$is_in_php_dir = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'php');
+$php_dir = $is_in_php_dir ? '' : 'php/';
+$back_dir = $is_in_php_dir ? '../' : '';
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRVE Admin — Back-office</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="../css/style.css" rel="stylesheet">
+  <link href="<?= $back_dir ?>css/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -21,9 +24,9 @@
     </div>
 
     <nav>
-        <a href="index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
-        <a href="liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
-        <a href="create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+        <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
+        <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
+        <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -37,9 +40,9 @@
 </header>
 
 <nav class="mobile-nav" id="mobile-nav">
-    <a href="index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
-    <a href="liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
-    <a href="create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+    <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
+    <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
+    <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
 </nav>
 
 <script>

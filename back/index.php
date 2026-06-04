@@ -1,6 +1,6 @@
 <?php
-require_once '../../api/Database.php';
-require_once '../../api/models/PointDeCharge.php';
+require_once '../api/Database.php';
+require_once '../api/models/PointDeCharge.php';
 
 $page_active = 'accueil';
 
@@ -8,7 +8,7 @@ $db = Database::getConnection();
 $pdcModel = new PointDeCharge($db);
 $pdcs = $pdcModel->getAll(accueil: true);
 
-include 'header.php';
+include './php/header.php';
 ?>
 
 <div class="content">
@@ -17,7 +17,7 @@ include 'header.php';
             <div class="page-title">Administration des IRVE</div>
             <div class="page-sub">Gestion des points de recharge véhicules électriques en Bretagne</div>
         </div>
-        <a href="create.php"><button class="btn-add">+ Ajouter un point</button></a>
+        <a href="php/create.php"><button class="btn-add">+ Ajouter un point</button></a>
     </div>
 
     <div class="table-wrap">
@@ -46,10 +46,10 @@ include 'header.php';
                 <td><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
                 <td><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
                 <td>
-                    <a href="detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="php/detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
                     <button class="btn-view">Voir</button>
                     </a>
-                    <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="php/edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
                     <button class="btn-edit">Modifier</button>
                     </a>
                 </td>
@@ -61,4 +61,4 @@ include 'header.php';
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'php/footer.php'; ?>
