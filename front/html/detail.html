@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/detail.css">
+    <script src="../js/detail.js" defer></script>
 </head>
 <body>
     <div class="page">
@@ -29,40 +30,57 @@
 
         <div class="detail-section">
             <a href="recherche.html" class="back-link">← Retour aux résultats</a>
-            <div class="detail-card">
-            <div class="detail-card-header">
-                <h2>Station Brest — Rue de l'Alma</h2>
-                <p>ID : FRXXE7400123            Mise en service : 03 / 2023</p>
+            
+            <div id="error-message" style="display: none; color: var(--texte3); margin-top: 20px;">
+                Point de charge introuvable ou paramètres incorrects.
             </div>
-            <div class="detail-card-body">
-                <div class="detail-group">
-                <div class="detail-group-title">Aménageur & Opérateur</div>
-                <div class="detail-grid-2">
-                    <div class="detail-field"><span class="detail-key">Nom aménageur</span><span class="detail-val">R3</span></div>
-                    <div class="detail-field"><span class="detail-key">SIREN aménageur</span><span class="detail-val">902 726 488</span></div>
-                    <div class="detail-field"><span class="detail-key">Nom opérateur</span><span class="detail-val">SPV COM</span></div>
-                    <div class="detail-field"><span class="detail-key">Contact opérateur</span><span class="detail-val">exploitation@r3-charge.fr</span></div>
+
+            <div class="detail-card" id="detail-card">
+                <div class="detail-card-header">
+                    <div>
+                        <h2 id="det-nom-station">Chargement...</h2>
+                        <p id="det-id-pdc-text">ID PDC : -</p>
+                    </div>
                 </div>
+                <div class="detail-card-body">
+                    <div class="detail-group">
+                        <div class="detail-group-title">Aménageur &amp; Opérateur</div>
+                        <div class="detail-grid-2">
+                            <div class="detail-field"><span class="detail-key">Aménageur</span><span class="detail-val" id="det-amenageur">-</span></div>
+                            <div class="detail-field"><span class="detail-key">SIREN</span><span class="detail-val" id="det-siren">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Opérateur</span><span class="detail-val" id="det-operateur">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Contact</span><span class="detail-val" id="det-contact">-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <div class="detail-group-title">Caractéristiques techniques</div>
+                        <div class="detail-grid-2">
+                            <div class="detail-field"><span class="detail-key">Type de prise</span><span class="detail-val" id="det-type-prise">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Puissance</span><span class="detail-val" id="det-puissance">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Câble T2 attaché</span><span class="detail-val" id="det-cable">-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <div class="detail-group-title">Localisation</div>
+                        <div class="detail-grid-2">
+                            <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val" id="det-latitude">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val" id="det-longitude">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val" id="det-commune">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val" id="det-departement">-</span></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-group">
+                        <div class="detail-group-title">Paiement</div>
+                        <div class="detail-grid-2">
+                            <div class="detail-field"><span class="detail-key">Tarification</span><span class="detail-val" id="det-tarification">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Types de paiement</span><span class="detail-val" id="det-types-paiement">-</span></div>
+                            <div class="detail-field"><span class="detail-key">Gratuit</span><span class="detail-val" id="det-gratuit">-</span></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="detail-group">
-                <div class="detail-group-title">Caractéristiques techniques</div>
-                <div class="detail-grid-2">
-                    <div class="detail-field"><span class="detail-key">Type de prise</span><span class="detail-val">Combo CCS</span></div>
-                    <div class="detail-field"><span class="detail-key">Puissance nominale</span><span class="detail-val">22 kW</span></div>
-                    <div class="detail-field"><span class="detail-key">Nb points de charge</span><span class="detail-val">2</span></div>
-                    <div class="detail-field"><span class="detail-key">Accès</span><span class="detail-val">Accès libre</span></div>
-                </div>
-                </div>
-                <div class="detail-group">
-                <div class="detail-group-title">Localisation</div>
-                <div class="detail-grid-2">
-                    <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val">Brest</span></div>
-                    <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val">29 — Finistère</span></div>
-                    <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val">48.3904° N</span></div>
-                    <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val">4.4861° W</span></div>
-                </div>
-                </div>
-            </div>
             </div>
         </div>
 

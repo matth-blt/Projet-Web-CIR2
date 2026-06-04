@@ -52,109 +52,211 @@ class PointDeCharge {
             $statement->execute();
             $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            if (empty($rows)) {
-                return [];
-            }
-
-            // Extraction des IDs de points de charge uniques pour charger les relations en lot
-            $pdcIds = array_filter(array_unique(array_column($rows, 'id_pdc')));
-            if (empty($pdcIds)) {
-                return array_map(function($row) {
-                    return [
-                        'nom_station' => null,
-                        'id_pdc' => $row['id_pdc'],
-                        'amenageur' => null,
-                        'operateur' => null,
-                        'type_prise' => $row['type_prise'],
-                        'commune' => null,
-                        'tarification' => $row['tarification']
-                    ];
-                }, $rows);
-            }
-
-            // 2. Récupération des infos des stations liées à ces PDC
-            $placeholders = implode(',', array_fill(0, count($pdcIds), '?'));
-            $stationQuery = "
-                SELECT pd.id_pdc, s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
-                FROM possede_des pd
-                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
-                WHERE pd.id_pdc IN ($placeholders)
-            ";
-            $stmtS = $this->db->prepare($stationQuery);
-            $stmtS->execute(array_values($pdcIds));
-            $stationRows = $stmtS->fetchAll(PDO::FETCH_ASSOC);
-
-            $stationsByPdc = [];
-            $actorIds = [];
-            $communeCodes = [];
-            foreach ($stationRows as $sRow) {
-                $stationsByPdc[$sRow['id_pdc']] = $sRow;
-                if (!empty($sRow['id_acteur'])) {
-                    $actorIds[] = $sRow['id_acteur'];
-                }
-                if (!empty($sRow['id_acteur_est_utiliser_par'])) {
-                    $actorIds[] = $sRow['id_acteur_est_utiliser_par'];
-                }
-                if (!empty($sRow['code_insee_commune'])) {
-                    $communeCodes[] = $sRow['code_insee_commune'];
-                }
-            }
-
-            // 3. Récupération des noms des acteurs en lot
-            $actorsById = [];
-            if (!empty($actorIds)) {
-                $actorIds = array_unique($actorIds);
-                $actorPlaceholders = implode(',', array_fill(0, count($actorIds), '?'));
-                $actorQuery = "SELECT id_acteur, nom_acteur FROM acteur WHERE id_acteur IN ($actorPlaceholders)";
-                $stmtA = $this->db->prepare($actorQuery);
-                $stmtA->execute(array_values($actorIds));
-                $actorRows = $stmtA->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($actorRows as $aRow) {
-                    $actorsById[$aRow['id_acteur']] = $aRow['nom_acteur'];
-                }
-            }
-
-            // 4. Récupération des noms de communes en lot
-            $communesByInsee = [];
-            if (!empty($communeCodes)) {
-                $communeCodes = array_unique($communeCodes);
-                $communePlaceholders = implode(',', array_fill(0, count($communeCodes), '?'));
-                $communeQuery = "SELECT code_insee_commune, nom_commune FROM commune WHERE code_insee_commune IN ($communePlaceholders)";
-                $stmtC = $this->db->prepare($communeQuery);
-                $stmtC->execute(array_values($communeCodes));
-                $communeRows = $stmtC->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($communeRows as $cRow) {
-                    $communesByInsee[$cRow['code_insee_commune']] = $cRow['nom_commune'];
-                }
-            }
-
-            // 5. Assemblage final en mémoire
-            $results = [];
-            foreach ($rows as $row) {
-                $idPdc = $row['id_pdc'];
-                $station = $stationsByPdc[$idPdc] ?? null;
-
-                $nomStation = $station ? $station['nom_station'] : null;
-                $idAmenageur = $station ? $station['id_acteur'] : null;
-                $idOperateur = $station ? $station['id_acteur_est_utiliser_par'] : null;
-                $codeCommune = $station ? $station['code_insee_commune'] : null;
-
-                $results[] = [
-                    'nom_station' => $nomStation,
-                    'id_pdc' => $idPdc,
-                    'amenageur' => $idAmenageur !== null ? ($actorsById[$idAmenageur] ?? null) : null,
-                    'operateur' => $idOperateur !== null ? ($actorsById[$idOperateur] ?? null) : null,
-                    'type_prise' => $row['type_prise'],
-                    'commune' => $codeCommune !== null ? ($communesByInsee[$codeCommune] ?? null) : null,
-                    'tarification' => $row['tarification']
-                ];
-            }
-
-            return $results;
+            return $this->loadRelationsForRows($rows);
         } catch (PDOException $exception) {
             error_log('Request error: ' . $exception->getMessage());
             return [];
         }
+    }
+
+    /**
+     * Recherche filtrée des points de charge.
+    */
+    public function search(array $filters, ?int $limit = null, int $offset = 0): array {
+        try {
+            $request = '
+                SELECT pdc.id_pdc, pdc.tarification, ad.type_prise
+                FROM point_de_charge pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                LEFT JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                LEFT JOIN acteur a ON s.id_acteur = a.id_acteur
+                LEFT JOIN commune c ON s.code_insee_commune = c.code_insee_commune
+            ';
+
+            $whereClauses = [];
+            $queryParams = [];
+
+            if (!empty($filters['amenageur'])) {
+                $whereClauses[] = 'a.nom_acteur = :amenageur';
+                $queryParams[':amenageur'] = $filters['amenageur'];
+            }
+            if (!empty($filters['type_prise'])) {
+                $whereClauses[] = 'ad.type_prise = :type_prise';
+                $queryParams[':type_prise'] = $filters['type_prise'];
+            }
+            if (!empty($filters['code_dep'])) {
+                $whereClauses[] = 'c.code_dep = :code_dep';
+                $queryParams[':code_dep'] = $filters['code_dep'];
+            }
+
+            if (!empty($whereClauses)) {
+                $request .= ' WHERE ' . implode(' AND ', $whereClauses);
+            }
+
+            if ($limit !== null) {
+                $request .= ' LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+            }
+
+            $statement = $this->db->prepare($request);
+            $statement->execute($queryParams);
+            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $this->loadRelationsForRows($rows);
+        } catch (PDOException $exception) {
+            error_log('Search error: ' . $exception->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Compte le nombre de résultats pour une recherche filtrée.
+    */
+    public function searchCount(array $filters): int {
+        try {
+            $request = '
+                SELECT COUNT(*) AS total
+                FROM point_de_charge pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                LEFT JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                LEFT JOIN acteur a ON s.id_acteur = a.id_acteur
+                LEFT JOIN commune c ON s.code_insee_commune = c.code_insee_commune
+            ';
+
+            $whereClauses = [];
+            $queryParams = [];
+
+            if (!empty($filters['amenageur'])) {
+                $whereClauses[] = 'a.nom_acteur = :amenageur';
+                $queryParams[':amenageur'] = $filters['amenageur'];
+            }
+            if (!empty($filters['type_prise'])) {
+                $whereClauses[] = 'ad.type_prise = :type_prise';
+                $queryParams[':type_prise'] = $filters['type_prise'];
+            }
+            if (!empty($filters['code_dep'])) {
+                $whereClauses[] = 'c.code_dep = :code_dep';
+                $queryParams[':code_dep'] = $filters['code_dep'];
+            }
+
+            if (!empty($whereClauses)) {
+                $request .= ' WHERE ' . implode(' AND ', $whereClauses);
+            }
+
+            $statement = $this->db->prepare($request);
+            $statement->execute($queryParams);
+            $row = $statement->fetch(PDO::FETCH_ASSOC);
+            return (int) ($row['total'] ?? 0);
+        } catch (PDOException $exception) {
+            error_log('Search count error: ' . $exception->getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Helper pour charger en lot les relations pour une liste de lignes
+    */
+    private function loadRelationsForRows(array $rows): array {
+        if (empty($rows)) {
+            return [];
+        }
+
+        // Extraction des IDs de points de charge uniques pour charger les relations en lot
+        $pdcIds = array_filter(array_unique(array_column($rows, 'id_pdc')));
+        if (empty($pdcIds)) {
+            return array_map(function($row) {
+                return [
+                    'nom_station' => null,
+                    'id_pdc' => $row['id_pdc'],
+                    'amenageur' => null,
+                    'operateur' => null,
+                    'type_prise' => $row['type_prise'],
+                    'commune' => null,
+                    'tarification' => $row['tarification']
+                ];
+            }, $rows);
+        }
+
+        // 2. Récupération des infos des stations liées à ces PDC
+        $placeholders = implode(',', array_fill(0, count($pdcIds), '?'));
+        $stationQuery = "
+            SELECT pd.id_pdc, s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
+            FROM possede_des pd
+            JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+            WHERE pd.id_pdc IN ($placeholders)
+        ";
+        $stmtS = $this->db->prepare($stationQuery);
+        $stmtS->execute(array_values($pdcIds));
+        $stationRows = $stmtS->fetchAll(PDO::FETCH_ASSOC);
+
+        $stationsByPdc = [];
+        $actorIds = [];
+        $communeCodes = [];
+        foreach ($stationRows as $sRow) {
+            $stationsByPdc[$sRow['id_pdc']] = $sRow;
+            if (!empty($sRow['id_acteur'])) {
+                $actorIds[] = $sRow['id_acteur'];
+            }
+            if (!empty($sRow['id_acteur_est_utiliser_par'])) {
+                $actorIds[] = $sRow['id_acteur_est_utiliser_par'];
+            }
+            if (!empty($sRow['code_insee_commune'])) {
+                $communeCodes[] = $sRow['code_insee_commune'];
+            }
+        }
+
+        // 3. Récupération des noms des acteurs en lot
+        $actorsById = [];
+        if (!empty($actorIds)) {
+            $actorIds = array_unique($actorIds);
+            $actorPlaceholders = implode(',', array_fill(0, count($actorIds), '?'));
+            $actorQuery = "SELECT id_acteur, nom_acteur FROM acteur WHERE id_acteur IN ($actorPlaceholders)";
+            $stmtA = $this->db->prepare($actorQuery);
+            $stmtA->execute(array_values($actorIds));
+            $actorRows = $stmtA->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($actorRows as $aRow) {
+                $actorsById[$aRow['id_acteur']] = $aRow['nom_acteur'];
+            }
+        }
+
+        // 4. Récupération des noms de communes en lot
+        $communesByInsee = [];
+        if (!empty($communeCodes)) {
+            $communeCodes = array_unique($communeCodes);
+            $communePlaceholders = implode(',', array_fill(0, count($communeCodes), '?'));
+            $communeQuery = "SELECT code_insee_commune, nom_commune FROM commune WHERE code_insee_commune IN ($communePlaceholders)";
+            $stmtC = $this->db->prepare($communeQuery);
+            $stmtC->execute(array_values($communeCodes));
+            $communeRows = $stmtC->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($communeRows as $cRow) {
+                $communesByInsee[$cRow['code_insee_commune']] = $cRow['nom_commune'];
+            }
+        }
+
+        // 5. Assemblage final en mémoire
+        $results = [];
+        foreach ($rows as $row) {
+            $idPdc = $row['id_pdc'];
+            $station = $stationsByPdc[$idPdc] ?? null;
+
+            $nomStation = $station ? $station['nom_station'] : null;
+            $idAmenageur = $station ? $station['id_acteur'] : null;
+            $idOperateur = $station ? $station['id_acteur_est_utiliser_par'] : null;
+            $codeCommune = $station ? $station['code_insee_commune'] : null;
+
+            $results[] = [
+                'nom_station' => $nomStation,
+                'id_pdc' => $idPdc,
+                'amenageur' => $idAmenageur !== null ? ($actorsById[$idAmenageur] ?? null) : null,
+                'operateur' => $idOperateur !== null ? ($actorsById[$idOperateur] ?? null) : null,
+                'type_prise' => $row['type_prise'],
+                'commune' => $codeCommune !== null ? ($communesByInsee[$codeCommune] ?? null) : null,
+                'tarification' => $row['tarification']
+            ];
+        }
+
+        return $results;
     }
 
     /**

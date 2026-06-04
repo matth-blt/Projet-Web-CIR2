@@ -5,10 +5,10 @@ from sqlalchemy import create_engine, text
 # ==============================================================================
 # 1. CONFIGURATION DE LA CONNEXION MYSQL
 # ==============================================================================
-DB_USER = 'root'
+DB_USER = 'irveuser'
 DB_PASSWORD = ''  # Renseigne ton mot de passe si nécessaire
 DB_HOST = 'localhost'
-DB_NAME = 'irve_bdd_projet'
+DB_NAME = 'irve'
 
 connection_string = f'mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 engine = create_engine(connection_string)
@@ -32,8 +32,8 @@ try:
     print("✨ Tables vidées, prêtes pour un import tout propre.")
 
     print("⏳ Chargement des fichiers CSV...")
-    df = pd.read_csv('bdd/irve_init.csv')
-    df_ref_communes = pd.read_csv('bdd/communes-france-2024-limite.csv', sep=';')
+    df = pd.read_csv('irve_init.csv')
+    df_ref_communes = pd.read_csv('communes-france-2024-limite.csv', sep=';')
 
     # Nettoyage global des booléens du CSV (textes 'true'/'false' -> 1/0)
     for col in ['gratuit', 'raccordement', 'cable_t2_attache']:

@@ -52,20 +52,41 @@ if ($requestRessource === 'pdc' && $requestMethod === 'GET') {
     require_once __DIR__ . '/models/PointDeCharge.php';
     try {
         $pdcModel = new PointDeCharge($db);
-        $limit = 100;
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-        $offset = ($page - 1) * $limit;
         
-        $total = $pdcModel->count();
-        $pdcs = $pdcModel->getAll(false, $limit, $offset);
-        
-        $data = [
-            'total' => $total,
-            'pages' => $total > 0 ? (int)ceil($total / $limit) : 1,
-            'page' => $page,
-            'limit' => $limit,
-            'pdcs' => $pdcs
-        ];
+        $subResource = array_shift($request);
+        if ($subResource === 'detail') {
+            $id_pdc = isset($_GET['id_pdc']) ? (int)$_GET['id_pdc'] : 0;
+            $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : '';
+            
+            $pdc = ($id_pdc && $type_prise) ? $pdcModel->getById($id_pdc, $type_prise) : null;
+            if ($pdc) {
+                $data = $pdc;
+            } else {
+                $data = false;
+            }
+        } else {
+            $limit = 100;
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $offset = ($page - 1) * $limit;
+            
+            // Extraction des filtres optionnels depuis les paramètres de l'URL
+            $filters = [
+                'amenageur' => isset($_GET['amenageur']) ? trim($_GET['amenageur']) : '',
+                'type_prise' => isset($_GET['type_prise']) ? trim($_GET['type_prise']) : '',
+                'code_dep' => isset($_GET['code_dep']) ? trim($_GET['code_dep']) : ''
+            ];
+            
+            $total = $pdcModel->searchCount($filters);
+            $pdcs = $pdcModel->search($filters, $limit, $offset);
+            
+            $data = [
+                'total' => $total,
+                'pages' => $total > 0 ? (int)ceil($total / $limit) : 1,
+                'page' => $page,
+                'limit' => $limit,
+                'pdcs' => $pdcs
+            ];
+        }
     } catch (Exception $e) {
         $data = false;
     }

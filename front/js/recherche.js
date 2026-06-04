@@ -1,11 +1,28 @@
+// Filtres actifs verrouillés (après clic sur le bouton de recherche ou au chargement initial)
+let activeFilters = {
+    amenageur: "",
+    type_prise: "",
+    code_dep: ""
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     fetchReferentiel();
-    fetchPDCs(1);
+    // Chargement initial (sans filtres)
+    fetchPDCs(1, true);
+
+    // Écouteur sur le bouton de recherche
+    const searchBtn = document.querySelector(".search-btn");
+    if (searchBtn) {
+        searchBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            fetchPDCs(1, true); // Lancer la recherche et verrouiller les filtres actifs
+        });
+    }
 });
 
 /**
  * Récupère les données de référentiel (filtres) depuis l'API request.php
- */
+*/
 async function fetchReferentiel() {
     try {
         const response = await fetch("../../api/request.php/referentiel");
@@ -21,7 +38,7 @@ async function fetchReferentiel() {
 
 /**
  * Remplit les éléments <select> de filtre avec les données récupérées, ordonnées et sans doublons
- */
+*/
 function populateFilters(data) {
     // 1. Remplissage des Aménageurs
     const selectAmenageur = document.getElementById("select-amenageur");
@@ -81,11 +98,29 @@ function populateFilters(data) {
 }
 
 /**
- * Récupère les points de charge de manière paginée
- */
-async function fetchPDCs(page = 1) {
+ * Récupère les points de charge de manière paginée et filtrée
+*/
+async function fetchPDCs(page = 1, lockCurrentInputs = false) {
     try {
-        const response = await fetch(`../../api/request.php/pdc?page=${page}`);
+        if (lockCurrentInputs) {
+            const selectAmenageur = document.getElementById("select-amenageur");
+            const selectPrise = document.getElementById("select-prise");
+            const selectDepartement = document.getElementById("select-departement");
+            
+            activeFilters.amenageur = selectAmenageur ? selectAmenageur.value : "";
+            activeFilters.type_prise = selectPrise ? selectPrise.value : "";
+            activeFilters.code_dep = selectDepartement ? selectDepartement.value : "";
+        }
+        
+        // Construction des paramètres d'URL pour le filtrage à partir des filtres verrouillés
+        const params = new URLSearchParams({
+            page: page,
+            amenageur: activeFilters.amenageur,
+            type_prise: activeFilters.type_prise,
+            code_dep: activeFilters.code_dep
+        });
+
+        const response = await fetch(`../../api/request.php/pdc?${params.toString()}`);
         if (!response.ok) {
             throw new Error("Erreur réseau lors du chargement des points de charge");
         }
@@ -110,7 +145,7 @@ async function fetchPDCs(page = 1) {
 
 /**
  * Génère le tableau HTML avec les résultats
- */
+*/
 function renderResultsTable(pdcs) {
     const tbody = document.getElementById("results-body");
     if (!tbody) return;
@@ -153,7 +188,7 @@ function renderResultsTable(pdcs) {
 
 /**
  * Génère la pagination HTML identique à la logique du back-office (liste.php)
- */
+*/
 function renderPager(currentPage, totalPages) {
     const pager = document.getElementById("results-pager");
     if (!pager) return;
@@ -224,7 +259,7 @@ function renderPager(currentPage, totalPages) {
 
 /**
  * Échappe le HTML pour éviter les injections XSS
- */
+*/
 function escapeHtml(str) {
     if (!str) return "";
     return str
@@ -238,7 +273,7 @@ function escapeHtml(str) {
 
 /**
  * Formate un nombre avec un espace pour les milliers
- */
+*/
 function formatNumber(num) {
     if (num === null || num === undefined) return "-";
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
