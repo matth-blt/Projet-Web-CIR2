@@ -48,6 +48,20 @@
         <div class="stats-section">
             <div class="section-heading">Statistiques générales</div>
             <div class="section-sub">Données issues de la base IRVE Bretagne</div>
+
+            <!-- Graphique : points par année et par département -->
+            <div class="stat-chart-card">
+                <div class="stat-chart-head">
+                    <div>
+                        <div class="stat-chart-title">Points de charge par année et par département</div>
+                        <div class="stat-chart-sub">4 départements bretons · mise en service par année</div>
+                    </div>
+                </div>
+                <div class="stat-chart-wrap">
+                    <canvas id="chartGroupedBar"></canvas>
+                </div>
+            </div>
+
             <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total enregistrements</div>
@@ -80,19 +94,6 @@
                 <span class="stat-tag">mise en service</span>
             </div>
             </div>
-        </div>
-
-        <div class="charts-section">
-
-            <!-- Graphique 1 : points par année ET par département (barres groupées) -->
-            <div class="chart-block">
-                <div class="chart-block-title">Points de charge par année et par département</div>
-                <div class="chart-block-sub">4 barres par année — un département breton par couleur</div>
-                <div class="chart-block-wrap">
-                    <canvas id="chartGroupedBar"></canvas>
-                </div>
-            </div>
-
         </div>
 
         <footer>
@@ -152,26 +153,26 @@
         });
     </script>
     <script>
-        /* ── Couleurs départements ── */
+        /* ── Palette dégradé de verts (cohérente avec les cards) ── */
         const DEP_COLORS = {
-            '22': { bg: 'rgba(76,175,125,0.8)',  border: '#4caf7d' },
-            '29': { bg: 'rgba(59,130,246,0.8)',  border: '#3b82f6' },
-            '35': { bg: 'rgba(245,158,11,0.8)',  border: '#f59e0b' },
-            '56': { bg: 'rgba(168,85,247,0.8)',  border: '#a855f7' },
+            '22': '#1a3a2a',  // vert-fonce
+            '29': '#2d5c42',  // vert-moyen
+            '35': '#4caf7d',  // vert-accent
+            '56': '#9ad9bd',  // vert clair
         };
 
         const YEARS = ['2018','2019','2020','2021','2022','2023','2024'];
 
-        /* ── Graphique 1 : barres groupées année × département ── */
+        /* ── Graphique : barres groupées année × département (thème clair) ── */
         new Chart(document.getElementById('chartGroupedBar'), {
             type: 'bar',
             data: {
                 labels: YEARS,
                 datasets: [
-                    { label: "Côtes-d'Armor (22)", data: [18, 32, 55, 80, 130, 210, 310],  backgroundColor: DEP_COLORS['22'].bg, borderColor: DEP_COLORS['22'].border, borderWidth: 1, borderRadius: 4 },
-                    { label: 'Finistère (29)',       data: [40, 65, 110, 160, 260, 420, 610], backgroundColor: DEP_COLORS['29'].bg, borderColor: DEP_COLORS['29'].border, borderWidth: 1, borderRadius: 4 },
-                    { label: 'Ille-et-Vilaine (35)', data: [35, 60, 105, 155, 250, 400, 590], backgroundColor: DEP_COLORS['35'].bg, borderColor: DEP_COLORS['35'].border, borderWidth: 1, borderRadius: 4 },
-                    { label: 'Morbihan (56)',         data: [27, 53, 110, 145, 250, 420, 590], backgroundColor: DEP_COLORS['56'].bg, borderColor: DEP_COLORS['56'].border, borderWidth: 1, borderRadius: 4 },
+                    { label: "Côtes-d'Armor (22)", data: [18, 32, 55, 80, 130, 210, 310],  backgroundColor: DEP_COLORS['22'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
+                    { label: 'Finistère (29)',       data: [40, 65, 110, 160, 260, 420, 610], backgroundColor: DEP_COLORS['29'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
+                    { label: 'Ille-et-Vilaine (35)', data: [35, 60, 105, 155, 250, 400, 590], backgroundColor: DEP_COLORS['35'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
+                    { label: 'Morbihan (56)',         data: [27, 53, 110, 145, 250, 420, 590], backgroundColor: DEP_COLORS['56'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
                 ]
             },
             options: {
@@ -181,20 +182,44 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: { color: '#4a5c50', font: { family: 'DM Sans', size: 12 }, usePointStyle: true, padding: 20 }
+                        align: 'end',
+                        labels: {
+                            color: '#4a5c50',
+                            font: { family: 'DM Sans', size: 12, weight: '500' },
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded',
+                            pointStyleWidth: 12,
+                            boxHeight: 8,
+                            padding: 20,
+                        }
                     },
                     tooltip: {
                         backgroundColor: '#1a3a2a',
-                        titleColor: '#fff',
+                        titleColor: '#ffffff',
                         bodyColor: 'rgba(255,255,255,0.75)',
-                        borderColor: 'rgba(76,175,125,0.3)',
+                        borderColor: 'rgba(76,175,125,0.35)',
                         borderWidth: 1,
                         padding: 12,
+                        cornerRadius: 8,
+                        usePointStyle: true,
+                        callbacks: {
+                            title: items => 'Année ' + items[0].label,
+                            label: item => '  ' + item.dataset.label + ' : ' + item.formattedValue + ' PDC',
+                        }
                     }
                 },
                 scales: {
-                    x: { grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 } } },
-                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)' }, ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 }, precision: 0 } }
+                    x: {
+                        grid: { display: false },
+                        border: { color: '#d8e4dc' },
+                        ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 } },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e8efe9' },
+                        border: { display: false },
+                        ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 }, precision: 0 },
+                    }
                 }
             }
         });

@@ -114,7 +114,7 @@
 
 /* ── SECTION STATISTIQUES ── */
 .stats-section {
-  padding: 0 80px;
+  padding: 80px 80px;
   background: var(--blanc);
   min-height: 100vh;
   display: flex;
@@ -163,39 +163,35 @@
   border-radius: 20px;
 }
 
-/* ── SECTION GRAPHIQUES (sous les stat-cards) ── */
-.charts-section {
-  padding: 60px 80px 80px;
-  background: var(--fond);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-
-/* Carte de graphique générique */
-.chart-block {
-  background: var(--blanc);
+/* ── CARTE GRAPHIQUE (assortie aux stat-card, placée au-dessus de la grille) ── */
+.stat-chart-card {
+  background: var(--surface);
   border: 1px solid var(--bordure);
   border-radius: var(--arrondi-lg);
-  padding: 28px 28px 20px;
+  padding: 24px 28px 20px;
+  margin-bottom: 20px;
 }
 
-.chart-block-title {
+.stat-chart-head {
+  margin-bottom: 20px;
+}
+
+.stat-chart-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--texte);
   margin-bottom: 4px;
 }
 
-.chart-block-sub {
+.stat-chart-sub {
   font-size: 12px;
+  font-weight: 500;
   color: var(--texte3);
-  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-/* Hauteur du canvas — grand graphique barres groupées */
-.chart-block-wrap {
+.stat-chart-wrap {
   position: relative;
   height: 320px;
 }
@@ -206,9 +202,9 @@
   .hero            { padding: 48px 32px; min-height: auto; flex-direction: column; gap: 40px; }
   .hero-right      { width: 100%; }
   .hero-chart-wrap { height: 220px; }
-  .stats-section   { padding: 40px 32px; min-height: auto; }
+  .stats-section   { padding: 48px 32px; min-height: auto; }
   .stats-grid      { grid-template-columns: repeat(2, 1fr); }
-  .charts-section  { padding: 40px 32px 60px; }
+  .stat-chart-wrap { height: 260px; }
 }
 
 @media (max-width: 540px) {
