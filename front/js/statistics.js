@@ -70,6 +70,11 @@ function updateStatsUI(data) {
 function renderHeroChart(pdcParAnnee) {
     const canvas = document.getElementById('heroChart');
     if (!canvas) return;
+    // Détruire l'instance existante si elle existe déjà sur ce canvas pour éviter l'erreur de réutilisation
+    const existingChart = Chart.getChart(canvas);
+    if (existingChart) {
+        existingChart.destroy();
+    }
 
     const ctx = canvas.getContext('2d');
     
