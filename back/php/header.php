@@ -27,6 +27,7 @@ $back_dir = $is_in_php_dir ? '../' : '';
         <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
         <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
         <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+        <a href="?logout=1">Déconnexion</a>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -43,6 +44,7 @@ $back_dir = $is_in_php_dir ? '../' : '';
     <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
     <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
     <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+    <a href="?logout=1">Déconnexion</a>
 </nav>
 
 <script>
