@@ -37,7 +37,7 @@ class PointDeCharge {
         try {
             // 1. Récupération de la liste de base (PDC + type de prise)
             $request = '
-                SELECT pdc.id_pdc, pdc.tarification, ad.type_prise
+                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, ad.type_prise
                 FROM point_de_charge pdc
                 LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
             ';
@@ -65,7 +65,7 @@ class PointDeCharge {
     public function search(array $filters, ?int $limit = null, int $offset = 0): array {
         try {
             $request = '
-                SELECT pdc.id_pdc, pdc.tarification, ad.type_prise
+                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, ad.type_prise
                 FROM point_de_charge pdc
                 LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
                 LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
@@ -173,7 +173,10 @@ class PointDeCharge {
                     'operateur' => null,
                     'type_prise' => $row['type_prise'],
                     'commune' => null,
-                    'tarification' => $row['tarification']
+                    'code_dep' => null,
+                    'tarification' => $row['tarification'],
+                    'puissance' => isset($row['puissance']) ? (float)$row['puissance'] : null,
+                    'date_mise_en_service' => null
                 ];
             }, $rows);
         }
@@ -181,7 +184,7 @@ class PointDeCharge {
         // 2. Récupération des infos des stations liées à ces PDC
         $placeholders = implode(',', array_fill(0, count($pdcIds), '?'));
         $stationQuery = "
-            SELECT pd.id_pdc, s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
+            SELECT pd.id_pdc, s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune, s.date_mise_en_service
             FROM possede_des pd
             JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
             WHERE pd.id_pdc IN ($placeholders)
@@ -225,12 +228,15 @@ class PointDeCharge {
         if (!empty($communeCodes)) {
             $communeCodes = array_unique($communeCodes);
             $communePlaceholders = implode(',', array_fill(0, count($communeCodes), '?'));
-            $communeQuery = "SELECT code_insee_commune, nom_commune FROM commune WHERE code_insee_commune IN ($communePlaceholders)";
+            $communeQuery = "SELECT code_insee_commune, nom_commune, code_dep FROM commune WHERE code_insee_commune IN ($communePlaceholders)";
             $stmtC = $this->db->prepare($communeQuery);
             $stmtC->execute(array_values($communeCodes));
             $communeRows = $stmtC->fetchAll(PDO::FETCH_ASSOC);
             foreach ($communeRows as $cRow) {
-                $communesByInsee[$cRow['code_insee_commune']] = $cRow['nom_commune'];
+                $communesByInsee[$cRow['code_insee_commune']] = [
+                    'nom_commune' => $cRow['nom_commune'],
+                    'code_dep' => $cRow['code_dep']
+                ];
             }
         }
 
@@ -244,6 +250,9 @@ class PointDeCharge {
             $idAmenageur = $station ? $station['id_acteur'] : null;
             $idOperateur = $station ? $station['id_acteur_est_utiliser_par'] : null;
             $codeCommune = $station ? $station['code_insee_commune'] : null;
+            $dateMiseEnService = $station ? $station['date_mise_en_service'] : null;
+
+            $communeInfo = ($codeCommune !== null && isset($communesByInsee[$codeCommune])) ? $communesByInsee[$codeCommune] : null;
 
             $results[] = [
                 'nom_station' => $nomStation,
@@ -251,8 +260,11 @@ class PointDeCharge {
                 'amenageur' => $idAmenageur !== null ? ($actorsById[$idAmenageur] ?? null) : null,
                 'operateur' => $idOperateur !== null ? ($actorsById[$idOperateur] ?? null) : null,
                 'type_prise' => $row['type_prise'],
-                'commune' => $codeCommune !== null ? ($communesByInsee[$codeCommune] ?? null) : null,
-                'tarification' => $row['tarification']
+                'commune' => $communeInfo ? $communeInfo['nom_commune'] : null,
+                'code_dep' => $communeInfo ? $communeInfo['code_dep'] : null,
+                'tarification' => $row['tarification'],
+                'puissance' => isset($row['puissance']) ? (float)$row['puissance'] : null,
+                'date_mise_en_service' => $dateMiseEnService
             ];
         }
 

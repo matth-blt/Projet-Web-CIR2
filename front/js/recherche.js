@@ -1,9 +1,10 @@
-// Filtres actifs verrouillés (après clic sur le bouton de recherche ou au chargement initial)
 let activeFilters = {
     amenageur: "",
     type_prise: "",
     code_dep: ""
 };
+
+let deptsMap = {};
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchReferentiel();
@@ -30,6 +31,13 @@ async function fetchReferentiel() {
             throw new Error("Erreur réseau lors du chargement des référentiels");
         }
         const data = await response.json();
+        
+        if (Array.isArray(data.departements)) {
+            data.departements.forEach(d => {
+                deptsMap[d.code_dep] = d.nom_departement;
+            });
+        }
+        
         populateFilters(data);
     } catch (error) {
         console.error("Erreur lors de la récupération du référentiel:", error);
@@ -144,6 +152,18 @@ async function fetchPDCs(page = 1, lockCurrentInputs = false) {
 }
 
 /**
+ * Formate une date AAAA-MM-JJ en MM/AAAA (Mois et Année)
+*/
+function formatMoisAnnee(dateStr) {
+    if (!dateStr) return "Non renseignée";
+    const parts = dateStr.split("-");
+    if (parts.length >= 2) {
+        return `${parts[1]}/${parts[0]}`;
+    }
+    return dateStr;
+}
+
+/**
  * Génère le tableau HTML avec les résultats
 */
 function renderResultsTable(pdcs) {
@@ -153,7 +173,7 @@ function renderResultsTable(pdcs) {
     tbody.innerHTML = "";
     
     if (!pdcs || pdcs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--texte3)">Aucun résultat</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--texte3)">Aucun résultat</td></tr>`;
         return;
     }
     
@@ -163,22 +183,25 @@ function renderResultsTable(pdcs) {
         // Délai d'animation pour effet fluide
         tr.style.animationDelay = `${Math.min((index + 1) * 0.05, 1)}s`;
         
-        const nomStation = escapeHtml(pdc.nom_station || "");
-        const amenageur = escapeHtml(pdc.amenageur || "");
-        const operateur = escapeHtml(pdc.operateur || "");
-        const typePrise = escapeHtml(pdc.type_prise || "");
+        const dateRaw = pdc.date_mise_en_service || "";
+        const dateFormatted = formatMoisAnnee(dateRaw);
+        const typePrise = escapeHtml(pdc.type_prise || "Inconnu");
+        const puissance = pdc.puissance ? `${pdc.puissance} kW` : "Non renseignée";
         const commune = escapeHtml(pdc.commune || "");
-        const tarif = escapeHtml(pdc.tarification || "");
+        const codeDepRaw = pdc.code_dep ? pdc.code_dep.toString() : "";
+        const codeDep = escapeHtml(codeDepRaw);
+        const deptName = escapeHtml(deptsMap[codeDepRaw] || "");
+        
+        const locationText = (commune && codeDep && deptName) ? `${commune} (${deptName} - ${codeDep})` : (commune || deptName || codeDep || "Non renseignée");
+        
         const idPdc = encodeURIComponent(pdc.id_pdc);
         const priseParam = encodeURIComponent(pdc.type_prise || "");
         
         tr.innerHTML = `
-            <td>${nomStation}</td>
-            <td>${amenageur}</td>
-            <td>${operateur}</td>
+            <td>${dateFormatted}</td>
             <td><span class="tag-prise">${typePrise}</span></td>
-            <td>${commune}</td>
-            <td>${tarif}</td>
+            <td>${puissance}</td>
+            <td>${locationText}</td>
             <td><a href="detail.html?id_pdc=${idPdc}&type_prise=${priseParam}" class="link-detail">Voir le détail →</a></td>
         `;
         

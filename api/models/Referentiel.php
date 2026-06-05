@@ -65,7 +65,7 @@ class Referentiel {
 
     public function getAmenageurs(): array {
         try {
-            $stmt = $this->db->prepare('SELECT nom_acteur FROM acteur WHERE role_acteur = \'Aménageur\'');
+            $stmt = $this->db->prepare("SELECT DISTINCT nom_acteur FROM acteur WHERE role_acteur = 'Aménageur' ORDER BY RAND() LIMIT 20");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {

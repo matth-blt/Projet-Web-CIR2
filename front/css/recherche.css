@@ -71,14 +71,12 @@ table {
   table-layout: fixed;
 }
 
-/* Largeurs des colonnes : Station | Aménageur | Opérateur | Type prise | Commune | Tarif | Actions */
-table thead th:nth-child(1) { width: 22%; }
-table thead th:nth-child(2) { width: 14%; }
-table thead th:nth-child(3) { width: 14%; }
-table thead th:nth-child(4) { width: 11%; }
-table thead th:nth-child(5) { width: 11%; }
-table thead th:nth-child(6) { width: 16%; }
-table thead th:nth-child(7) { width: 12%; }
+/* Largeurs des colonnes : Date de mise en service | Type de prise | Puissance | Localisation | Actions */
+table thead th:nth-child(1) { width: 25%; }
+table thead th:nth-child(2) { width: 20%; }
+table thead th:nth-child(3) { width: 20%; }
+table thead th:nth-child(4) { width: 33%; }
+table thead th:nth-child(5) { width: 12%; }
 
 thead th {
   background: var(--surface);
