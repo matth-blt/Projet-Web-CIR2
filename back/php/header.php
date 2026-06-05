@@ -11,6 +11,16 @@ $back_dir = $is_in_php_dir ? '../' : '';
   <title>IRVE Admin — Back-office</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="<?= $back_dir ?>css/style.css" rel="stylesheet">
+  <script>
+      // Synchronisation du statut de connexion avec le LocalStorage
+        <?php if (isset($_SESSION['auth_user'])): ?>
+            if (localStorage.getItem('auth_user') !== <?= json_encode($_SESSION['auth_user']) ?>) {
+                localStorage.setItem('auth_user', <?= json_encode($_SESSION['auth_user']) ?>);
+            }
+        <?php else: ?>
+            localStorage.removeItem('auth_user');
+        <?php endif; ?>
+  </script>
 </head>
 <body>
 
@@ -27,6 +37,7 @@ $back_dir = $is_in_php_dir ? '../' : '';
         <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
         <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
         <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+        <a href="?logout=1" class="logout-link">Déconnexion</a>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -43,6 +54,7 @@ $back_dir = $is_in_php_dir ? '../' : '';
     <a href="<?= $back_dir ?>index.php" <?= ($page_active === 'accueil') ? 'class="active"' : '' ?>>Accueil</a>
     <a href="<?= $php_dir ?>liste.php" <?= ($page_active === 'liste')   ? 'class="active"' : '' ?>>Liste</a>
     <a href="<?= $php_dir ?>create.php" <?= ($page_active === 'nouveau') ? 'class="active"' : '' ?>>Nouveau</a>
+    <a href="?logout=1" class="logout-link">Déconnexion</a>
 </nav>
 
 <script>
