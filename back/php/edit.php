@@ -6,11 +6,10 @@ require_once __DIR__ . '/../../api/models/PointDeCharge.php';
 $page_active = 'liste';
 
 $id_pdc = $_GET['id_pdc'] ?? '';
-$type_prise = $_GET['type_prise'] ?? '';
 
 $db = Database::getConnection();
 $pdcModel = new PointDeCharge($db);
-$pdc = ($id_pdc && $type_prise) ? $pdcModel->getById((int)$id_pdc, $type_prise) : null;
+$pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
 
 $success = false;
 $error   = false;
@@ -21,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc) {
         'puissance' => $_POST['puissance'] ?: null,
         'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
         'latitude' => $_POST['latitude'] ?: null,
-        'longitude' => $_POST['longitude'] ?: null,
+        'longitude' => $_POST['longitude'] ?? null,
         'tarification' => $_POST['tarification'] ?: null,
     ]);
 
     if ($result) {
-        header('Location: detail.php?id_pdc=' . urlencode($id_pdc) . '&type_prise=' . urlencode($type_prise));
+        header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
         exit;
     } else {
         $error = true;
@@ -52,7 +51,7 @@ include 'header.php';
     <div class="edit-card">
         <div class="edit-card-body">
         <form class="form-card" method="POST"
-                action="edit.php?id_pdc=<?= urlencode($id_pdc) ?>&type_prise=<?= urlencode($type_prise) ?>">
+                action="edit.php?id_pdc=<?= urlencode($id_pdc) ?>">
 
             <!-- Lecture seule : données liées à la station -->
             <div class="form-section-title">Informations station</div>
@@ -132,8 +131,8 @@ include 'header.php';
             </div>
 
             <div class="form-actions">
-            <button type="submit" class="btn-save">Sauvegarder</button>
-            <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>&type_prise=<?= urlencode($type_prise) ?>">
+             <button type="submit" class="btn-save">Sauvegarder</button>
+            <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>">
                 <button type="button" class="btn-cancel">Annuler</button>
             </a>
             </div>

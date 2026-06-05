@@ -53,10 +53,10 @@ include 'header.php';
                 <td><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
                 <td><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
                 <td>
-                    <a href="detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-view">Voir</button>
                     </a>
-                    <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-edit">Modifier</button>
                     </a>
                 </td>

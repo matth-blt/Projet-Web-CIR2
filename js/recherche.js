@@ -195,14 +195,13 @@ function renderResultsTable(pdcs) {
         const locationText = (commune && codeDep && deptName) ? `${commune} (${deptName} - ${codeDep})` : (commune || deptName || codeDep || "Non renseignée");
         
         const idPdc = encodeURIComponent(pdc.id_pdc);
-        const priseParam = encodeURIComponent(pdc.type_prise || "");
         
         tr.innerHTML = `
             <td>${dateFormatted}</td>
             <td><span class="tag-prise">${typePrise}</span></td>
             <td>${puissance}</td>
             <td>${locationText}</td>
-            <td><a href="detail.html?id_pdc=${idPdc}&type_prise=${priseParam}" class="link-detail">Voir le détail →</a></td>
+            <td><a href="detail.html?id_pdc=${idPdc}" class="link-detail">Voir le détail →</a></td>
         `;
         
         tbody.appendChild(tr);

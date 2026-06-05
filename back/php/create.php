@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 
     if ($id_pdc !== false) {
-        header('Location: detail.php?id_pdc=' . urlencode($id_pdc) . '&type_prise=' . urlencode($_POST['type_prise'] ?? ''));
+        header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
         exit;
     } else {
         $error = true;

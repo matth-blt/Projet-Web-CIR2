@@ -6,11 +6,10 @@ require_once __DIR__ . '/../../api/models/PointDeCharge.php';
 $page_active = 'liste';
 
 $id_pdc = $_GET['id_pdc'] ?? '';
-$type_prise = $_GET['type_prise'] ?? '';
 
 $db = Database::getConnection();
 $pdcModel = new PointDeCharge($db);
-$pdc = ($id_pdc && $type_prise) ? $pdcModel->getById((int)$id_pdc, $type_prise) : null;
+$pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
 
 include 'header.php';
 ?>
@@ -29,7 +28,7 @@ include 'header.php';
             <h2><?= htmlspecialchars($pdc['nom_station'] ?? 'Non renseigné') ?></h2>
             <p>ID PDC : <?= htmlspecialchars($pdc['id_pdc']) ?></p>
         </div>
-        <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+        <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
             <button class="btn-edit">Modifier</button>
         </a>
         </div>

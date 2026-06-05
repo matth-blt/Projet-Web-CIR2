@@ -22,7 +22,7 @@ if ($requestRessource === 'stats' && $requestMethod === 'GET') {
     try {
         $statsModel = new Stats($db);
         $data = [
-            'total_elements' => $statsModel->getNbrElements(),
+            'total_pdc' => $statsModel->getNbrPDC(),
             'total_amenageurs' => $statsModel->getNbrAmenageurs(),
             'total_prises' => $statsModel->getNbrTypeDePrises(),
             'departments' => $statsModel->getNbrPDCParDepartements(),
@@ -57,9 +57,8 @@ if ($requestRessource === 'pdc' && $requestMethod === 'GET') {
         $subResource = array_shift($request);
         if ($subResource === 'detail') {
             $id_pdc = isset($_GET['id_pdc']) ? (int)$_GET['id_pdc'] : 0;
-            $type_prise = isset($_GET['type_prise']) ? $_GET['type_prise'] : '';
             
-            $pdc = ($id_pdc && $type_prise) ? $pdcModel->getById($id_pdc, $type_prise) : null;
+            $pdc = $id_pdc ? $pdcModel->getById($id_pdc) : null;
             if ($pdc) {
                 $data = $pdc;
             } else {

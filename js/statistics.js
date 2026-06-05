@@ -63,10 +63,10 @@ function updateStatsUI(data) {
         renderStatsTable(data.pdc_par_annee_departement);
     }
 
-    // 6. Total de points de charge (getNbrElements)
+    // 6. Total de points de charge (getNbrPDC)
     const totalRecordsEl = document.getElementById("stat-total-records");
-    if (totalRecordsEl && data.total_elements !== undefined) {
-        totalRecordsEl.textContent = parseInt(data.total_elements, 10).toLocaleString('fr-FR') + " points au total";
+    if (totalRecordsEl && data.total_pdc !== undefined) {
+        totalRecordsEl.textContent = parseInt(data.total_pdc, 10).toLocaleString('fr-FR') + " points au total";
     }
 }
 

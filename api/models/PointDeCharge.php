@@ -14,8 +14,7 @@ class PointDeCharge {
         try {
             $request = '
                 SELECT COUNT(*) AS total
-                FROM point_de_charge pdc
-                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                FROM point_de_charge
             ';
             $statement = $this->db->prepare($request);
             $statement->execute();
@@ -37,15 +36,18 @@ class PointDeCharge {
         try {
             // 1. Récupération de la liste de base (PDC + type de prise)
             $request = '
-                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, ad.type_prise
+                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, GROUP_CONCAT(ad.type_prise SEPARATOR ", ") AS type_prise
                 FROM point_de_charge pdc
                 LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
             ';
 
             if ($accueil) {
-                $request .= ' ORDER BY RAND() LIMIT 5';
-            } else if ($limit !== null) {
-                $request .= ' LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+                $request .= ' GROUP BY pdc.id_pdc ORDER BY RAND() LIMIT 5';
+            } else {
+                $request .= ' GROUP BY pdc.id_pdc';
+                if ($limit !== null) {
+                    $request .= ' LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
+                }
             }
 
             $statement = $this->db->prepare($request);
@@ -65,7 +67,7 @@ class PointDeCharge {
     public function search(array $filters, ?int $limit = null, int $offset = 0): array {
         try {
             $request = '
-                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, ad.type_prise
+                SELECT pdc.id_pdc, pdc.tarification, pdc.puissance, GROUP_CONCAT(ad.type_prise SEPARATOR ", ") AS type_prise
                 FROM point_de_charge pdc
                 LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
                 LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
@@ -94,6 +96,8 @@ class PointDeCharge {
                 $request .= ' WHERE ' . implode(' AND ', $whereClauses);
             }
 
+            $request .= ' GROUP BY pdc.id_pdc';
+
             if ($limit !== null) {
                 $request .= ' LIMIT ' . (int)$limit . ' OFFSET ' . (int)$offset;
             }
@@ -115,7 +119,7 @@ class PointDeCharge {
     public function searchCount(array $filters): int {
         try {
             $request = '
-                SELECT COUNT(*) AS total
+                SELECT COUNT(DISTINCT pdc.id_pdc) AS total
                 FROM point_de_charge pdc
                 LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
                 LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
@@ -272,22 +276,19 @@ class PointDeCharge {
     }
 
     /**
-     * Récupère le détail d'un PDC par son ID et type de prise.
+     * Récupère le détail d'un PDC par son ID.
      */
-    public function getById(int $id_pdc, ?string $type_prise = null): ?array {
+    public function getById(int $id_pdc): ?array {
         try {
             // 1. Récupération des infos de base du PDC et type de prise
             $request = '
-                SELECT pdc.*, ad.type_prise
+                SELECT pdc.*, GROUP_CONCAT(ad.type_prise SEPARATOR ", ") AS type_prise
                 FROM point_de_charge pdc
-                JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
                 WHERE pdc.id_pdc = :id_pdc
+                GROUP BY pdc.id_pdc
             ';
             $params = [':id_pdc' => $id_pdc];
-            if ($type_prise !== null) {
-                $request .= ' AND ad.type_prise = :type_prise';
-                $params[':type_prise'] = $type_prise;
-            }
 
             $statement = $this->db->prepare($request);
             $statement->execute($params);
@@ -300,7 +301,7 @@ class PointDeCharge {
             // Initialisation de la structure de retour attendue par les vues
             $res = [
                 'id_pdc' => (int) $pdc['id_pdc'],
-                'type_prise' => $pdc['type_prise'],
+                'type_prise' => $pdc['type_prise'] ?? 'Non renseigné',
                 'puissance' => $pdc['puissance'] !== null ? (float)$pdc['puissance'] : null,
                 'cable_t2_attache' => (int)($pdc['cable_t2_attache'] ?? 0),
                 'latitude' => $pdc['lat'] !== null ? (float)$pdc['lat'] : null,

@@ -47,10 +47,10 @@ include './php/header.php';
                 <td><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
                 <td><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
                 <td>
-                    <a href="php/detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="php/detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-view">Voir</button>
                     </a>
-                    <a href="php/edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>&type_prise=<?= urlencode($pdc['type_prise'] ?? '') ?>">
+                    <a href="php/edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-edit">Modifier</button>
                     </a>
                 </td>

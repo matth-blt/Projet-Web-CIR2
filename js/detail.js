@@ -9,16 +9,14 @@ async function fetchPDCDetail() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
         const idPdc = urlParams.get("id_pdc");
-        const typePrise = urlParams.get("type_prise");
 
-        if (!idPdc || !typePrise) {
+        if (!idPdc) {
             showError();
             return;
         }
 
         const params = new URLSearchParams({
-            id_pdc: idPdc,
-            type_prise: typePrise
+            id_pdc: idPdc
         });
 
         const response = await fetch(`../api/request.php/pdc/detail?${params.toString()}`);
