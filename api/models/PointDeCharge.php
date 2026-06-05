@@ -510,19 +510,21 @@ class PointDeCharge {
         try {
             $request = '
                 SELECT 
-                    s.id_station_itinerance AS id, 
+                    pdc.id_pdc AS id, 
                     s.nom_station,
                     s.adresse_station,
-                    s.nbr_pdc,
                     c.nom_commune AS localite, 
                     c.code_dep AS dept, 
                     YEAR(s.date_mise_en_service) AS annee, 
-                    AVG(pdc.lat) AS lat, 
-                    AVG(pdc.lon) AS lng
-                FROM station s
+                    pdc.puissance, 
+                    pdc.lat, 
+                    pdc.lon AS lng,
+                    ad.type_prise
+                FROM point_de_charge pdc
+                JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
                 JOIN commune c ON s.code_insee_commune = c.code_insee_commune
-                JOIN possede_des pd ON s.id_station_itinerance = pd.id_station_itinerance
-                JOIN point_de_charge pdc ON pd.id_pdc = pdc.id_pdc
+                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
                 WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
             ';
 
@@ -542,8 +544,6 @@ class PointDeCharge {
                 $request .= ' AND ' . implode(' AND ', $whereClauses);
             }
 
-            $request .= ' GROUP BY s.id_station_itinerance';
-
             $statement = $this->db->prepare($request);
             $statement->execute($queryParams);
             $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -551,13 +551,14 @@ class PointDeCharge {
             // Conversion des types numériques pour le JSON et correction des longitudes positives (tous les points en Bretagne ont une longitude négative)
             return array_map(function($row) {
                 return [
-                    'id' => $row['id'],
+                    'id' => (int)$row['id'],
                     'nom_station' => $row['nom_station'],
                     'adresse_station' => $row['adresse_station'],
-                    'nbr_pdc' => (int)$row['nbr_pdc'],
                     'localite' => $row['localite'],
                     'dept' => (int)$row['dept'],
                     'annee' => $row['annee'] !== null ? (int)$row['annee'] : null,
+                    'puissance' => $row['puissance'] !== null ? (float)$row['puissance'] : null,
+                    'type_prise' => $row['type_prise'],
                     'lat' => (float)$row['lat'],
                     'lng' => -abs((float)$row['lng'])
                 ];

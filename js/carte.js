@@ -123,19 +123,19 @@ async function fetchMapPoints(filters = {}) {
     }
 }
 
-/**
- * Construit le contenu HTML d'une bulle d'info (popup) pour une station
-*/
 function popupHTML(s) {
-    const deptName = deptsMap[s.dept];
+    const deptName = deptsMap[s.dept] || `Département ${s.dept}`;
     const anneeText = s.annee ? ` · ${s.annee}` : "";
-    const nbrPdcText = s.nbr_pdc > 1 ? `${s.nbr_pdc} points de charge` : `${s.nbr_pdc} point de charge`;
+    const puissanceText = s.puissance ? `${s.puissance} kW` : "Puissance inconnue";
+    const typePriseText = s.type_prise ? ` (${s.type_prise})` : "";
+    const typePriseParam = s.type_prise ? `&type_prise=${encodeURIComponent(s.type_prise)}` : "";
     
     return `
         <div class="borne-popup-loc">${s.nom_station || "Station sans nom"}</div>
         <div class="borne-popup-meta">${s.adresse_station || "Adresse non spécifiée"}</div>
         <div class="borne-popup-meta">${s.localite || "Localité inconnue"} (${deptName} - ${s.dept})${anneeText}</div>
-        <span class="borne-popup-power">${nbrPdcText}</span>
+        <span class="borne-popup-power">${puissanceText}${typePriseText}</span>
+        <a class="borne-popup-link" href="detail.html?id_pdc=${s.id}${typePriseParam}">Voir le détail →</a>
     `;
 }
 
