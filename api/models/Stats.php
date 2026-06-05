@@ -7,22 +7,6 @@ class Stats {
         $this->db = $db;
     }
 
-    public function getNbrElements(): int {
-        try {
-            $stmt = $this->db->prepare('
-                SELECT SUM(TABLE_ROWS) AS total_elements
-                FROM information_schema.TABLES
-                WHERE TABLE_SCHEMA = \'irve_bdd_projet\';
-            ');
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $row ? (int)$row['total_elements'] : 0;
-        } catch (PDOException $exception) {
-            error_log('Stats error: ' . $exception->getMessage());
-            return -1;
-        }
-    }
-
     public function getNbrPDC(): int {
         try {
             $stmt = $this->db->prepare('SELECT COUNT(*) AS total_pdc FROM point_de_charge;');
