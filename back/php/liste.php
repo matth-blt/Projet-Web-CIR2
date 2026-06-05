@@ -59,6 +59,9 @@ include 'header.php';
                     <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-edit">Modifier</button>
                     </a>
+                    <a href="delete.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?');">
+                    <button type="button" class="btn-delete">Supprimer</button>
+                    </a>
                 </td>
             </tr>
           <?php endforeach; ?>

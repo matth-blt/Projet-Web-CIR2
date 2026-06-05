@@ -569,6 +569,40 @@ class PointDeCharge {
             return [];
         }
     }
+
+    /**
+     * Supprime un point de charge (PDC) et ses relations.
+     */
+    public function delete(int $id_pdc): bool {
+        try {
+            $this->db->beginTransaction();
+
+            // 1. Suppression des associations de paiement
+            $stmt = $this->db->prepare('DELETE FROM est_payer_avec WHERE id_pdc = :id_pdc');
+            $stmt->execute([':id_pdc' => $id_pdc]);
+
+            // 2. Suppression des associations de type de prise
+            $stmt = $this->db->prepare('DELETE FROM a_des WHERE id_pdc = :id_pdc');
+            $stmt->execute([':id_pdc' => $id_pdc]);
+
+            // 3. Suppression des associations avec la station
+            $stmt = $this->db->prepare('DELETE FROM possede_des WHERE id_pdc = :id_pdc');
+            $stmt->execute([':id_pdc' => $id_pdc]);
+
+            // 4. Suppression du point de charge
+            $stmt = $this->db->prepare('DELETE FROM point_de_charge WHERE id_pdc = :id_pdc');
+            $stmt->execute([':id_pdc' => $id_pdc]);
+
+            $this->db->commit();
+            return true;
+        } catch (PDOException $exception) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            error_log('Delete error: ' . $exception->getMessage());
+            return false;
+        }
+    }
 }
 ?>
 

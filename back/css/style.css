@@ -148,6 +148,27 @@ nav a.active { color: var(--blue-accent); }
   border: 1px solid var(--border); padding: 12px 24px;
   border-radius: var(--radius-sm); font-size: 14px; cursor: pointer;
 }
+.btn-delete {
+  font-size: 12px; padding: 5px 14px;
+  border-radius: 5px;
+  border: 1px solid #e24b4a;
+  background: #fdf2f2; color: #e24b4a;
+  cursor: pointer; font-weight: 500;
+  margin-left: 6px;
+  transition: all 0.2s ease;
+}
+.btn-delete:hover {
+  background: #e24b4a; color: #fff;
+}
+.btn-delete-lg {
+  background: #fdf2f2; color: #e24b4a;
+  border: 1px solid #e24b4a; padding: 12px 24px;
+  border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-delete-lg:hover {
+  background: #e24b4a; color: #fff;
+}
 .back-link {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 14px; color: var(--blue-dark);
@@ -194,7 +215,7 @@ table thead th:nth-child(3) { width: 14%; }
 table thead th:nth-child(4) { width: 11%; }
 table thead th:nth-child(5) { width: 11%; }
 table thead th:nth-child(6) { width: 16%; }
-table thead th:nth-child(7) { width: 15%; }
+table thead th:nth-child(7) { width: 25%; }
 
 thead th {
   background: var(--surface2); padding: 14px 20px;

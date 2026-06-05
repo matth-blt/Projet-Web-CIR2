@@ -132,9 +132,12 @@ include 'header.php';
 
             <div class="form-actions">
              <button type="submit" class="btn-save">Sauvegarder</button>
-            <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>">
-                <button type="button" class="btn-cancel">Annuler</button>
-            </a>
+             <a href="delete.php?id_pdc=<?= urlencode($id_pdc) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?');" style="margin-right: auto;">
+                 <button type="button" class="btn-delete-lg">Supprimer</button>
+             </a>
+             <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>">
+                 <button type="button" class="btn-cancel">Annuler</button>
+             </a>
             </div>
 
         </form>
