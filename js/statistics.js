@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 */
 async function fetchStats() {
     try {
-        const response = await fetch("../../api/request.php/stats");
+        const response = await fetch("api/request.php/stats");
         if (!response.ok) {
             throw new Error("Erreur réseau lors du chargement des statistiques");
         }        

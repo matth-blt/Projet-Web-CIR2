@@ -42,7 +42,7 @@ function initMap() {
 */
 async function fetchReferentiel() {
     try {
-        const response = await fetch("../../api/request.php/referentiel");
+        const response = await fetch("../api/request.php/referentiel");
         if (!response.ok) {
             throw new Error("Erreur réseau lors du chargement des référentiels");
         }
@@ -112,7 +112,7 @@ async function fetchMapPoints(filters = {}) {
         if (filters.annee) queryParams.append("annee", filters.annee);
         if (filters.code_dep) queryParams.append("code_dep", filters.code_dep);
 
-        const response = await fetch(`../../api/request.php/pdc/map?${queryParams.toString()}`);
+        const response = await fetch(`../api/request.php/pdc/map?${queryParams.toString()}`);
         if (!response.ok) {
             throw new Error("Erreur lors de la récupération des points de carte");
         }

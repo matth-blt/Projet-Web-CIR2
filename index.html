@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IRVE Bretagne — Accueil</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/index.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script src="../js/statistics.js" defer></script>
+    <script src="js/statistics.js" defer></script>
 </head>
 <body>
     <div class="page">
@@ -24,8 +24,8 @@
             </button>
             <nav>
             <a href="index.html" class="active">Accueil</a>
-            <a href="recherche.html">Recherche</a>
-            <a href="carte.html">Carte</a>
+            <a href="html/recherche.html">Recherche</a>
+            <a href="html/carte.html">Carte</a>
             </nav>
         </header>
     
@@ -34,8 +34,8 @@
                 <h1>Points de recharge en Bretagne</h1>
                 <p>Explorez les infrastructures de recharge pour véhicules électriques (IRVE) en Bretagne. Recherchez par critères ou visualisez sur une carte interactive.</p>
                 <div class="hero-btns">
-                    <a href="recherche.html" class="btn-primary">Rechercher une borne</a>
-                    <a href="carte.html" class="btn-outline">Voir la carte</a>
+                    <a href="html/recherche.html" class="btn-primary">Rechercher une borne</a>
+                    <a href="html/carte.html" class="btn-outline">Voir la carte</a>
                 </div>
             </div>
             <div class="hero-right">
@@ -148,7 +148,7 @@
                         borderWidth: 1,
                         padding: 10,
                         callbacks: {
-                            label: item => '  ' + item.formattedValue + ' bornes',
+                             label: item => '  ' + item.formattedValue + ' bornes',
                         }
                     }
                 },
@@ -165,79 +165,6 @@
                 }
             }
         });
-    </script>
-    <script>
-        /* ── Palette dégradé de verts (cohérente avec les cards) ── */
-        const DEP_COLORS = {
-            '22': '#1a3a2a',  // vert-fonce
-            '29': '#2d5c42',  // vert-moyen
-            '35': '#4caf7d',  // vert-accent
-            '56': '#9ad9bd',  // vert clair
-        };
-
-        const YEARS = ['2018','2019','2020','2021','2022','2023','2024'];
-
-        /* ── Graphique : barres groupées année × département (thème clair) ── */
-        new Chart(document.getElementById('chartGroupedBar'), {
-            type: 'bar',
-            data: {
-                labels: YEARS,
-                datasets: [
-                    { label: "Côtes-d'Armor (22)", data: [18, 32, 55, 80, 130, 210, 310],  backgroundColor: DEP_COLORS['22'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                    { label: 'Finistère (29)',       data: [40, 65, 110, 160, 260, 420, 610], backgroundColor: DEP_COLORS['29'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                    { label: 'Ille-et-Vilaine (35)', data: [35, 60, 105, 155, 250, 400, 590], backgroundColor: DEP_COLORS['35'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                    { label: 'Morbihan (56)',         data: [27, 53, 110, 145, 250, 420, 590], backgroundColor: DEP_COLORS['56'], borderRadius: 4, borderSkipped: false, maxBarThickness: 22 },
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        align: 'end',
-                        labels: {
-                            color: '#4a5c50',
-                            font: { family: 'DM Sans', size: 12, weight: '500' },
-                            usePointStyle: true,
-                            pointStyle: 'rectRounded',
-                            pointStyleWidth: 12,
-                            boxHeight: 8,
-                            padding: 20,
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: '#1a3a2a',
-                        titleColor: '#ffffff',
-                        bodyColor: 'rgba(255,255,255,0.75)',
-                        borderColor: 'rgba(76,175,125,0.35)',
-                        borderWidth: 1,
-                        padding: 12,
-                        cornerRadius: 8,
-                        usePointStyle: true,
-                        callbacks: {
-                            title: items => 'Année ' + items[0].label,
-                            label: item => '  ' + item.dataset.label + ' : ' + item.formattedValue + ' PDC',
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        border: { color: '#d8e4dc' },
-                        ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 } },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#e8efe9' },
-                        border: { display: false },
-                        ticks: { color: '#7a8c80', font: { family: 'DM Sans', size: 12 }, precision: 0 },
-                    }
-                }
-            }
-        });
-
     </script>
 </body>
 </html>

@@ -21,7 +21,7 @@ async function fetchPDCDetail() {
             type_prise: typePrise
         });
 
-        const response = await fetch(`../../api/request.php/pdc/detail?${params.toString()}`);
+        const response = await fetch(`../api/request.php/pdc/detail?${params.toString()}`);
         if (!response.ok) {
             throw new Error("Erreur lors de la récupération du détail");
         }

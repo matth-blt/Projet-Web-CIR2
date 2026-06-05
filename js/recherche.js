@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 */
 async function fetchReferentiel() {
     try {
-        const response = await fetch("../../api/request.php/referentiel");
+        const response = await fetch("../api/request.php/referentiel");
         if (!response.ok) {
             throw new Error("Erreur réseau lors du chargement des référentiels");
         }
@@ -128,7 +128,7 @@ async function fetchPDCs(page = 1, lockCurrentInputs = false) {
             code_dep: activeFilters.code_dep
         });
 
-        const response = await fetch(`../../api/request.php/pdc?${params.toString()}`);
+        const response = await fetch(`../api/request.php/pdc?${params.toString()}`);
         if (!response.ok) {
             throw new Error("Erreur réseau lors du chargement des points de charge");
         }
