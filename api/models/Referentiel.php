@@ -9,7 +9,7 @@ class Referentiel {
 
     /**
      * Retourne la liste des types de prise.
-     */
+    */
     public function getTypesPrise(): array {
         try {
             $stmt = $this->db->prepare('SELECT type_prise FROM prise ORDER BY type_prise');
@@ -23,7 +23,7 @@ class Referentiel {
 
     /**
      * Retourne la liste des types de paiement.
-     */
+    */
     public function getTypesPaiement(): array {
         try {
             $stmt = $this->db->prepare('SELECT type_paiement FROM paiement ORDER BY type_paiement');
@@ -37,7 +37,7 @@ class Referentiel {
 
     /**
      * Retourne la liste des types d'implantation.
-     */
+    */
     public function getImplantations(): array {
         try {
             $stmt = $this->db->prepare('SELECT implantation_station FROM implantation ORDER BY implantation_station');
@@ -51,7 +51,7 @@ class Referentiel {
 
     /**
      * Retourne la liste des enseignes.
-     */
+    */
     public function getEnseignes(): array {
         try {
             $stmt = $this->db->prepare('SELECT nom_enseigne FROM enseigne ORDER BY nom_enseigne');

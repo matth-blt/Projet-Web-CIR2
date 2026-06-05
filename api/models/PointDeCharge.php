@@ -498,19 +498,19 @@ class PointDeCharge {
         try {
             $request = '
                 SELECT 
-                    pdc.id_pdc AS id, 
+                    s.id_station_itinerance AS id, 
+                    s.nom_station,
+                    s.adresse_station,
+                    s.nbr_pdc,
                     c.nom_commune AS localite, 
                     c.code_dep AS dept, 
                     YEAR(s.date_mise_en_service) AS annee, 
-                    pdc.puissance, 
-                    pdc.lat, 
-                    pdc.lon AS lng,
-                    ad.type_prise
-                FROM point_de_charge pdc
-                JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
-                JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                    AVG(pdc.lat) AS lat, 
+                    AVG(pdc.lon) AS lng
+                FROM station s
                 JOIN commune c ON s.code_insee_commune = c.code_insee_commune
-                LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                JOIN possede_des pd ON s.id_station_itinerance = pd.id_station_itinerance
+                JOIN point_de_charge pdc ON pd.id_pdc = pdc.id_pdc
                 WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
             ';
 
@@ -530,21 +530,24 @@ class PointDeCharge {
                 $request .= ' AND ' . implode(' AND ', $whereClauses);
             }
 
+            $request .= ' GROUP BY s.id_station_itinerance';
+
             $statement = $this->db->prepare($request);
             $statement->execute($queryParams);
             $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            // Conversion des types numériques pour le JSON
+            // Conversion des types numériques pour le JSON et correction des longitudes positives (tous les points en Bretagne ont une longitude négative)
             return array_map(function($row) {
                 return [
-                    'id' => (int)$row['id'],
+                    'id' => $row['id'],
+                    'nom_station' => $row['nom_station'],
+                    'adresse_station' => $row['adresse_station'],
+                    'nbr_pdc' => (int)$row['nbr_pdc'],
                     'localite' => $row['localite'],
                     'dept' => (int)$row['dept'],
                     'annee' => $row['annee'] !== null ? (int)$row['annee'] : null,
-                    'puissance' => $row['puissance'] !== null ? (float)$row['puissance'] : null,
                     'lat' => (float)$row['lat'],
-                    'lng' => (float)$row['lng'],
-                    'type_prise' => $row['type_prise']
+                    'lng' => -abs((float)$row['lng'])
                 ];
             }, $rows);
         } catch (PDOException $exception) {
