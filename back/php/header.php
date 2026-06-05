@@ -27,7 +27,7 @@ $back_dir = $is_in_php_dir ? '../' : '';
 <header>
     <div class="logo">
         <div class="logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14H11v-5h2zm0-7H11V7h2z"/></svg>
+        <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" ><path d="M12 22c5.51 0 10-4.49 10-10S17.51 2 12 2 2 6.49 2 12s4.49 10 10 10M11 7h2v2h-2zm0 4h2v6h-2z"></path></svg>
         </div>
         <span class="logo-name">IRVE Admin</span>
         <span class="admin-badge">Back</span>
