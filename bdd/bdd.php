@@ -20,10 +20,10 @@ mb_internal_encoding('UTF-8');
 // ==============================================================================
 // 1. CONFIGURATION DE LA CONNEXION MYSQL
 // ==============================================================================
-$DB_USER     = 'irveuser';
+$DB_USER     = 'root';
 $DB_PASSWORD = '';            // Renseigne ton mot de passe si nécessaire
 $DB_HOST     = 'localhost';
-$DB_NAME     = 'irve';
+$DB_NAME     = 'irve_bdd_projet';
 
 // ------------------------------------------------------------------------------
 //  Fonctions utilitaires « mini-pandas »
@@ -198,8 +198,8 @@ try {
     foreach ($df as &$row) {
         foreach (['gratuit', 'raccordement', 'cable_t2_attache'] as $col) {
             if (array_key_exists($col, $row)) {
-                $lv = is_na($row[$col]) ? null : strtolower((string)$row[$col]);
-                $row[$col] = ($lv === 'true') ? 1 : 0;
+                $lv = is_na($row[$col]) ? null : strtolower(trim((string)$row[$col]));
+                $row[$col] = ($lv === 'true' || $lv === '1') ? 1 : 0;
             }
         }
     }
@@ -578,9 +578,12 @@ try {
         $seen_id[$k] = true;
 
         $pid = (int)(float)$id;
-        if (strtolower((string)($r['paiement_acte']  ?? '')) === 'true') $pay_rows[] = ['type_paiement' => 'Acte',  'id_pdc' => $pid];
-        if (strtolower((string)($r['paiement_cb']    ?? '')) === 'true') $pay_rows[] = ['type_paiement' => 'CB',    'id_pdc' => $pid];
-        if (strtolower((string)($r['paiement_autre'] ?? '')) === 'true') $pay_rows[] = ['type_paiement' => 'Autre', 'id_pdc' => $pid];
+        $acte = strtolower(trim((string)($r['paiement_acte'] ?? '')));
+        $cb = strtolower(trim((string)($r['paiement_cb'] ?? '')));
+        $autre = strtolower(trim((string)($r['paiement_autre'] ?? '')));
+        if ($acte === 'true' || $acte === '1') $pay_rows[] = ['type_paiement' => 'Acte',  'id_pdc' => $pid];
+        if ($cb === 'true' || $cb === '1') $pay_rows[] = ['type_paiement' => 'CB',    'id_pdc' => $pid];
+        if ($autre === 'true' || $autre === '1') $pay_rows[] = ['type_paiement' => 'Autre', 'id_pdc' => $pid];
     }
     if (!empty($pay_rows)) {
         $pay_rows = dedupe_rows($pay_rows, ['type_paiement', 'id_pdc']);
@@ -599,11 +602,16 @@ try {
         $seen_id[$k] = true;
 
         $pid = (int)(float)$id;
-        if (strtolower((string)($r['prise_type_ef']        ?? '')) === 'true') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'EF'];
-        if (strtolower((string)($r['prise_type_2']         ?? '')) === 'true') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Type 2'];
-        if (strtolower((string)($r['prise_type_combo_ccs'] ?? '')) === 'true') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Combo CCS'];
-        if (strtolower((string)($r['prise_type_chademo']   ?? '')) === 'true') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'CHAdeMO'];
-        if (strtolower((string)($r['prise_type_autre']     ?? '')) === 'true') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Autre'];
+        $ef = strtolower(trim((string)($r['prise_type_ef'] ?? '')));
+        $t2 = strtolower(trim((string)($r['prise_type_2'] ?? '')));
+        $ccs = strtolower(trim((string)($r['prise_type_combo_ccs'] ?? '')));
+        $chademo = strtolower(trim((string)($r['prise_type_chademo'] ?? '')));
+        $autre_p = strtolower(trim((string)($r['prise_type_autre'] ?? '')));
+        if ($ef === 'true' || $ef === '1') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'EF'];
+        if ($t2 === 'true' || $t2 === '1') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Type 2'];
+        if ($ccs === 'true' || $ccs === '1') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Combo CCS'];
+        if ($chademo === 'true' || $chademo === '1') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'CHAdeMO'];
+        if ($autre_p === 'true' || $autre_p === '1') $prise_rows[] = ['id_pdc' => $pid, 'type_prise' => 'Autre'];
     }
     if (!empty($prise_rows)) {
         foreach ($prise_rows as &$pr) {

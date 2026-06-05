@@ -41,7 +41,7 @@ function updateStatsUI(data) {
         prisesEl.textContent = data.total_prises;
     }
 
-    // 3. Départements (22, 29, 35, 56)
+    // 3. Départements
     if (data.departments && Array.isArray(data.departments)) {
         data.departments.forEach(dep => {
             const num = dep.numero_departement;
@@ -66,7 +66,7 @@ function updateStatsUI(data) {
     // 6. Total de points de charge (getNbrElements)
     const totalRecordsEl = document.getElementById("stat-total-records");
     if (totalRecordsEl && data.total_elements !== undefined) {
-        totalRecordsEl.textContent = parseInt(data.total_elements, 10).toLocaleString('fr-FR') + " bornes au total";
+        totalRecordsEl.textContent = parseInt(data.total_elements, 10).toLocaleString('fr-FR') + " points au total";
     }
 }
 
@@ -76,7 +76,7 @@ function updateStatsUI(data) {
 function renderHeroChart(pdcParAnnee) {
     const canvas = document.getElementById('heroChart');
     if (!canvas) return;
-    // Détruire l'instance existante si elle existe déjà sur ce canvas pour éviter l'erreur de réutilisation
+
     const existingChart = Chart.getChart(canvas);
     if (existingChart) {
         existingChart.destroy();
