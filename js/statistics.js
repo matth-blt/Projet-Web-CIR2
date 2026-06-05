@@ -62,6 +62,12 @@ function updateStatsUI(data) {
     if (data.pdc_par_annee_departement && Array.isArray(data.pdc_par_annee_departement)) {
         renderStatsTable(data.pdc_par_annee_departement);
     }
+
+    // 6. Total de points de charge (getNbrElements)
+    const totalRecordsEl = document.getElementById("stat-total-records");
+    if (totalRecordsEl && data.total_elements !== undefined) {
+        totalRecordsEl.textContent = parseInt(data.total_elements, 10).toLocaleString('fr-FR') + " bornes au total";
+    }
 }
 
 /**
