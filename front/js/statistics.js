@@ -32,13 +32,13 @@ function updateStatsUI(data) {
     // 1. Aménageurs
     const amenageursEl = document.getElementById("stat-amenageurs");
     if (amenageursEl) {
-        amenageursEl.textContent = formatNumber(data.total_amenageurs);
+        amenageursEl.textContent = data.total_amenageurs;
     }
 
     // 2. Types de prise
     const prisesEl = document.getElementById("stat-prises");
     if (prisesEl) {
-        prisesEl.textContent = formatNumber(data.total_prises);
+        prisesEl.textContent = data.total_prises;
     }
 
     // 3. Départements (22, 29, 35, 56)
@@ -48,7 +48,7 @@ function updateStatsUI(data) {
             const count = dep.nombre_points_de_charge;
             const el = document.getElementById(`stat-dep-${num}`);
             if (el) {
-                el.textContent = formatNumber(count);
+                el.textContent = count;
             }
         });
     }
@@ -196,18 +196,10 @@ function renderStatsTable(pdcParAnneeDep) {
             const count = match ? parseInt(match.nombre_points_de_charge, 10) || 0 : 0;
             
             const tdCount = document.createElement('td');
-            tdCount.textContent = formatNumber(count);
+            tdCount.textContent = count;
             tr.appendChild(tdCount);
         });
 
         tbody.appendChild(tr);
     });
-}
-
-/**
- * Formate un nombre avec un espace pour les milliers (ex : 24377 -> 24 377)
- */
-function formatNumber(num) {
-    if (num === null || num === undefined) return "-";
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
