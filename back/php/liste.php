@@ -59,9 +59,12 @@ include 'header.php';
                     <a href="edit.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-edit">Modifier</button>
                     </a>
-                    <a href="delete.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?');">
-                    <button type="button" class="btn-delete">Supprimer</button>
-                    </a>
+                    <form action="delete.php" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?');">
+                        <input type="hidden" name="id_pdc" value="<?= htmlspecialchars($pdc['id_pdc']) ?>">
+                        <input type="hidden" name="redirect" value="liste">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                        <button type="submit" class="btn-delete">Supprimer</button>
+                    </form>
                 </td>
             </tr>
           <?php endforeach; ?>

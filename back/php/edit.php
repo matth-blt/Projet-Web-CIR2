@@ -15,6 +15,10 @@ $success = false;
 $error   = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc) {
+    $csrf = $_POST['csrf_token'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+        die('Erreur CSRF : Action non autorisée.');
+    }
     $result = $pdcModel->update([
         'id_pdc' => $id_pdc,
         'puissance' => $_POST['puissance'] ?: null,
@@ -52,6 +56,7 @@ include 'header.php';
         <div class="edit-card-body">
         <form class="form-card" method="POST"
                 action="edit.php?id_pdc=<?= urlencode($id_pdc) ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <!-- Lecture seule : données liées à la station -->
             <div class="form-section-title">Informations station</div>
@@ -132,14 +137,19 @@ include 'header.php';
 
             <div class="form-actions">
              <button type="submit" class="btn-save">Sauvegarder</button>
-             <a href="delete.php?id_pdc=<?= urlencode($id_pdc) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?');" style="margin-right: auto;">
-                 <button type="button" class="btn-delete-lg">Supprimer</button>
-             </a>
+             <button type="button" class="btn-delete-lg" onclick="if (confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?')) { document.getElementById('delete-form').submit(); }" style="margin-right: auto;">Supprimer</button>
              <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>">
                  <button type="button" class="btn-cancel">Annuler</button>
              </a>
             </div>
 
+        </form>
+
+        <!-- Formulaire de suppression séparé -->
+        <form id="delete-form" action="delete.php" method="POST" style="display:none;">
+            <input type="hidden" name="id_pdc" value="<?= htmlspecialchars($id_pdc) ?>">
+            <input type="hidden" name="redirect" value="liste">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
         </form>
         </div>
 

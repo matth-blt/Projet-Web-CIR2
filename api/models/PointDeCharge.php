@@ -604,5 +604,4 @@ class PointDeCharge {
         }
     }
 }
-?>
 

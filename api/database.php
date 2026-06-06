@@ -12,4 +12,3 @@ class Database {
         return $pdo;
     }
 }
-?>

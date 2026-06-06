@@ -35,33 +35,6 @@ class Referentiel {
         }
     }
 
-    /**
-     * Retourne la liste des types d'implantation.
-    */
-    public function getImplantations(): array {
-        try {
-            $stmt = $this->db->prepare('SELECT implantation_station FROM implantation ORDER BY implantation_station');
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            error_log('Referentiel error: ' . $exception->getMessage());
-            return [];
-        }
-    }
-
-    /**
-     * Retourne la liste des enseignes.
-    */
-    public function getEnseignes(): array {
-        try {
-            $stmt = $this->db->prepare('SELECT nom_enseigne FROM enseigne ORDER BY nom_enseigne');
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            error_log('Referentiel error: ' . $exception->getMessage());
-            return [];
-        }
-    }
 
     public function getAmenageurs(): array {
         try {
@@ -96,4 +69,3 @@ class Referentiel {
         }
     }
 }
-?>

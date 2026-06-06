@@ -108,4 +108,3 @@ if ($data !== false) {
     echo json_encode(['error' => 'Resource not found or bad request']);
 }
 exit;
-?>

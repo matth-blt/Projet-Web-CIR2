@@ -15,6 +15,10 @@ $error = false;
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $csrf = $_POST['csrf_token'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+        die('Erreur CSRF : Action non autorisée.');
+    }
 
     $pdcModel = new PointDeCharge($db);
     $id_pdc = $pdcModel->create([
@@ -79,6 +83,7 @@ include 'header.php';
     <div class="edit-card">
         <div class="edit-card-body">
         <form class="form-card" method="POST" action="create.php">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <!-- ── STATION ── -->
             <div class="form-section-title">Station</div>
