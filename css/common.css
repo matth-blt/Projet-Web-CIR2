@@ -27,6 +27,9 @@
 /* =============================================
    BASE — police et fond général
    ============================================= */
+html {
+    scroll-behavior: smooth;
+}
 body {
     font-family: 'DM Sans', sans-serif;
     background: var(--fond);

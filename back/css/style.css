@@ -20,6 +20,9 @@
     --radius-lg: 14px;
 }
 
+html {
+    scroll-behavior: smooth;
+}
 body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
@@ -299,6 +302,10 @@ tbody tr:last-child td {
     gap: 6px;
     padding: 16px 20px; 
     border-top: 1px solid var(--border);
+}
+.pager a {
+    text-decoration: none;
+    color: inherit;
 }
 .pager-btn {
     width: 32px; 
