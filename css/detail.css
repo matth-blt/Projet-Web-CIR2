@@ -64,7 +64,7 @@
 /* Grille 2 colonnes pour les champs */
 .detail-grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(max(260px, 50% - 10px), 1fr));
     gap: 20px;
 }
 
@@ -83,13 +83,6 @@
     font-size: 15px;
     font-weight: 500;
     color: var(--texte);
-}
-
-/* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-    .detail-grid-2 { 
-        grid-template-columns: 1fr; 
-    }
 }
 
 @media (max-width: 480px) {

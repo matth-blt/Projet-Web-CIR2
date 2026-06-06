@@ -449,7 +449,7 @@ tbody tr:last-child td {
 }
 .detail-grid-2 { 
     display: grid; 
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: repeat(auto-fit, minmax(max(260px, 50% - 10px), 1fr)); 
     gap: 20px; 
 }
 .detail-field { 
@@ -504,10 +504,6 @@ footer span {
         gap: 16px; 
     }
 
-    .detail-grid-2 { 
-        grid-template-columns: 1fr 1fr; 
-        gap: 16px; 
-    }
 
     .table-wrap { 
         overflow-x: auto; 
@@ -562,9 +558,6 @@ footer span {
     }
     .detail-card-body { 
         padding: 20px 16px; 
-    }
-    .detail-grid-2 { 
-        grid-template-columns: 1fr; 
     }
 
     .table-wrap { 
