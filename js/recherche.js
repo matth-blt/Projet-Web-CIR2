@@ -197,10 +197,10 @@ function renderResultsTable(pdcs) {
         const idPdc = encodeURIComponent(pdc.id_pdc);
         
         tr.innerHTML = `
-            <td>${dateFormatted}</td>
-            <td><span class="tag-prise">${typePrise}</span></td>
-            <td>${puissance}</td>
-            <td>${locationText}</td>
+            <td data-label="Mise en service">${dateFormatted}</td>
+            <td data-label="Prise"><span class="tag-prise">${typePrise}</span></td>
+            <td data-label="Puissance">${puissance}</td>
+            <td data-label="Localisation">${locationText}</td>
             <td><a href="detail.html?id_pdc=${idPdc}" class="link-detail">Voir le détail →</a></td>
         `;
         
