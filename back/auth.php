@@ -1,70 +1,72 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$USERS = [
-    'matthieu' => '$2y$12$wshtRls.2HJZ4CeSF/qBnuvhKOoFaoHQ/3mnAxBeEa2884dXKSAEG',
-    'noah' => '$2y$12$TIBgf0gDMR1zeIxkQNEAUO40JSPxvwx1YTIyWxf.kQ6e9O1fUGMES'
-];
-
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-
-if (isset($_GET['logout'])) {
-    $_SESSION = [];
-    session_destroy();
-?><!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <script>
-            localStorage.removeItem('auth_user');
-            window.location.href = <?= json_encode(strtok($_SERVER["REQUEST_URI"], "?")) ?>;
-        </script>
-    </head>
-    <body>
-    </body>
-    </html>
-    <?php
-    exit;
-}
-
-$erreur = false;
-if (isset($_POST['login_user'], $_POST['login_pass'])) {
-    $csrf = $_POST['csrf_token'] ?? '';
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
-        die('Erreur CSRF : Action non autorisée.');
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
-    $u = $_POST['login_user'];
-    $p = $_POST['login_pass'];
-    if (isset($USERS[$u]) && password_verify($p, $USERS[$u])) {
-        $_SESSION['auth_user'] = $u;
-        ?>
-        <!DOCTYPE html>
+
+    $USERS = [
+        'matthieu' => '$2y$12$wshtRls.2HJZ4CeSF/qBnuvhKOoFaoHQ/3mnAxBeEa2884dXKSAEG',
+        'noah' => '$2y$12$TIBgf0gDMR1zeIxkQNEAUO40JSPxvwx1YTIyWxf.kQ6e9O1fUGMES'
+    ];
+
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+
+    if (isset($_GET['logout'])) {
+        $_SESSION = [];
+        session_destroy();
+?>      <!DOCTYPE html>
         <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <script>
-                localStorage.setItem('auth_user', <?= json_encode($u) ?>);
-                window.location.href = <?= json_encode($_SERVER['REQUEST_URI']) ?>;
+                localStorage.removeItem('auth_user');
+                window.location.href = <?= json_encode(strtok($_SERVER["REQUEST_URI"], "?")) ?>;
             </script>
         </head>
         <body>
         </body>
         </html>
-        <?php
+<?php
         exit;
     }
-    $erreur = true;
-}
 
-if (!empty($_SESSION['auth_user'])) {
-    return;
-}
+    $erreur = false;
+    if (isset($_POST['login_user'], $_POST['login_pass'])) {
+        $csrf = $_POST['csrf_token'] ?? '';
 
-$base = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'php') ? '../' : '';
+        if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+            die('Erreur CSRF : Action non autorisée.');
+        }
+
+        $u = $_POST['login_user'];
+        $p = $_POST['login_pass'];
+        if (isset($USERS[$u]) && password_verify($p, $USERS[$u])) {
+            $_SESSION['auth_user'] = $u;
+?>          <!DOCTYPE html>
+            <html lang="fr">
+            <head>
+                <meta charset="UTF-8">
+                <script>
+                    localStorage.setItem('auth_user', <?= json_encode($u) ?>);
+                    window.location.href = <?= json_encode($_SERVER['REQUEST_URI']) ?>;
+                </script>
+            </head>
+            <body>
+            </body>
+            </html>
+<?php
+            exit;
+        }
+
+        $erreur = true;
+    }
+
+    if (!empty($_SESSION['auth_user'])) {
+        return;
+    }
+
+    $base = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'php') ? '../' : '';
 
 ?><!DOCTYPE html>
 <html lang="fr">

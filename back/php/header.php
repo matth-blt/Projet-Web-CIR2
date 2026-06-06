@@ -1,8 +1,8 @@
 <?php
 // $page_active doit être défini avant l'inclusion : 'accueil', 'liste' ou 'nouveau'
-$is_in_php_dir = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'php');
-$php_dir = $is_in_php_dir ? '' : 'php/';
-$back_dir = $is_in_php_dir ? '../' : '';
+    $is_in_php_dir = (basename(dirname($_SERVER['SCRIPT_NAME'])) === 'php');
+    $php_dir = $is_in_php_dir ? '' : 'php/';
+    $back_dir = $is_in_php_dir ? '../' : '';
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>

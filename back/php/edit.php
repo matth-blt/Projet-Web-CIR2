@@ -1,42 +1,43 @@
 <?php
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../../api/Database.php';
-require_once __DIR__ . '/../../api/models/PointDeCharge.php';
+    require_once __DIR__ . '/../auth.php';
+    require_once __DIR__ . '/../../api/Database.php';
+    require_once __DIR__ . '/../../api/models/PointDeCharge.php';
 
-$page_active = 'liste';
+    $page_active = 'liste';
 
-$id_pdc = $_GET['id_pdc'] ?? '';
+    $id_pdc = $_GET['id_pdc'] ?? '';
 
-$db = Database::getConnection();
-$pdcModel = new PointDeCharge($db);
-$pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
+    $db = Database::getConnection();
+    $pdcModel = new PointDeCharge($db);
+    $pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
 
-$success = false;
-$error   = false;
+    $success = false;
+    $error = false;
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc) {
-    $csrf = $_POST['csrf_token'] ?? '';
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
-        die('Erreur CSRF : Action non autorisée.');
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdc) {
+        $csrf = $_POST['csrf_token'] ?? '';
+        if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+            die('Erreur CSRF : Action non autorisée.');
+        }
+        
+        $result = $pdcModel->update([
+            'id_pdc' => $id_pdc,
+            'puissance' => $_POST['puissance'] ?: null,
+            'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
+            'latitude' => $_POST['latitude'] ?: null,
+            'longitude' => $_POST['longitude'] ?? null,
+            'tarification' => $_POST['tarification'] ?: null,
+        ]);
+
+        if ($result) {
+            header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
+            exit;
+        } else {
+            $error = true;
+        }
     }
-    $result = $pdcModel->update([
-        'id_pdc' => $id_pdc,
-        'puissance' => $_POST['puissance'] ?: null,
-        'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
-        'latitude' => $_POST['latitude'] ?: null,
-        'longitude' => $_POST['longitude'] ?? null,
-        'tarification' => $_POST['tarification'] ?: null,
-    ]);
 
-    if ($result) {
-        header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
-        exit;
-    } else {
-        $error = true;
-    }
-}
-
-include 'header.php';
+    include 'header.php';
 ?>
 
 <div class="content">

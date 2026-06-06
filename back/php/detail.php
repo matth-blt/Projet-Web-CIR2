@@ -1,17 +1,17 @@
 <?php
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../../api/Database.php';
-require_once __DIR__ . '/../../api/models/PointDeCharge.php';
+    require_once __DIR__ . '/../auth.php';
+    require_once __DIR__ . '/../../api/Database.php';
+    require_once __DIR__ . '/../../api/models/PointDeCharge.php';
 
-$page_active = 'liste';
+    $page_active = 'liste';
 
-$id_pdc = $_GET['id_pdc'] ?? '';
+    $id_pdc = $_GET['id_pdc'] ?? '';
 
-$db = Database::getConnection();
-$pdcModel = new PointDeCharge($db);
-$pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
+    $db = Database::getConnection();
+    $pdcModel = new PointDeCharge($db);
+    $pdc = $id_pdc ? $pdcModel->getById((int)$id_pdc) : null;
 
-include 'header.php';
+    include 'header.php';
 ?>
 
 <div class="content">

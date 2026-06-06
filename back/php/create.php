@@ -1,67 +1,67 @@
 <?php
-require_once __DIR__ . '/../auth.php';
-require_once __DIR__ . '/../../api/Database.php';
-require_once __DIR__ . '/../../api/models/PointDeCharge.php';
-require_once __DIR__ . '/../../api/models/Referentiel.php';
+    require_once __DIR__ . '/../auth.php';
+    require_once __DIR__ . '/../../api/Database.php';
+    require_once __DIR__ . '/../../api/models/PointDeCharge.php';
+    require_once __DIR__ . '/../../api/models/Referentiel.php';
 
-$page_active = 'nouveau';
+    $page_active = 'nouveau';
 
-$db = Database::getConnection();
-$ref = new Referentiel($db);
-$types_prises = $ref->getTypesPrise();
-$types_paiement = $ref->getTypesPaiement();
+    $db = Database::getConnection();
+    $ref = new Referentiel($db);
+    $types_prises = $ref->getTypesPrise();
+    $types_paiement = $ref->getTypesPaiement();
 
-$error = false;
-$message = '';
+    $error = false;
+    $message = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $csrf = $_POST['csrf_token'] ?? '';
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
-        die('Erreur CSRF : Action non autorisée.');
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $csrf = $_POST['csrf_token'] ?? '';
+        if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrf)) {
+            die('Erreur CSRF : Action non autorisée.');
+        }
+
+        $pdcModel = new PointDeCharge($db);
+        $id_pdc = $pdcModel->create([
+            // Station
+            'nom_station' => $_POST['nom_station'] ?? '',
+            'adresse_station' => $_POST['adresse_station'] ?? '',
+            'id_station_itinerance' => $_POST['id_station_itinerance'] ?? '',
+            'date_service' => $_POST['date_service'] ?? '',
+            // Aménageur
+            'nom_amenageur' => $_POST['nom_amenageur'] ?? '',
+            'siren_amenageur' => (int)($_POST['siren_amenageur'] ?? 0),
+            'contact_amenageur' => $_POST['contact_amenageur'] ?? '',
+            // Opérateur
+            'nom_operateur' => $_POST['nom_operateur'] ?? '',
+            'contact_operateur' => $_POST['contact_operateur'] ?? '',
+            'telephone_operateur' => $_POST['telephone_operateur'] ?? '',
+            // Localisation
+            'code_insee' => (int)($_POST['code_insee'] ?? 0),
+            'nom_commune' => $_POST['nom_commune'] ?? '',
+            'code_dep' => (int)($_POST['code_dep'] ?? 0),
+            'nom_departement' => $_POST['nom_departement'] ?? '',
+            'latitude' => $_POST['latitude'] ?? 0,
+            'longitude' => $_POST['longitude'] ?? 0,
+            // PDC
+            'puissance' => $_POST['puissance'] ?? 0,
+            'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
+            'gratuit' => (int)($_POST['gratuit'] ?? 0),
+            'tarification' => $_POST['tarification'] ?? '',
+            // Relations
+            'type_prise' => $_POST['type_prise'] ?? '',
+            'types_paiement' => $_POST['types_paiement'] ?? [],
+        ]);
+
+        if ($id_pdc !== false) {
+            header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
+            exit;
+        } else {
+            $error = true;
+            $message = 'Erreur lors de l\'insertion. Vérifie les données saisies.';
+        }
     }
 
-    $pdcModel = new PointDeCharge($db);
-    $id_pdc = $pdcModel->create([
-        // Station
-        'nom_station' => $_POST['nom_station'] ?? '',
-        'adresse_station' => $_POST['adresse_station'] ?? '',
-        'id_station_itinerance' => $_POST['id_station_itinerance'] ?? '',
-        'date_service' => $_POST['date_service'] ?? '',
-        // Aménageur
-        'nom_amenageur' => $_POST['nom_amenageur'] ?? '',
-        'siren_amenageur' => (int)($_POST['siren_amenageur'] ?? 0),
-        'contact_amenageur' => $_POST['contact_amenageur'] ?? '',
-        // Opérateur
-        'nom_operateur' => $_POST['nom_operateur'] ?? '',
-        'contact_operateur' => $_POST['contact_operateur'] ?? '',
-        'telephone_operateur' => $_POST['telephone_operateur'] ?? '',
-        // Localisation
-        'code_insee' => (int)($_POST['code_insee'] ?? 0),
-        'nom_commune' => $_POST['nom_commune'] ?? '',
-        'code_dep' => (int)($_POST['code_dep'] ?? 0),
-        'nom_departement' => $_POST['nom_departement'] ?? '',
-        'latitude' => $_POST['latitude'] ?? 0,
-        'longitude' => $_POST['longitude'] ?? 0,
-        // PDC
-        'puissance' => $_POST['puissance'] ?? 0,
-        'cable_t2_attache' => (int)($_POST['cable_t2_attache'] ?? 0),
-        'gratuit' => (int)($_POST['gratuit'] ?? 0),
-        'tarification' => $_POST['tarification'] ?? '',
-        // Relations
-        'type_prise' => $_POST['type_prise'] ?? '',
-        'types_paiement' => $_POST['types_paiement'] ?? [],
-    ]);
-
-    if ($id_pdc !== false) {
-        header('Location: detail.php?id_pdc=' . urlencode($id_pdc));
-        exit;
-    } else {
-        $error = true;
-        $message = 'Erreur lors de l\'insertion. Vérifie les données saisies.';
-    }
-}
-
-include 'header.php';
+    include 'header.php';
 ?>
 
 <div class="content">
