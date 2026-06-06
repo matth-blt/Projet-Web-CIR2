@@ -16,18 +16,18 @@
     <div class="page">
         <header>
             <div class="logo">
-            <div class="logo-icon">
-                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" ><path d="M19 9h-5V3a1 1 0 0 0-.69-.95c-.41-.13-.86.01-1.12.36l-8 11a1 1 0 0 0-.08 1.04c.17.34.51.55.89.55h5v6a1 1 0 0 0 1 1c.31 0 .62-.15.81-.41l8-11a1 1 0 0 0 .08-1.04A.99.99 0 0 0 19 9"></path></svg>
-            </div>
-            <span class="logo-name">IRVE Bretagne</span>
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-5V3a1 1 0 0 0-.69-.95c-.41-.13-.86.01-1.12.36l-8 11a1 1 0 0 0-.08 1.04c.17.34.51.55.89.55h5v6a1 1 0 0 0 1 1c.31 0 .62-.15.81-.41l8-11a1 1 0 0 0 .08-1.04A.99.99 0 0 0 19 9"></path></svg>
+                </div>
+                <span class="logo-name">IRVE Bretagne</span>
             </div>
             <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); document.querySelector('nav').classList.toggle('open')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
             </button>
             <nav>
-            <a href="../index.html">Accueil</a>
-            <a href="recherche.html">Recherche</a>
-            <a href="carte.html" class="active">Carte</a>
+                <a href="../index.html">Accueil</a>
+                <a href="recherche.html">Recherche</a>
+                <a href="carte.html" class="active">Carte</a>
             </nav>
         </header>
 
@@ -35,31 +35,31 @@
             <div class="section-heading">Visualisation cartographique</div>
             <div class="section-sub">Sélectionnez un filtre pour afficher les bornes sur la carte OpenStreetMap</div>
 
-        <div class="map-controls">
-            <div class="field-group">
-                <label class="field-label">Année d'installation</label>
-                <select class="field-select" id="select-annee">
-                    <option value="">— Toutes les années —</option>
-                </select>
+            <div class="map-controls">
+                <div class="field-group">
+                    <label class="field-label">Année d'installation</label>
+                    <select class="field-select" id="select-annee">
+                        <option value="">— Toutes les années —</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Département</label>
+                    <select class="field-select" id="select-departement">
+                        <option value="">— Tous les départements —</option>
+                    </select>
+                </div>
+                <button class="search-btn">Afficher</button>
             </div>
-            <div class="field-group">
-                <label class="field-label">Département</label>
-                <select class="field-select" id="select-departement">
-                    <option value="">— Tous les départements —</option>
-                </select>
-            </div>
-            <button class="search-btn">Afficher</button>
-        </div>
 
-        <!-- Carte OpenStreetMap (Leaflet) — pleine largeur -->
-        <div id="map" class="map-canvas"></div>
+            <!-- Carte OpenStreetMap (Leaflet) — pleine largeur -->
+            <div id="map" class="map-canvas"></div>
 
-        <p class="map-note">Cliquez sur un marqueur : la carte se centre dessus et affiche la localité, la puissance et un lien vers la page détail.</p>
+            <p class="map-note">Cliquez sur un marqueur : la carte se centre dessus et affiche la localité, la puissance et un lien vers la page détail.</p>
         </div>
 
         <footer>
-            <span>Groupe CIR2 — 2026</span>
-            <span>ISEN Ouest · Brest / Caen / Nantes / Rennes</span>
+            <span>Matthieu Ballout / Noah Guichard · CIR2</span>
+            <span>ISEN Ouest</span>
         </footer>
     </div>
 </body>
