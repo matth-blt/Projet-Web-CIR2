@@ -510,25 +510,53 @@
 
         public function getMapPoints(array $filters): array {
             try {
-                $request = '
-                    SELECT 
-                        pdc.id_pdc AS id, 
-                        s.nom_station,
-                        s.adresse_station,
-                        c.nom_commune AS localite, 
-                        c.code_dep AS dept, 
-                        YEAR(s.date_mise_en_service) AS annee, 
-                        pdc.puissance, 
-                        pdc.lat, 
-                        pdc.lon AS lng,
-                        ad.type_prise
-                    FROM point_de_charge pdc
-                    JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
-                    JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
-                    JOIN commune c ON s.code_insee_commune = c.code_insee_commune
-                    LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
-                    WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
-                ';
+                $zoom = isset($filters['zoom']) ? (int)$filters['zoom'] : 0;
+                
+                // Si le zoom est faible (zoom < 10), on groupe par station pour limiter le nombre de marqueurs
+                if ($zoom > 0 && $zoom < 10) {
+                    $request = '
+                        SELECT 
+                            MIN(pdc.id_pdc) AS id, 
+                            s.nom_station,
+                            s.adresse_station,
+                            c.nom_commune AS localite, 
+                            c.code_dep AS dept, 
+                            YEAR(s.date_mise_en_service) AS annee, 
+                            AVG(pdc.puissance) AS puissance, 
+                            AVG(pdc.lat) AS lat, 
+                            AVG(pdc.lon) AS lng,
+                            GROUP_CONCAT(DISTINCT ad.type_prise SEPARATOR ", ") AS type_prise,
+                            COUNT(pdc.id_pdc) AS count_pdc
+                        FROM point_de_charge pdc
+                        JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                        JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                        JOIN commune c ON s.code_insee_commune = c.code_insee_commune
+                        LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                        WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
+                    ';
+                } else {
+                    // Sinon (zoom >= 10 ou zoom non spécifié), on affiche les points de charge individuels
+                    $request = '
+                        SELECT 
+                            pdc.id_pdc AS id, 
+                            s.nom_station,
+                            s.adresse_station,
+                            c.nom_commune AS localite, 
+                            c.code_dep AS dept, 
+                            YEAR(s.date_mise_en_service) AS annee, 
+                            pdc.puissance, 
+                            pdc.lat, 
+                            pdc.lon AS lng,
+                            ad.type_prise,
+                            1 AS count_pdc
+                        FROM point_de_charge pdc
+                        JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
+                        JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
+                        JOIN commune c ON s.code_insee_commune = c.code_insee_commune
+                        LEFT JOIN a_des ad ON pdc.id_pdc = ad.id_pdc
+                        WHERE pdc.lat IS NOT NULL AND pdc.lon IS NOT NULL
+                    ';
+                }
 
                 $whereClauses = [];
                 $queryParams = [];
@@ -542,15 +570,30 @@
                     $queryParams[':code_dep'] = $filters['code_dep'];
                 }
 
+                // Filtrage géographique par Bounding Box
+                if ($filters['min_lat'] !== null && $filters['max_lat'] !== null && $filters['min_lng'] !== null && $filters['max_lng'] !== null) {
+                    $whereClauses[] = 'pdc.lat BETWEEN :min_lat AND :max_lat';
+                    // On prend la valeur absolue pour la longitude négative dans le BETWEEN si nécessaire, ou plus simplement :
+                    $whereClauses[] = 'pdc.lon BETWEEN :min_lng AND :max_lng';
+                    $queryParams[':min_lat'] = $filters['min_lat'];
+                    $queryParams[':max_lat'] = $filters['max_lat'];
+                    $queryParams[':min_lng'] = $filters['min_lng'];
+                    $queryParams[':max_lng'] = $filters['max_lng'];
+                }
+
                 if (!empty($whereClauses)) {
                     $request .= ' AND ' . implode(' AND ', $whereClauses);
+                }
+
+                // Groupement SQL si zoom < 10
+                if ($zoom > 0 && $zoom < 10) {
+                    $request .= ' GROUP BY s.id_station_itinerance';
                 }
 
                 $statement = $this->db->prepare($request);
                 $statement->execute($queryParams);
                 $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                // Conversion des types numériques pour le JSON et correction des longitudes positives (tous les points en Bretagne ont une longitude négative)
                 return array_map(function($row) {
                     return [
                         'id' => (int)$row['id'],
@@ -562,7 +605,8 @@
                         'puissance' => $row['puissance'] !== null ? (float)$row['puissance'] : null,
                         'type_prise' => $row['type_prise'],
                         'lat' => (float)$row['lat'],
-                        'lng' => -abs((float)$row['lng'])
+                        'lng' => -abs((float)$row['lng']),
+                        'count_pdc' => (int)$row['count_pdc']
                     ];
                 }, $rows);
             } catch (PDOException $exception) {

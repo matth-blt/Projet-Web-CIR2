@@ -68,7 +68,12 @@
             } else if ($subResource === 'map') {
                 $filters = [
                     'annee' => isset($_GET['annee']) ? trim($_GET['annee']) : '',
-                    'code_dep' => isset($_GET['code_dep']) ? trim($_GET['code_dep']) : ''
+                    'code_dep' => isset($_GET['code_dep']) ? trim($_GET['code_dep']) : '',
+                    'zoom' => isset($_GET['zoom']) ? (int)$_GET['zoom'] : 0,
+                    'min_lat' => isset($_GET['min_lat']) ? (float)$_GET['min_lat'] : null,
+                    'max_lat' => isset($_GET['max_lat']) ? (float)$_GET['max_lat'] : null,
+                    'min_lng' => isset($_GET['min_lng']) ? (float)$_GET['min_lng'] : null,
+                    'max_lng' => isset($_GET['max_lng']) ? (float)$_GET['max_lng'] : null
                 ];
                 $data = $pdcModel->getMapPoints($filters);
             } else {

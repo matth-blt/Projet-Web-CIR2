@@ -123,6 +123,10 @@
     .map-section { 
         padding: 40px 32px; 
     }
+    .map-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 @media (max-width: 480px) {
