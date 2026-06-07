@@ -1,16 +1,33 @@
 <?php 
     require_once __DIR__ . '/../Database.php';
 
+    /**
+     * Classe PointDeCharge
+     * Modèle principal représentant un point de charge (PDC) pour véhicule électrique.
+     * Gère le décompte, la recherche paginée, la récupération unitaire (fiche détails),
+     * la création complète sécurisée en transaction, la modification, la récupération cartographique
+     * (avec agrégation de stations selon le niveau de zoom) et la suppression.
+    */
     class PointDeCharge {
+        /**
+         * @var PDO Instance de connexion à la base de données.
+        */
         private PDO $db;
 
+        /**
+         * Constructeur de la classe PointDeCharge.
+         * 
+         * @param PDO $db Connexion active à la base de données injectée.
+        */
         public function __construct(PDO $db) {
             $this->db = $db;
         }
 
         /**
-         * Compte le nombre total de points de charge.
-         */
+         * Compte le nombre total de points de charge physiques enregistrés dans la table point_de_charge.
+         * 
+         * @return int Nombre total de points de charge, ou 0 en cas d'erreur.
+        */
         public function count(): int {
             try {
                 $request = '
@@ -28,11 +45,14 @@
         }
 
         /**
-         * Récupère la liste des PDC.
-         * @param bool $accueil  Si true, retourne 5 PDC aléatoires (aperçu accueil).
-         * @param int|null $limit  Nombre max de résultats (pagination).
-         * @param int $offset  Décalage (pagination).
-         */
+         * Récupère la liste complète des points de charge physiques avec leurs types de prise associés.
+         * Charge également en lot les relations externes correspondantes (station, commune, département, acteurs).
+         * 
+         * @param bool $accueil Si vrai, retourne 5 bornes aléatoires pour l'aperçu de la page d'accueil d'administration.
+         * @param int|null $limit Nombre maximum de résultats à retourner (pour la pagination).
+         * @param int $offset Indice du premier élément à retourner (pour la pagination).
+         * @return array Liste des points de charge avec leurs relations résolues.
+        */
         public function getAll(bool $accueil = false, ?int $limit = null, int $offset = 0): array {
             try {
                 // 1. Récupération de la liste de base (PDC + type de prise)
@@ -63,7 +83,13 @@
         }
 
         /**
-         * Recherche filtrée des points de charge.
+         * Effectue une recherche multicritères filtrée des points de charge.
+         * Supporte le filtrage optionnel par nom d'aménageur, type de prise et code département.
+         * 
+         * @param array $filters Tableau de critères de filtrage ('amenageur', 'type_prise', 'code_dep').
+         * @param int|null $limit Nombre maximum de lignes à retourner (pour la pagination).
+         * @param int $offset Indice de décalage (pour la pagination).
+         * @return array Liste filtrée des points de charge correspondants.
         */
         public function search(array $filters, ?int $limit = null, int $offset = 0): array {
             try {
@@ -115,7 +141,11 @@
         }
 
         /**
-         * Compte le nombre de résultats pour une recherche filtrée.
+         * Compte le nombre total de points de charge uniques correspondant aux critères de filtrage.
+         * Utilisé pour la pagination de la page de recherche.
+         * 
+         * @param array $filters Critères de filtrage ('amenageur', 'type_prise', 'code_dep').
+         * @return int Nombre de points de charge correspondants.
         */
         public function searchCount(array $filters): int {
             try {
@@ -160,7 +190,12 @@
         }
 
         /**
-         * Helper pour charger en lot les relations pour une liste de lignes
+         * Chargeur de relations en lot (Eager Loading manuel).
+         * Regroupe en lot les requêtes vers la station, la commune et les acteurs
+         * afin d'optimiser les performances de l'application et prévenir le problème N+1.
+         * 
+         * @param array $rows Liste brute de lignes de points de charge.
+         * @return array Liste des points de charge enrichie de leurs relations.
         */
         private function loadRelationsForRows(array $rows): array {
             if (empty($rows)) {
@@ -277,8 +312,12 @@
         }
 
         /**
-         * Récupère le détail d'un PDC par son ID.
-         */
+         * Récupère la fiche détaillée d'un point de charge spécifique par son ID.
+         * Résout l'ensemble des relations connexes de station, de commune et de modes de paiement.
+         * 
+         * @param int $id_pdc L'identifiant unique du point de charge.
+         * @return array|null Fiche détaillée du point de charge, ou null s'il est introuvable.
+        */
         public function getById(int $id_pdc): ?array {
             try {
                 // 1. Récupération des infos de base du PDC et type de prise
@@ -392,8 +431,11 @@
         }
 
         /**
-         * Met à jour les champs modifiables d'un PDC existant.
-         */
+         * Met à jour les caractéristiques modifiables d'un point de charge.
+         * 
+         * @param array $data Tableau associatif contenant les nouveaux paramètres ('id_pdc', 'puissance', 'cable_t2_attache', 'latitude', 'longitude', 'tarification').
+         * @return bool Vrai en cas de réussite de la mise à jour, faux en cas d'erreur.
+        */
         public function update(array $data): bool {
             try {
                 $stmt = $this->db->prepare('
@@ -423,9 +465,14 @@
         }
 
         /**
-         * Crée un nouveau PDC complet (transaction : département, commune, acteurs, station, pdc, relations).
-         * @return int|false  L'ID du PDC créé, ou false en cas d'erreur.
-         */
+         * Insère un point de charge complet avec sa station et ses relations au sein d'une transaction SQL unifiée.
+         * Insère ou réutilise le département et la commune correspondants, crée les acteurs nécessaires (aménageur, opérateur),
+         * instancie la station physique puis la borne de recharge en lui assignant ses relations (type de prise, modes de paiement).
+         * Effectue un rollback complet des insertions partielles en cas d'erreur de base de données.
+         * 
+         * @param array $data Tableau associatif contenant l'intégralité des champs de saisie du formulaire d'ajout.
+         * @return int|false L'identifiant généré du nouveau point de charge inséré, ou false en cas d'échec.
+        */
         public function create(array $data): int|false {
             try {
                 $this->db->beginTransaction();
@@ -508,6 +555,21 @@
             }
         }
 
+        /**
+         * Récupère les données géolocalisées optimisées pour l'affichage cartographique.
+         * Si le niveau de zoom est faible (zoom < 10), agrège les bornes physiques par station pour économiser la mémoire du navigateur.
+         * Si le zoom est élevé (zoom >= 10), renvoie les points de charge individuels situés dans la boîte englobante (Bounding Box) visible.
+         * 
+         * @param array $filters Critères de filtrage et limites de coordonnées.
+         * @param string|int [filters.annee] Année de mise en service filtrée.
+         * @param string|int [filters.code_dep] Code de département breton filtré.
+         * @param int [filters.zoom] Niveau de zoom actuel de l'utilisateur.
+         * @param float [filters.min_lat] Latitude minimale de la Bounding Box.
+         * @param float [filters.max_lat] Latitude maximale de la Bounding Box.
+         * @param float [filters.min_lng] Longitude minimale de la Bounding Box.
+         * @param float [filters.max_lng] Longitude maximale de la Bounding Box.
+         * @return array Tableau de marqueurs géolocalisés.
+        */
         public function getMapPoints(array $filters): array {
             try {
                 $zoom = isset($filters['zoom']) ? (int)$filters['zoom'] : 0;
@@ -617,7 +679,12 @@
 
         /**
          * Supprime un point de charge (PDC) et ses relations.
-         */
+         * Supprime séquentiellement toutes les clés étrangères dépendantes (moyens de paiement, types de prise, association de station)
+         * au sein d'une transaction SQL unifiée pour préserver l'intégrité référentielle.
+         * 
+         * @param int $id_pdc Identifiant unique de la borne à supprimer.
+         * @return bool Vrai si la suppression a réussi, faux en cas d'erreur.
+        */
         public function delete(int $id_pdc): bool {
             try {
                 $this->db->beginTransaction();

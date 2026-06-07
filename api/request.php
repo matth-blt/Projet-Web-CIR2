@@ -1,5 +1,8 @@
 <?php 
     require_once __DIR__ . '/Database.php';
+    require_once __DIR__ . '/models/Stats.php';
+    require_once __DIR__ . '/models/Referentiel.php';
+    require_once __DIR__ . '/models/PointDeCharge.php';
 
     // Connexion à la base de données
     try {
@@ -19,7 +22,6 @@
     $data = false;
 
     if ($requestRessource === 'stats' && $requestMethod === 'GET') {
-        require_once __DIR__ . '/models/Stats.php';
         try {
             $statsModel = new Stats($db);
             $data = [
@@ -36,7 +38,6 @@
     }
 
     if ($requestRessource === 'referentiel' && $requestMethod === 'GET') {
-        require_once __DIR__ . '/models/Referentiel.php';
         try {
             $refModel = new Referentiel($db);
             $data = [
@@ -51,7 +52,6 @@
     }
 
     if ($requestRessource === 'pdc' && $requestMethod === 'GET') {
-        require_once __DIR__ . '/models/PointDeCharge.php';
         try {
             $pdcModel = new PointDeCharge($db);
             

@@ -1,13 +1,32 @@
 <?php 
     require_once __DIR__ . '/../Database.php';
 
+    /**
+     * Classe Stats
+     * Permet de calculer toutes les statistiques générales pour la page d'accueil de l'application
+     * (nombre total de points de charge, répartition par année, répartition par département,
+     * cumul croisé année/département, nombre d'aménageurs et types de prise distincts).
+    */
     class Stats {
+        /**
+         * @var PDO Instance de connexion à la base de données.
+        */
         private PDO $db;
 
+        /**
+         * Constructeur de la classe Stats.
+         * 
+         * @param PDO $db Connexion active à la base de données injectée.
+        */
         public function __construct(PDO $db) {
             $this->db = $db;
         }
 
+        /**
+         * Récupère le nombre total de points de charge physiques enregistrés.
+         * 
+         * @return int Nombre total de points de charge, ou -1 en cas d'erreur.
+        */
         public function getNbrPDC(): int {
             try {
                 $stmt = $this->db->prepare('SELECT COUNT(*) AS total_pdc FROM point_de_charge;');
@@ -21,7 +40,9 @@
         }
         
         /**
-         * Retourne le nombre de points de charge par années.
+         * Récupère le nombre total de points de charge mis en service pour chaque année.
+         * 
+         * @return array Liste associative (annee, nombre_points_de_charge) triée chronologiquement.
         */
         public function getNbrPDCParAnnees(): array {
             try {
@@ -47,7 +68,9 @@
         }
 
         /**
-         * Retourne le nombre de points de charge par departements.
+         * Récupère le nombre total de points de charge pour chaque département breton.
+         * 
+         * @return array Liste associative (numero_departement, nom_departement, nombre_points_de_charge) ordonnée par volume décroissant.
         */
         public function getNbrPDCParDepartements(): array {
             try {
@@ -75,6 +98,12 @@
             }
         }
 
+        /**
+         * Récupère le nombre de points de charge croisés à la fois par année et par département.
+         * Alimente le grand tableau de statistiques croisées de l'accueil.
+         * 
+         * @return array Liste croisée (numero_departement, nom_departement, annee, nombre_points_de_charge) triée par année.
+        */
         public function getNbrPDCDepartementAnnees(): array {
             try {
                 $stmt = $this->db->prepare('
@@ -104,7 +133,9 @@
         }
 
         /**
-         * Retourne le nombre d'amenageurs.
+         * Récupère le nombre total d'acteurs de type 'Aménageur' enregistrés en base.
+         * 
+         * @return int Nombre total d'aménageurs distincts, ou -1 en cas d'erreur.
         */
         public function getNbrAmenageurs(): int {
             try {
@@ -123,7 +154,9 @@
         }
 
         /**
-         * Retourne le nombre de types de prises.
+         * Récupère le nombre total de types de prises distincts gérés par l'application.
+         * 
+         * @return int Nombre total de types de prises, ou -1 en cas d'erreur.
         */
         public function getNbrTypeDePrises(): int {
             try {
