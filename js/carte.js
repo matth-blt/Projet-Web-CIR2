@@ -29,7 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Initialise la carte Leaflet
+ * Initialise la carte Leaflet centrée par défaut sur la Bretagne.
+ * Ajoute les couches de tuiles (tileLayer) et configure les écouteurs d'événements
+ * (déplacement, clic, fermeture de popup) nécessaires à l'interactivité.
+ * 
+ * @function initMap
+ * @returns {void}
  */
 function initMap() {
     map = L.map('map', { scrollWheelZoom: true });
@@ -66,7 +71,11 @@ function initMap() {
 }
 
 /**
- * Lance le chargement des points de la zone visible
+ * Calcule la zone géographique visible (Bounding Box) et le niveau de zoom actuel
+ * de la carte, puis déclenche le chargement asynchrone des points correspondants.
+ * 
+ * @function updateMapPoints
+ * @returns {void}
  */
 function updateMapPoints() {
     const zoom = map.getZoom();
@@ -86,7 +95,12 @@ function updateMapPoints() {
 }
 
 /**
- * Récupère les référentiels (années d'installation et départements) depuis l'API
+ * Récupère les référentiels de filtres (départements bretons et années) depuis l'API.
+ * Alimente l'index départemental pour le décodage ultérieur des noms de départements.
+ * 
+ * @async
+ * @function fetchReferentiel
+ * @returns {Promise<void>}
  */
 async function fetchReferentiel() {
     try {
@@ -109,7 +123,14 @@ async function fetchReferentiel() {
 }
 
 /**
- * Remplit les listes déroulantes de filtres
+ * Remplit les listes déroulantes de filtres.
+ * Filtre les valeurs nulles, déduplique les années et ordonne les données.
+ * 
+ * @function populateFilters
+ * @param {Object} data - L'objet contenant les référentiels.
+ * @param {Array<{annee?: string|number}>} data.annees - Liste brute des années.
+ * @param {Array<{code_dep: string|number, nom_departement: string}>} data.departements - Liste des départements.
+ * @returns {void}
  */
 function populateFilters(data) {
     const selectAnnee = document.getElementById("select-annee");
@@ -148,7 +169,21 @@ function populateFilters(data) {
 }
 
 /**
- * Récupère les points géolocalisés depuis l'API avec les filtres et limites de coordonnées
+ * Récupère la liste des points de charge géolocalisés correspondant aux filtres et limites spécifiés.
+ * Effectue un appel HTTP GET vers l'API '/pdc/map' puis transmet les résultats à la fonction render.
+ * 
+ * @async
+ * @function fetchMapPoints
+ * @param {Object} [filters={}] - Critères de filtrage et limites de coordonnées.
+ * @param {string|number} [filters.annee] - Année choisie.
+ * @param {string|number} [filters.code_dep] - Code de département choisi.
+ * @param {number} [filters.zoom] - Niveau de zoom de la carte.
+ * @param {number} [filters.min_lat] - Latitude minimale visible.
+ * @param {number} [filters.max_lat] - Latitude maximale visible.
+ * @param {number} [filters.min_lng] - Longitude minimale visible.
+ * @param {number} [filters.max_lng] - Longitude maximale visible.
+ * @param {boolean} [fitBounds=false] - Ajuste ou non les limites géographiques de la vue de la carte sur les points trouvés.
+ * @returns {Promise<void>}
  */
 async function fetchMapPoints(filters = {}, fitBounds = false) {
     try {
@@ -173,8 +208,21 @@ async function fetchMapPoints(filters = {}, fitBounds = false) {
 }
 
 /**
- * Retourne le contenu HTML de la bulle d'info (popup)
- */
+ * Génère le contenu HTML destiné à habiller la bulle d'information (popup) d'un marqueur.
+ * Distingue le cas d'une station regroupant plusieurs bornes (zoom faible) et d'un point individuel (zoom élevé).
+ * 
+ * @param {Object} s - Les données de la borne ou station de recharge.
+ * @param {string} s.nom_station - Le nom attribué à la station.
+ * @param {string} s.adresse_station - L'adresse de la station.
+ * @param {string} s.localite - La commune.
+ * @param {string|number} s.dept - Le code du département.
+ * @param {string|number} [s.annee] - L'année de mise en service.
+ * @param {number} [s.puissance] - La puissance électrique.
+ * @param {string} [s.type_prise] - Le type de prise.
+ * @param {number} [s.count_pdc] - Le cas échéant, le nombre de points regroupés sous cette station.
+ * @param {string|number} [s.id] - Identifiant unique de la borne individuelle.
+ * @returns {string} Le code HTML formaté.
+*/
 function popupHTML(s) {
     const deptName = deptsMap[s.dept] || `Département ${s.dept}`;
     const anneeText = s.annee ? ` · ${s.annee}` : "";
@@ -202,8 +250,11 @@ function popupHTML(s) {
 }
 
 /**
- * Crée l'icône de marqueur personnalisé
- */
+ * Construit un objet icône divIcon personnalisé de Leaflet comportant le SVG de l'éclair.
+ * 
+ * @param {boolean} active - Si vrai, applique la classe active (.is-active) pour surligner le marqueur.
+ * @returns {L.DivIcon} L'objet icône de Leaflet configuré.
+*/
 function makeIcon(active) {
     return L.divIcon({
         className: '',
@@ -215,8 +266,12 @@ function makeIcon(active) {
 }
 
 /**
- * Sélectionne une station : centre la carte et ouvre la bulle d'info
- */
+ * Sélectionne une borne spécifique : centre la vue cartographique avec survol fluide,
+ * applique le style visuel actif sur son icône et ouvre sa bulle d'information.
+ * 
+ * @param {string|number} id - L'identifiant unique du point de charge.
+ * @returns {void}
+*/
 function selectBorne(id) {
     if (activeId !== null && refs.has(activeId)) {
         refs.get(activeId).setIcon(makeIcon(false));
@@ -231,8 +286,10 @@ function selectBorne(id) {
 }
 
 /**
- * Désélectionne la borne active : remet son icône par défaut et vide l'état actif
- */
+ * Désélectionne la borne active, lui réapplique son icône par défaut et vide le pointeur actif.
+ * 
+ * @returns {void}
+*/
 function deselectBorne() {
     if (activeId !== null && refs.has(activeId)) {
         refs.get(activeId).setIcon(makeIcon(false));
@@ -241,8 +298,14 @@ function deselectBorne() {
 }
 
 /**
- * Dessine les marqueurs sur la carte
- */
+ * Nettoie la couche existante et dessine les nouveaux marqueurs géographiques sur la carte.
+ * Si une borne précédemment active est à nouveau visible, elle est sélectionnée automatiquement.
+ * Ajuste la vue cartographique si fitBounds est vrai.
+ * 
+ * @param {Array<Object>} stations - Liste des points de recharge retournés par le serveur.
+ * @param {boolean} [fitBounds=false] - Si vrai, ajuste les limites de zoom de la carte sur l'ensemble des points.
+ * @returns {void}
+*/
 function render(stations, fitBounds = false) {
     // On conserve et réinitialise l'ID actif temporairement
     const prevActiveId = activeId;

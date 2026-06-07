@@ -3,8 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Récupère les détails du point de charge via l'API et les injecte dans le DOM
- */
+ * Récupère les détails d'un point de charge spécifique via l'API et les affiche dans la page.
+ * Analyse les paramètres de la barre d'adresse (query string) pour extraire 'id_pdc'.
+ * Envoie une requête HTTP GET asynchrone vers '../api/request.php/pdc/detail?id_pdc=...'.
+ * Renseigne les différents champs d'information du DOM (Aménageur, Puissance, Prise, Paiement, etc.).
+ * Affiche le message d'erreur si l'identifiant est absent ou en cas d'échec de la requête.
+ * 
+ * @async
+ * @returns {Promise<void>}
+*/
 async function fetchPDCDetail() {
     try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -66,8 +73,11 @@ async function fetchPDCDetail() {
 }
 
 /**
- * Affiche le message d'erreur et cache la carte
- */
+ * Gère l'affichage des erreurs sur l'interface utilisateur.
+ * Affiche le conteneur du message d'erreur et cache la carte détaillée de la station.
+ * 
+ * @returns {void}
+*/
 function showError() {
     const errorEl = document.getElementById("error-message");
     if (errorEl) {

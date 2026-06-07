@@ -22,7 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Récupère les données de référentiel (filtres) depuis l'API request.php
+ * Récupère les référentiels de recherche (départements, types de prise, aménageurs) depuis l'API.
+ * Met en cache les noms des départements associés à leurs codes INSEE et lance la population des listes de filtres.
+ * 
+ * @async
+ * @returns {Promise<void>}
 */
 async function fetchReferentiel() {
     try {
@@ -45,7 +49,14 @@ async function fetchReferentiel() {
 }
 
 /**
- * Remplit les éléments <select> de filtre avec les données récupérées, ordonnées et sans doublons
+ * Alimente dynamiquement les filtres déroulants <select> du formulaire de recherche.
+ * Trie les listes par ordre alphabétique ou numérique et supprime les doublons.
+ * 
+ * @param {Object} data - L'objet contenant les listes de référentiel.
+ * @param {Array<{nom_acteur?: string}>} data.amenageurs - Liste des aménageurs.
+ * @param {Array<{type_prise?: string}>} data.types_prise - Liste des types de prise.
+ * @param {Array<{code_dep: string|number, nom_departement: string}>} data.departements - Liste des départements bretons.
+ * @returns {void}
 */
 function populateFilters(data) {
     // 1. Remplissage des Aménageurs
@@ -106,7 +117,15 @@ function populateFilters(data) {
 }
 
 /**
- * Récupère les points de charge de manière paginée et filtrée
+ * Récupère de façon paginée et filtrée les points de charge correspondants à la recherche.
+ * Si lockCurrentInputs est vrai, verrouille les critères actuellement choisis dans le DOM.
+ * Envoie une requête HTTP GET asynchrone vers l'API '/pdc' avec les critères correspondants.
+ * Renseigne le nombre total de bornes trouvées, génère le tableau et met à jour la pagination.
+ * 
+ * @async
+ * @param {number} [page=1] - Le numéro de la page demandée.
+ * @param {boolean} [lockCurrentInputs=false] - Verrouille ou non les options saisies au clic de recherche.
+ * @returns {Promise<void>}
 */
 async function fetchPDCs(page = 1, lockCurrentInputs = false) {
     try {
@@ -152,7 +171,11 @@ async function fetchPDCs(page = 1, lockCurrentInputs = false) {
 }
 
 /**
- * Formate une date AAAA-MM-JJ en MM/AAAA (Mois et Année)
+ * Formate une date au format standard AAAA-MM-JJ en MM/AAAA.
+ * Si la date est invalide ou manquante, retourne 'Non renseignée'.
+ * 
+ * @param {string} dateStr - La date brute issue de la base de données.
+ * @returns {string} La date formatée.
 */
 function formatMoisAnnee(dateStr) {
     if (!dateStr) return "Non renseignée";
@@ -164,7 +187,11 @@ function formatMoisAnnee(dateStr) {
 }
 
 /**
- * Génère le tableau HTML avec les résultats
+ * Génère et injecte le corps du tableau HTML (ou les cartes sur mobile) pour afficher les résultats.
+ * Gère l'échappement des chaînes de caractères pour prévenir les failles de sécurité de type XSS.
+ * 
+ * @param {Array<Object>} pdcs - La liste des points de charge à restituer dans la vue.
+ * @returns {void}
 */
 function renderResultsTable(pdcs) {
     const tbody = document.getElementById("results-body");
@@ -209,7 +236,12 @@ function renderResultsTable(pdcs) {
 }
 
 /**
- * Génère la pagination HTML identique à la logique du back-office (liste.php)
+ * Génère et injecte les boutons de pagination (précédent, pages numérotées, ellipses, suivant).
+ * Associe les écouteurs d'événements au clic pour charger les pages adéquates.
+ * 
+ * @param {number} currentPage - La page active actuelle.
+ * @param {number} totalPages - Le nombre total de pages disponibles.
+ * @returns {void}
 */
 function renderPager(currentPage, totalPages) {
     const pager = document.getElementById("results-pager");
@@ -280,7 +312,10 @@ function renderPager(currentPage, totalPages) {
 }
 
 /**
- * Échappe le HTML pour éviter les injections XSS
+ * Échappe les caractères HTML sensibles pour prévenir les injections de scripts malveillants (failles XSS).
+ * 
+ * @param {any} str - La chaîne ou valeur à sécuriser.
+ * @returns {string} La chaîne échappée.
 */
 function escapeHtml(str) {
     if (!str) return "";
@@ -294,7 +329,11 @@ function escapeHtml(str) {
 }
 
 /**
- * Formate un nombre avec un espace pour les milliers
+ * Formate un nombre entier en lui ajoutant des espaces comme séparateurs de milliers.
+ * Si le nombre est nul ou indéfini, renvoie '-'.
+ * 
+ * @param {number|null|undefined} num - Le nombre à formater.
+ * @returns {string} Le nombre formaté.
 */
 function formatNumber(num) {
     if (num === null || num === undefined) return "-";
