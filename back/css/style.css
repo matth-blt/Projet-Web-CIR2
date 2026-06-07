@@ -263,13 +263,13 @@ table {
     border-collapse: collapse; 
     table-layout: fixed; 
 }
-table thead th:nth-child(1) { width: 22%; }
+table thead th:nth-child(1) { width: 18%; }
 table thead th:nth-child(2) { width: 14%; }
-table thead th:nth-child(3) { width: 14%; }
+table thead th:nth-child(3) { width: 10%; }
 table thead th:nth-child(4) { width: 11%; }
 table thead th:nth-child(5) { width: 11%; }
-table thead th:nth-child(6) { width: 16%; }
-table thead th:nth-child(7) { width: 25%; }
+table thead th:nth-child(6) { width: 14%; }
+table thead th:nth-child(7) { width: 22%; }
 
 thead th {
     background: var(--surface2); padding: 14px 20px;
