@@ -188,18 +188,16 @@ Pour accéder à l'interface d'administration sous l'URL `http://projet-cir2-31/
 
 Ou alors modifier `auth.php` :
 ```php
-    $USERS = [
-        'matthieu' => '$2y$12$wshtRls.2HJZ4CeSF/qBnuvhKOoFaoHQ/3mnAxBeEa2884dXKSAEG',
-        'noah' => '$2y$12$TIBgf0gDMR1zeIxkQNEAUO40JSPxvwx1YTIyWxf.kQ6e9O1fUGMES',
-        'nom_utilisateur' => password_hash('mot_de_passe', PASSWORD_BCRYPT)
-    ];
+$USERS = [
+    'matthieu' => '$2y$12$wshtRls.2HJZ4CeSF/qBnuvhKOoFaoHQ/3mnAxBeEa2884dXKSAEG',
+    'noah' => '$2y$12$TIBgf0gDMR1zeIxkQNEAUO40JSPxvwx1YTIyWxf.kQ6e9O1fUGMES',
+    'nom_utilisateur' => password_hash('mot_de_passe', PASSWORD_BCRYPT)
+];
 ```
 (recommandé) Pour eviter les problèmes de sécurité créé un fichier `hash.php` : 
 ```php
-<?php
-    $password = 'mot_de_passe';
-    echo password_hash($password, PASSWORD_BCRYPT);
-?>
+$password = 'mot_de_passe';
+echo password_hash($password, PASSWORD_BCRYPT);
 ```
 ```bash
 php hash.php
