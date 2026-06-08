@@ -18,11 +18,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (searchBtn) {
         searchBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            activeFilters.annee = document.getElementById("select-annee").value;
-            activeFilters.code_dep = document.getElementById("select-departement").value;
-            
-            // Lors d'une recherche explicite, on récupère l'ensemble des points sans filtre de bounding box
-            // pour pouvoir zoomer dessus et centrer la carte.
+            const anneeVal = document.getElementById("select-annee").value;
+            const codeDepVal = document.getElementById("select-departement").value;
+
+            activeFilters.annee = anneeVal;
+            activeFilters.code_dep = codeDepVal;
+
+            if (anneeVal === "" && codeDepVal === "") {
+                markersLayer.clearLayers();
+                refs.clear();
+                deselectBorne();
+                map.setView([48.2, -2.9], 8);
+                alert("Veuillez sélectionner au moins un filtre pour afficher les points sur la carte.");
+                return;
+            }
+
             fetchMapPoints({ annee: activeFilters.annee, code_dep: activeFilters.code_dep }, true);
         });
     }
@@ -31,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * Initialise la carte Leaflet centrée par défaut sur la Bretagne.
  * Ajoute les couches de tuiles (tileLayer) et configure les écouteurs d'événements
- * (déplacement, clic, fermeture de popup) nécessaires à l'interactivité.
+ * (clic, fermeture de popup) nécessaires à l'interactivité.
  * 
  * @function initMap
  * @returns {void}
@@ -40,11 +50,6 @@ function initMap() {
     map = L.map('map', { scrollWheelZoom: true });
 
     markersLayer = L.layerGroup().addTo(map);
-
-    // Écouteur sur le déplacement ou zoom
-    map.on("moveend", () => {
-        updateMapPoints();
-    });
 
     // Écouteur de clic sur la carte pour déselectionner la borne active
     map.on("click", () => {
@@ -61,37 +66,13 @@ function initMap() {
         }
     });
 
-    // Centrage initial sur la Bretagne (déclenchera le moveend et chargera les points)
+    // Centrage initial sur la Bretagne
     map.setView([48.2, -2.9], 8);
 
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://hot.openstreetmap.org/">Humanitarian OpenStreetMap Team</a>',
         maxZoom: 19,
     }).addTo(map);
-}
-
-/**
- * Calcule la zone géographique visible (Bounding Box) et le niveau de zoom actuel
- * de la carte, puis déclenche le chargement asynchrone des points correspondants.
- * 
- * @function updateMapPoints
- * @returns {void}
- */
-function updateMapPoints() {
-    const zoom = map.getZoom();
-    const bounds = map.getBounds();
-    const southWest = bounds.getSouthWest();
-    const northEast = bounds.getNorthEast();
-
-    fetchMapPoints({
-        annee: activeFilters.annee,
-        code_dep: activeFilters.code_dep,
-        zoom: zoom,
-        min_lat: southWest.lat,
-        max_lat: northEast.lat,
-        min_lng: southWest.lng,
-        max_lng: northEast.lng
-    }, false);
 }
 
 /**
@@ -194,21 +175,6 @@ async function fetchMapPoints(filters = {}, fitBounds = false) {
         if (filters.code_dep) {
             queryParams.append("code_dep", filters.code_dep);
         }
-        if (filters.zoom !== undefined) { 
-            queryParams.append("zoom", filters.zoom); 
-        }
-        if (filters.min_lat !== undefined) { 
-            queryParams.append("min_lat", filters.min_lat); 
-        }
-        if (filters.max_lat !== undefined) { 
-            queryParams.append("max_lat", filters.max_lat); 
-        }
-        if (filters.min_lng !== undefined) { 
-            queryParams.append("min_lng", filters.min_lng); 
-        }
-        if (filters.max_lng !== undefined) { 
-            queryParams.append("max_lng", filters.max_lng);
-        }
 
         const response = await fetch(`../api/request.php/pdc/map?${queryParams.toString()}`);
         if (!response.ok) {
@@ -243,17 +209,6 @@ function popupHTML(s) {
     const puissanceText = s.puissance ? `${s.puissance} kW` : "Puissance inconnue";
     const typePriseText = s.type_prise ? ` (${s.type_prise})` : "";
     
-    // Si c'est un point groupé représentant plusieurs bornes physiques à cette station
-    if (s.count_pdc && s.count_pdc > 1) {
-        return `
-            <div class="borne-popup-loc">${s.nom_station || "Station sans nom"}</div>
-            <div class="borne-popup-meta">${s.adresse_station || "Adresse non spécifiée"}</div>
-            <div class="borne-popup-meta">${s.localite || "Localité inconnue"} (${deptName} - ${s.dept})${anneeText}</div>
-            <span class="borne-popup-power" style="background:var(--vert-fonce);color:#ffffff;padding:4px 10px;border-radius:12px;font-weight:600;">${s.count_pdc} points de charge</span>
-            <p style="font-size:11px;color:var(--texte3);margin-top:8px;">Zoomez sur la carte pour afficher les détails des bornes individuelles.</p>
-        `;
-    }
-
     return `
         <div class="borne-popup-loc">${s.nom_station || "Station sans nom"}</div>
         <div class="borne-popup-meta">${s.adresse_station || "Adresse non spécifiée"}</div>

@@ -75,7 +75,11 @@
                     'min_lng' => isset($_GET['min_lng']) ? (float)$_GET['min_lng'] : null,
                     'max_lng' => isset($_GET['max_lng']) ? (float)$_GET['max_lng'] : null
                 ];
-                $data = $pdcModel->getMapPoints($filters);
+                if (empty($filters['annee']) && empty($filters['code_dep'])) {
+                    $data = [];
+                } else {
+                    $data = $pdcModel->getMapPoints($filters);
+                }
             } else {
                 $limit = 100;
                 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
