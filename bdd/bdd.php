@@ -4,7 +4,7 @@
     $DB_USER = 'root';
     $DB_PASSWORD = '';
     $DB_HOST = 'localhost';
-    $DB_NAME = 'irve_bdd_projet';
+    $DB_NAME = 'irve_bdd_projet_v2';
 
 
     /** Vrai si la valeur correspond à un « NaN » pandas (null ou chaîne vide). */
@@ -177,6 +177,27 @@
                 if (array_key_exists($col, $row)) {
                     $lv = is_na($row[$col]) ? null : strtolower(trim((string)$row[$col]));
                     $row[$col] = ($lv === 'true' || $lv === '1') ? 1 : 0;
+                }
+            }
+        }
+        unset($row);
+
+        // Résolution des identifiants d'itinérance en doublon (ex: "Non concerné")
+        foreach ($df as $index => &$row) {
+            $sid = $row['id_station_itinerance'] ?? null;
+            if (is_na($sid) || strtolower(trim((string)$sid)) === 'non concerné' || strtolower(trim((string)$sid)) === 'non concerne') {
+                $localId = $row['id_station_local'] ?? null;
+                if (!is_na($localId) && strtolower(trim((string)$localId)) !== 'nan' && strtolower(trim((string)$localId)) !== 'non concerné' && strtolower(trim((string)$localId)) !== 'non concerne') {
+                    $cleanLocal = trim((string)$localId);
+                    $row['id_station_itinerance'] = strlen($cleanLocal) <= 50 ? $cleanLocal : substr($cleanLocal, 0, 50);
+                } else {
+                    $name = trim((string)($row['nom_station'] ?? ''));
+                    $addr = trim((string)($row['adresse_station'] ?? ''));
+                    if ($name !== '' || $addr !== '') {
+                        $row['id_station_itinerance'] = 'STA_SYN_' . md5($name . '|' . $addr);
+                    } else {
+                        $row['id_station_itinerance'] = 'STA_ROW_' . ($row['id'] ?? $index);
+                    }
                 }
             }
         }
