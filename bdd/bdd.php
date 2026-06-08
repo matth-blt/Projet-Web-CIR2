@@ -469,10 +469,10 @@
 
             $insee = to_int_or_null($s['code_insee_commune'] ?? null);
 
-            // date_mise_en_service : parse, fillna(1970-01-01), .dt.date
+            // date_mise_en_service : parse, fillna(null), .dt.date
             $dt = $s['date_mise_en_service'] ?? null;
-            $date = '1970-01-01';
-            if (!is_na($dt)) {
+            $date = null;
+            if (!is_na($dt) && (string)$dt !== '0000-00-00') {
                 $ts = strtotime((string)$dt);
                 if ($ts !== false) {
                     $formatted = date('Y-m-d', $ts);
