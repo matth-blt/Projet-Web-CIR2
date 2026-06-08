@@ -99,8 +99,6 @@ nav a {
     color: rgba(255, 255, 255, 0.65);
     text-decoration: none;
 }
-
-/* Lien actif (page courante) */
 nav a.active {
     color: var(--vert-accent);
 }

@@ -22,8 +22,6 @@
     border-radius: var(--arrondi-lg);
     overflow: hidden;
 }
-
-/* En-tête sombre de la carte */
 .detail-card-header {
     background: var(--vert-fonce);
     padding: 28px 32px;
@@ -38,18 +36,12 @@
     font-size: 13px;
     color: rgba(255, 255, 255, 0.55);
 }
-
-/* Corps de la carte */
 .detail-card-body {
     padding: 32px;
 }
-
-/* Groupe de champs (ex: Aménageur, Localisation…) */
 .detail-group {
     margin-bottom: 32px;
 }
-
-/* Titre du groupe */
 .detail-group-title {
     font-size: 11px;
     font-weight: 600;
@@ -60,15 +52,11 @@
     margin-bottom: 16px;
     border-bottom: 1px solid var(--bordure);
 }
-
-/* Grille 2 colonnes pour les champs */
 .detail-grid-2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(max(260px, 50% - 10px), 1fr));
     gap: 20px;
 }
-
-/* Champ individuel : label + valeur */
 .detail-field {
     display: flex;
     flex-direction: column;

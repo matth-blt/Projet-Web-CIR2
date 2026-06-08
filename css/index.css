@@ -48,15 +48,12 @@
     line-height: 1.7;
     margin-bottom: 32px;
 }
-
-/* Conteneur des deux boutons */
 .hero-btns {
     display: flex;
     gap: 14px;
     flex-wrap: wrap;
 }
 
-/* Bouton plein */
 .btn-primary {
     background: var(--vert-accent);
     color: #ffffff;
@@ -70,8 +67,6 @@
     text-decoration: none;
     display: inline-block;
 }
-
-/* Bouton contour */
 .btn-outline {
     background: transparent;
     color: var(--vert-accent);
@@ -95,8 +90,6 @@
     flex-direction: column;
     justify-content: center;
 }
-
-/* Grille 3 colonnes */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -207,8 +200,6 @@
     color: var(--texte);
     border-bottom: 1px solid var(--bordure);
 }
-
-/* Pas de bordure sur la dernière ligne */
 .table-wrap tbody tr:last-child td {
     border-bottom: none;
 }

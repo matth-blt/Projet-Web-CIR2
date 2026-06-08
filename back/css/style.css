@@ -23,6 +23,7 @@
 html {
     scroll-behavior: smooth;
 }
+
 body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
