@@ -71,7 +71,7 @@
 ?>
 
 <div class="content">
-    <a href="liste.php" class="back-link">&larr; Retour à la liste</a>
+    <a href="../index.php" class="back-link">&larr; Retour à la liste</a>
 
     <div class="page-header">
         <div>
@@ -276,7 +276,7 @@
 
             <div class="form-actions">
             <button type="submit" class="btn-save">Enregistrer</button>
-            <a href="liste.php"><button type="button" class="btn-cancel">Annuler</button></a>
+            <a href="../index.php"><button type="button" class="btn-cancel">Annuler</button></a>
             </div>
 
         </form>

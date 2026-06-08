@@ -62,9 +62,7 @@ projet-cir2-31/
 │   │   ├── detail.php
 │   │   ├── edit.php
 │   │   ├── footer.php
-│   │   ├── footer.php
-│   │   ├── header.php
-│   │   └── liste.php
+│   │   └── header.php
 │   ├── auth.php
 │   └── index.php
 ├── bdd/

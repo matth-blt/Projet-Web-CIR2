@@ -21,9 +21,5 @@
         $pdcModel->delete((int)$id_pdc);
     }
 
-    if ($redirect === 'accueil') {
-        header('Location: ../index.php');
-    } else {
-        header('Location: liste.php');
-    }
+    header('Location: ../index.php');
     exit;

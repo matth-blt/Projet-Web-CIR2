@@ -176,18 +176,24 @@ nav a.active {
     border-radius: var(--radius-sm);
     font-size: 14px; font-weight: 600; cursor: pointer;
 }
-.btn-view {
-    font-size: 12px; padding: 5px 14px;
-    border-radius: 5px; border: 1px solid var(--border);
-    background: var(--white); color: var(--text2);
-    cursor: pointer; font-weight: 500; margin-right: 6px;
-}
-.btn-edit {
-    font-size: 12px; padding: 5px 14px;
-    border-radius: 5px;
+.btn-view, .btn-edit {
+    font-size: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
     border: 1px solid var(--blue-accent);
     background: var(--blue-light); color: var(--blue-accent);
     cursor: pointer; font-weight: 500;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+}
+.btn-view:hover, .btn-edit:hover {
+    background: var(--blue-accent);
+    color: #fff;
 }
 .btn-save {
     background: var(--blue-dark); color: #fff;
@@ -201,13 +207,20 @@ nav a.active {
     border-radius: var(--radius-sm); font-size: 14px; cursor: pointer;
 }
 .btn-delete {
-    font-size: 12px; padding: 5px 14px;
-    border-radius: 5px;
+    font-size: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
     border: 1px solid #e24b4a;
     background: #fdf2f2; color: #e24b4a;
     cursor: pointer; font-weight: 500;
     margin-left: 6px;
     transition: all 0.2s ease;
+    vertical-align: middle;
 }
 .btn-delete:hover {
     background: #e24b4a; color: #fff;
@@ -268,9 +281,9 @@ table thead th:nth-child(1) { width: 18%; }
 table thead th:nth-child(2) { width: 14%; }
 table thead th:nth-child(3) { width: 10%; }
 table thead th:nth-child(4) { width: 11%; }
-table thead th:nth-child(5) { width: 11%; }
-table thead th:nth-child(6) { width: 14%; }
-table thead th:nth-child(7) { width: 22%; }
+table thead th:nth-child(5) { width: 14%; }
+table thead th:nth-child(6) { width: 17%; }
+table thead th:nth-child(7) { width: 14%; }
 
 thead th {
     background: var(--surface2); padding: 14px 20px;

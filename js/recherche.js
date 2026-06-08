@@ -262,7 +262,7 @@ function renderPager(currentPage, totalPages) {
     }
     pager.appendChild(prevBtn);
     
-    // Calcul de la plage de pages à afficher (exactement comme dans liste.php)
+    // Calcul de la plage de pages à afficher (exactement comme dans back/index.php)
     let range = [];
     if (totalPages <= 7) {
         for (let i = 1; i <= totalPages; i++) range.push(i);

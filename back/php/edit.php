@@ -41,7 +41,7 @@
 ?>
 
 <div class="content">
-    <a href="liste.php" class="back-link">&larr; Retour à la liste</a>
+    <a href="../index.php" class="back-link">&larr; Retour à la liste</a>
 
     <?php if (!$pdc): ?>
         <p style="color:var(--text3)">Point de charge introuvable.</p>
