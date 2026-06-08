@@ -29,11 +29,10 @@ Il consiste en une application web complète permettant d'explorer, de visualise
 ### Back-office
 Toutes les pages d'administration sont situées sous le préfixe `/back/` et protégées par une connexion sécurisée par session, hachage Bcrypt et jetons anti-CSRF :
 1. **Authentification** : Synchronisation continue entre la session PHP et le `localStorage` du navigateur. Mots de passe sécurisés par l'algorithme Bcrypt.
-2. **Accueil d'administration** : Tableau de synthèse listant les bornes avec liens de consultation, modification et suppression rapide.
-3. **Visualisation complète (Liste)** : Consultation de l'ensemble des installations paginée 100 par 100 avec un paginateur d'ellipses.
-4. **Création (Formulaire d'ajout)** : Insertion complète d'un nouveau point de charge avec gestion des transactions MySQL/MariaDB pour préserver l'intégrité de la base.
-5. **Modification (Formulaire d'édition)** : Mise à jour des caractéristiques modifiables (Puissance, câble attaché, coordonnées et tarification).
-6. **Suppression sécurisée** : Action de suppression effectuée uniquement via la méthode `POST` avec contrôle de jetons CSRF pour écarter les failles de sécurité. Supprime en cascade et en transaction les relations dépendantes avant d'effacer la borne.
+2. **Accueil d'administration** : Tableau de synthèse de l'ensemble des installations, paginé 100 par 100 avec un paginateur d'ellipses, équipé d'une barre de recherche globale (recherche textuelle multicritères). Propose des liens de consultation, modification et suppression rapide.
+3. **Création (Formulaire d'ajout)** : Insertion complète d'un nouveau point de charge dans une transaction SQL unifiée. Sélection multiple des types de prise par boutons à cocher (toggles) et invite de confirmation de perte de saisie lors d'une annulation.
+4. **Modification (Formulaire d'édition)** : Mise à jour des caractéristiques modifiables (Puissance, câble attaché, coordonnées et tarification), mise en page responsive des actions et confirmation avant annulation.
+5. **Suppression sécurisée** : Action de suppression protégée, lancée uniquement en méthode `POST` avec validation de jetons CSRF. Supprime proprement en cascade et en transaction les liaisons associées (moyens de paiement, prises, possede_des) pour respecter l'intégrité référentielle.
 
 ---
 
