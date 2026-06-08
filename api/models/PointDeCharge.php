@@ -533,8 +533,15 @@
                 ]);
 
                 // 9. Relation pdc ↔ type de prise
-                $this->db->prepare('INSERT INTO a_des (id_pdc, type_prise) VALUES (:id_pdc, :type_prise)')
-                ->execute([':id_pdc' => $id_pdc, ':type_prise' => $data['type_prise']]);
+                if (!empty($data['types_prises']) && is_array($data['types_prises'])) {
+                    $stmtPrise = $this->db->prepare('INSERT IGNORE INTO a_des (id_pdc, type_prise) VALUES (:id_pdc, :type_prise)');
+                    foreach ($data['types_prises'] as $prise) {
+                        $stmtPrise->execute([':id_pdc' => $id_pdc, ':type_prise' => $prise]);
+                    }
+                } else if (!empty($data['type_prise'])) {
+                    $this->db->prepare('INSERT INTO a_des (id_pdc, type_prise) VALUES (:id_pdc, :type_prise)')
+                    ->execute([':id_pdc' => $id_pdc, ':type_prise' => $data['type_prise']]);
+                }
 
                 // 10. Relation station ↔ pdc
                 $this->db->prepare('INSERT INTO possede_des (id_pdc, id_station_itinerance) VALUES (:id_pdc, :id_sta)')

@@ -165,7 +165,7 @@ Créez et configurez un Virtual Host Apache pour faire correspondre l'URL `http:
         Options FollowSymLinks
         AllowOverride All
         Require all granted
-	DirectoryIndex index.php
+	    DirectoryIndex index.php
     </Directory>
 
     ErrorLog ${APACHE_LOG_DIR}/projet-cir2-31-error.log
