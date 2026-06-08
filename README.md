@@ -7,7 +7,7 @@ Il consiste en une application web complète permettant d'explorer, de visualise
 
 ## Fonctionnalités du Projet
 
-### Front-office (Grand Public)
+### Front-office
 1. **Accueil (Tableau de bord)** :
    * Présentation textuelle du service.
    * Statistiques dynamiques issues de la base de données (nombre total de bornes, nombre d'aménageurs, nombre de types de prise, etc...).
@@ -28,7 +28,7 @@ Il consiste en une application web complète permettant d'explorer, de visualise
 4. **Fiche Détails** :
    * Page affichant toutes les informations d'une borne (coordonnées, opérateur, tarification, câble attaché, modes de paiement, gratuité).
 
-### Back-office (Espace Administration)
+### Back-office
 Toutes les pages d'administration sont situées sous le préfixe `/back/` et protégées par une connexion sécurisée par session, hachage Bcrypt et jetons anti-CSRF :
 1. **Authentification** : Synchronisation continue entre la session PHP et le `localStorage` du navigateur. Mots de passe sécurisés par l'algorithme Bcrypt.
 2. **Accueil d'administration** : Tableau de synthèse listant les bornes avec liens de consultation, modification et suppression rapide.
