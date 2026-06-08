@@ -192,7 +192,7 @@ $USERS = [
     'nom_utilisateur' => password_hash('mot_de_passe', PASSWORD_BCRYPT)
 ];
 ```
-(recommandé) Pour eviter les problèmes de sécurité en marquant votre mdp en clair créé un fichier `hash.php` : 
+(recommandé) Pour éviter les problèmes de sécurité en marquant votre mot de passe en clair, créez un fichier `hash.php` :
 ```php
 $password = 'mot_de_passe';
 echo password_hash($password, PASSWORD_BCRYPT);
