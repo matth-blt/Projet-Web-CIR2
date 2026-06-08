@@ -59,6 +59,7 @@
             <div class="detail-grid-2">
             <div class="detail-field"><span class="detail-key">Latitude</span><span class="detail-val"><?= htmlspecialchars($pdc['latitude'] ?? 'Non renseignée') ?></span></div>
             <div class="detail-field"><span class="detail-key">Longitude</span><span class="detail-val"><?= htmlspecialchars($pdc['longitude'] ?? 'Non renseignée') ?></span></div>
+            <div class="detail-field"><span class="detail-key">Adresse</span><span class="detail-val"><?= htmlspecialchars($pdc['adresse_station'] ?? 'Non renseignée') ?></span></div>
             <div class="detail-field"><span class="detail-key">Commune</span><span class="detail-val"><?= htmlspecialchars($pdc['commune'] ?? 'Non renseignée') ?></span></div>
             <div class="detail-field"><span class="detail-key">Département</span><span class="detail-val"><?= htmlspecialchars($pdc['departement'] ?? 'Non renseigné') ?></span></div>
             </div>

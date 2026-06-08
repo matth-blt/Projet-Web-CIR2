@@ -53,6 +53,7 @@ async function fetchPDCDetail() {
         document.getElementById("det-cable").textContent = data.cable_t2_attache ? "Oui" : "Non";
 
         // Localisation
+        document.getElementById("det-adresse").textContent = data.adresse_station || "Non renseignée";
         document.getElementById("det-latitude").textContent = data.latitude || "Non renseignée";
         document.getElementById("det-longitude").textContent = data.longitude || "Non renseignée";
         document.getElementById("det-commune").textContent = data.commune || "Non renseignée";

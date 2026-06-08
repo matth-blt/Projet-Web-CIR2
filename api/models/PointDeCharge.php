@@ -350,6 +350,7 @@
                     'condition_acces' => $pdc['pdc_condition'],
                     'gratuit' => (int)($pdc['gratuit'] ?? 0),
                     'nom_station' => null,
+                    'adresse_station' => null,
                     'amenageur' => null,
                     'siren_amenageur' => null,
                     'operateur' => null,
@@ -361,7 +362,7 @@
 
                 // 2. Récupération de la station associée
                 $stmtS = $this->db->prepare('
-                    SELECT s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune
+                    SELECT s.nom_station, s.id_acteur, s.id_acteur_est_utiliser_par, s.code_insee_commune, s.adresse_station
                     FROM possede_des pd
                     JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
                     WHERE pd.id_pdc = :id_pdc
@@ -372,6 +373,7 @@
 
                 if ($station) {
                     $res['nom_station'] = $station['nom_station'];
+                    $res['adresse_station'] = $station['adresse_station'];
 
                     // 2.1 Acteur aménageur
                     if (!empty($station['id_acteur'])) {
