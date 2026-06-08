@@ -122,7 +122,7 @@ projet-cir2-31/
    USE irve
    SOURCE /path/de/votre/fichier/bdd/bdd.sql
    ```
-2. Modifier et executez le script d'importation PHP pour analyser les fichiers et peupler automatiquement les tables normalisées de la base de données :
+2. Modifiez et executez le script d'importation PHP pour analyser les fichiers et peupler automatiquement les tables normalisées de la base de données :
    ```php
    $DB_USER = 'nom_utilisateur';
    $DB_PASSWORD = 'mot_de_passe';
