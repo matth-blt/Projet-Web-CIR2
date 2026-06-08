@@ -1,10 +1,10 @@
 <?php 
     mb_internal_encoding('UTF-8');
 
-    $DB_USER = 'root';
-    $DB_PASSWORD = '';
+    $DB_USER = 'irveuser';
+    $DB_PASSWORD = 'irvepwd';
     $DB_HOST = 'localhost';
-    $DB_NAME = 'irve_bdd_projet_v2';
+    $DB_NAME = 'irve';
 
 
     /** Vrai si la valeur correspond à un « NaN » pandas (null ou chaîne vide). */
