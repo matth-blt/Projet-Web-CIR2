@@ -179,9 +179,29 @@ sudo a2ensite projet-cir2-31
 ---
 
 ## 🔑 Identifiants d'administration (Back-office)
-Pour accéder à l'interface d'administration sous l'URL `http://projet-cir2-31/back/`, utilisez l'un des comptes statiques sécurisés par Bcrypt :
+Pour accéder à l'interface d'administration sous l'URL `http://projet-cir2-31/back/`, utilisez l'un des comptes statiques :
 
 | Identifiant | Mot de passe |
 | :--- | :--- |
 | **matthieu** | `irve_matthieu` |
 | **noah** | `irve_noah` |
+
+Ou alors modifier `auth.php` :
+```php
+    $USERS = [
+        'matthieu' => '$2y$12$wshtRls.2HJZ4CeSF/qBnuvhKOoFaoHQ/3mnAxBeEa2884dXKSAEG',
+        'noah' => '$2y$12$TIBgf0gDMR1zeIxkQNEAUO40JSPxvwx1YTIyWxf.kQ6e9O1fUGMES',
+        'nom_utilisateur' => password_hash('mot_de_passe', PASSWORD_BCRYPT)
+    ];
+```
+(recommandé) Pour eviter les problèmes de sécurité créé un fichier `hash.php` : 
+```php
+<?php
+    $password = 'mot_de_passe';
+    echo password_hash($password, PASSWORD_BCRYPT);
+?>
+```
+```bash
+php hash.php
+```
+Récupérer le mot de passe hasher et copier le dans le tableau de `auth.php`.
