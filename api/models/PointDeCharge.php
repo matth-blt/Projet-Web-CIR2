@@ -100,6 +100,7 @@
                     LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
                     LEFT JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
                     LEFT JOIN acteur a ON s.id_acteur = a.id_acteur
+                    LEFT JOIN acteur a_op ON s.id_acteur_est_utiliser_par = a_op.id_acteur
                     LEFT JOIN commune c ON s.code_insee_commune = c.code_insee_commune
                 ';
 
@@ -117,6 +118,19 @@
                 if (!empty($filters['code_dep'])) {
                     $whereClauses[] = 'c.code_dep = :code_dep';
                     $queryParams[':code_dep'] = $filters['code_dep'];
+                }
+                if (!empty($filters['search'])) {
+                    $whereClauses[] = '(
+                        pdc.id_pdc LIKE :search
+                        OR s.nom_station LIKE :search
+                        OR s.adresse_station LIKE :search
+                        OR s.id_station_itinerance LIKE :search
+                        OR c.nom_commune LIKE :search
+                        OR a.nom_acteur LIKE :search
+                        OR a_op.nom_acteur LIKE :search
+                        OR ad.type_prise LIKE :search
+                    )';
+                    $queryParams[':search'] = '%' . $filters['search'] . '%';
                 }
 
                 if (!empty($whereClauses)) {
@@ -156,6 +170,7 @@
                     LEFT JOIN possede_des pd ON pdc.id_pdc = pd.id_pdc
                     LEFT JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
                     LEFT JOIN acteur a ON s.id_acteur = a.id_acteur
+                    LEFT JOIN acteur a_op ON s.id_acteur_est_utiliser_par = a_op.id_acteur
                     LEFT JOIN commune c ON s.code_insee_commune = c.code_insee_commune
                 ';
 
@@ -173,6 +188,19 @@
                 if (!empty($filters['code_dep'])) {
                     $whereClauses[] = 'c.code_dep = :code_dep';
                     $queryParams[':code_dep'] = $filters['code_dep'];
+                }
+                if (!empty($filters['search'])) {
+                    $whereClauses[] = '(
+                        pdc.id_pdc LIKE :search
+                        OR s.nom_station LIKE :search
+                        OR s.adresse_station LIKE :search
+                        OR s.id_station_itinerance LIKE :search
+                        OR c.nom_commune LIKE :search
+                        OR a.nom_acteur LIKE :search
+                        OR a_op.nom_acteur LIKE :search
+                        OR ad.type_prise LIKE :search
+                    )';
+                    $queryParams[':search'] = '%' . $filters['search'] . '%';
                 }
 
                 if (!empty($whereClauses)) {

@@ -4,7 +4,7 @@
     require_once __DIR__ . '/../../api/models/PointDeCharge.php';
     require_once __DIR__ . '/../../api/models/Referentiel.php';
 
-    $page_active = 'nouveau';
+    $page_active = 'accueil';
 
     $db = Database::getConnection();
     $ref = new Referentiel($db);

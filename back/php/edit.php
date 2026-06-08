@@ -3,7 +3,7 @@
     require_once __DIR__ . '/../../api/Database.php';
     require_once __DIR__ . '/../../api/models/PointDeCharge.php';
 
-    $page_active = 'liste';
+    $page_active = 'accueil';
 
     $id_pdc = $_GET['id_pdc'] ?? '';
 

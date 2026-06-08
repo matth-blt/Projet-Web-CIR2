@@ -7,11 +7,20 @@
 
     $db = Database::getConnection();
     $pdcModel = new PointDeCharge($db);
+    $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
     $limit = 100;
     $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
     $offset = ($page - 1) * $limit;
-    $total = $pdcModel->count();
-    $pdcs = $pdcModel->getAll(false, $limit, $offset);
+
+    if ($search !== '') {
+        $filters = ['search' => $search];
+        $total = $pdcModel->searchCount($filters);
+        $pdcs = $pdcModel->search($filters, $limit, $offset);
+    } else {
+        $total = $pdcModel->count();
+        $pdcs = $pdcModel->getAll(false, $limit, $offset);
+    }
 
     $totalPages = $total > 0 ? (int)ceil($total / $limit) : 1;
 
@@ -25,6 +34,23 @@
         <div class="page-sub">Affichage 100 par 100 — <?= $total ?> résultats</div>
         </div>
         <a href="php/create.php"><button class="btn-add">+ Ajouter</button></a>
+    </div>
+
+    <!-- Barre de recherche globale -->
+    <div class="search-container">
+        <form method="GET" action="index.php" class="search-form">
+            <div class="search-input-wrap">
+                <input type="text" name="search" class="search-input" value="<?= htmlspecialchars($search) ?>">
+                <?php if ($search !== ''): ?>
+                    <a href="index.php" class="btn-clear-icon" title="Réinitialiser">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                    </a>
+                <?php endif; ?>
+                <button type="submit" class="btn-search-icon" title="Rechercher">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+            </div>
+        </form>
     </div>
 
     <div class="table-wrap">
@@ -80,9 +106,10 @@
 
     <!-- Pagination -->
     <?php if ($totalPages > 1): ?>
+    <?php $searchQuery = ($search !== '') ? '&search=' . urlencode($search) : ''; ?>
     <div class="pager">
         <?php if ($page > 1): ?>
-            <a href="?page=<?= $page - 1 ?>"><button class="pager-btn">←</button></a>
+            <a href="?page=<?= $page - 1 ?><?= $searchQuery ?>"><button class="pager-btn">←</button></a>
         <?php else: ?>
             <button class="pager-btn" disabled>←</button>
         <?php endif; ?>
@@ -106,7 +133,7 @@
         ?>
             <span class="pager-dots">…</span>
         <?php else: ?>
-            <a href="?page=<?= $p ?>">
+            <a href="?page=<?= $p ?><?= $searchQuery ?>">
             <button class="pager-btn <?= ($p === $page) ? 'active' : '' ?>"><?= $p ?></button>
             </a>
         <?php
@@ -115,7 +142,7 @@
         ?>
 
         <?php if ($page < $totalPages): ?>
-            <a href="?page=<?= $page + 1 ?>"><button class="pager-btn">→</button></a>
+            <a href="?page=<?= $page + 1 ?><?= $searchQuery ?>"><button class="pager-btn">→</button></a>
         <?php else: ?>
             <button class="pager-btn" disabled>→</button>
         <?php endif; ?>

@@ -13,7 +13,7 @@
     }
 
     $id_pdc = $_POST['id_pdc'] ?? '';
-    $redirect = $_POST['redirect'] ?? 'liste';
+
 
     if ($id_pdc) {
         $db = Database::getConnection();
