@@ -276,7 +276,7 @@
 
             <div class="form-actions">
             <button type="submit" class="btn-save">Enregistrer</button>
-            <a href="../index.php"><button type="button" class="btn-cancel">Annuler</button></a>
+            <a href="../index.php" onclick="return confirm('Êtes-vous sûr de vouloir annuler ? La saisie sera perdue.');"><button type="button" class="btn-cancel">Annuler</button></a>
             </div>
 
         </form>

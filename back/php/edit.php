@@ -139,7 +139,7 @@
             <div class="form-actions">
              <button type="submit" class="btn-save">Sauvegarder</button>
              <button type="button" class="btn-delete-lg" onclick="if (confirm('Êtes-vous sûr de vouloir supprimer ce point de charge ?')) { document.getElementById('delete-form').submit(); }" style="margin-right: auto;">Supprimer</button>
-             <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>">
+             <a href="detail.php?id_pdc=<?= urlencode($id_pdc) ?>" onclick="return confirm('Êtes-vous sûr de vouloir annuler ? Vos modifications seront perdues.');">
                  <button type="button" class="btn-cancel">Annuler</button>
              </a>
             </div>
@@ -149,7 +149,6 @@
         <!-- Formulaire de suppression séparé -->
         <form id="delete-form" action="delete.php" method="POST" style="display:none;">
             <input type="hidden" name="id_pdc" value="<?= htmlspecialchars($id_pdc) ?>">
-            <input type="hidden" name="redirect" value="liste">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
         </form>
         </div>
