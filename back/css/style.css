@@ -184,10 +184,10 @@ nav a.active {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
-    border: 1px solid var(--blue-accent);
+    border-radius: var(--radius-sm);
+    border: none;
     background: var(--blue-light); color: var(--blue-accent);
-    cursor: pointer; font-weight: 500;
+    cursor: pointer;
     transition: all 0.2s ease;
     vertical-align: middle;
 }
@@ -195,6 +195,69 @@ nav a.active {
     background: var(--blue-accent);
     color: #fff;
 }
+.btn-delete {
+    font-size: 12px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: #fdf2f2; color: #e24b4a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    vertical-align: middle;
+}
+.btn-delete:hover {
+    background: #e24b4a;
+    color: #fff;
+}
+
+/* ── MICRO-ANIMATIONS DES ICONES D'ACTIONS ── */
+.btn-view svg, .btn-edit svg, .btn-delete svg {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.btn-view:hover svg {
+    animation: eye-blink 0.6s ease-out forwards;
+}
+
+.btn-edit:hover svg {
+    animation: pencil-write 0.6s ease-in-out forwards;
+}
+
+.btn-delete:hover svg {
+    animation: trash-hover 0.5s ease-in-out forwards;
+}
+
+/* Animations de survol avancées */
+@keyframes eye-blink {
+    0% { transform: scale(1); }
+    20% { transform: scaleY(0.25) scaleX(1.1); }
+    40% { transform: scale(1.18); }
+    100% { transform: scale(1.18); }
+}
+
+@keyframes pencil-write {
+    0% { transform: scale(1) rotate(0deg); }
+    20% { transform: scale(1.15) rotate(-20deg) translate(-1px, -1px); }
+    40% { transform: scale(1.15) rotate(-8deg) translate(0px, 0px); }
+    60% { transform: scale(1.15) rotate(-18deg) translate(-1px, -1px); }
+    80% { transform: scale(1.15) rotate(-12deg) translate(0px, 0px); }
+    100% { transform: scale(1.15) rotate(-15deg); }
+}
+
+@keyframes trash-hover {
+    0% { transform: scale(1) translateY(0) rotate(0deg); }
+    20% { transform: scale(1.1) translateY(-2px) rotate(-8deg); }
+    40% { transform: scale(1.1) translateY(-2px) rotate(6deg); }
+    60% { transform: scale(1.1) translateY(-2px) rotate(-6deg); }
+    80% { transform: scale(1.1) translateY(-2px) rotate(4deg); }
+    100% { transform: scale(1.1) translateY(-2px) rotate(0deg); }
+}
+
 .btn-save {
     background: var(--blue-dark); color: #fff;
     border: none; padding: 12px 32px;
@@ -205,25 +268,6 @@ nav a.active {
     background: transparent; color: var(--text2);
     border: 1px solid var(--border); padding: 12px 24px;
     border-radius: var(--radius-sm); font-size: 14px; cursor: pointer;
-}
-.btn-delete {
-    font-size: 12px;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-    border: 1px solid #e24b4a;
-    background: #fdf2f2; color: #e24b4a;
-    cursor: pointer; font-weight: 500;
-    margin-left: 6px;
-    transition: all 0.2s ease;
-    vertical-align: middle;
-}
-.btn-delete:hover {
-    background: #e24b4a; color: #fff;
 }
 .btn-delete-lg {
     background: #fdf2f2; color: #e24b4a;
@@ -594,9 +638,10 @@ footer span {
         flex-direction: column; 
     }
 
-    .btn-save, .btn-cancel { 
+    .btn-save, .btn-cancel, .btn-delete-lg { 
         width: 100%; 
         text-align: center; 
+        margin-right: 0 !important;
     }
 
     footer {
