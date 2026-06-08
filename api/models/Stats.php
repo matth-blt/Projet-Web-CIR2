@@ -54,6 +54,8 @@
                         station s
                     INNER JOIN 
                         possede_des pd ON s.id_station_itinerance = pd.id_station_itinerance
+                    WHERE 
+                        s.date_mise_en_service > \'1900-01-01\'
                     GROUP BY 
                         YEAR(s.date_mise_en_service)
                     ORDER BY 
@@ -117,6 +119,8 @@
                     INNER JOIN station s ON pd.id_station_itinerance = s.id_station_itinerance
                     INNER JOIN commune c ON s.code_insee_commune = c.code_insee_commune
                     INNER JOIN departement dep ON c.code_dep = dep.code_dep
+                    WHERE 
+                        s.date_mise_en_service > \'1900-01-01\'
                     GROUP BY 
                         dep.code_dep,
                         dep.nom_departement,

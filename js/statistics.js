@@ -109,8 +109,9 @@ function renderHeroChart(pdcParAnnee) {
     const ctx = canvas.getContext('2d');
     
     // Extraction des années et du nombre de points de charge
-    const labels = pdcParAnnee.map(item => item.annee.toString());
-    const data = pdcParAnnee.map(item => parseInt(item.nombre_points_de_charge, 10));
+    const validData = pdcParAnnee.filter(item => item.annee !== null && item.annee !== undefined && item.annee !== '');
+    const labels = validData.map(item => item.annee.toString());
+    const data = validData.map(item => parseInt(item.nombre_points_de_charge, 10));
 
     new Chart(ctx, {
         type: 'line',
@@ -206,7 +207,7 @@ function renderStatsTable(pdcParAnneeDep) {
     // 3. Définir les années de manière dynamique à partir des données
     const yearsSet = new Set();
     pdcParAnneeDep.forEach(item => {
-        if (item.annee) {
+        if (item.annee !== null && item.annee !== undefined && item.annee !== '') {
             yearsSet.add(item.annee.toString());
         }
     });
@@ -224,6 +225,7 @@ function renderStatsTable(pdcParAnneeDep) {
         // Colonnes Départements
         sortedDepCodes.forEach(code => {
             const match = pdcParAnneeDep.find(item => 
+                item.annee !== null && item.annee !== undefined && item.annee !== '' &&
                 item.annee.toString() === year && 
                 item.numero_departement.toString() === code
             );
