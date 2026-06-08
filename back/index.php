@@ -40,12 +40,12 @@ include './php/header.php';
             <?php else: ?>
                 <?php $i = 0; foreach ($pdcs as $pdc): $i++; ?>
                 <tr style="animation-delay: <?= min($i * 0.05, 1) ?>s">
-                <td><?= htmlspecialchars($pdc['nom_station'] ?? '') ?></td>
-                <td><?= htmlspecialchars($pdc['amenageur'] ?? '') ?></td>
-                <td><?= htmlspecialchars($pdc['operateur'] ?? '') ?></td>
-                <td><?= htmlspecialchars($pdc['type_prise'] ?? '') ?></td>
-                <td><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
-                <td><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
+                <td data-label="Station"><?= htmlspecialchars($pdc['nom_station'] ?? '') ?></td>
+                <td data-label="Aménageur"><?= htmlspecialchars($pdc['amenageur'] ?? '') ?></td>
+                <td data-label="Opérateur"><?= htmlspecialchars($pdc['operateur'] ?? '') ?></td>
+                <td data-label="Type de prise"><?= htmlspecialchars($pdc['type_prise'] ?? '') ?></td>
+                <td data-label="Commune"><?= htmlspecialchars($pdc['commune'] ?? '') ?></td>
+                <td data-label="Tarif"><?= htmlspecialchars($pdc['tarification'] ?? '') ?></td>
                 <td>
                     <a href="php/detail.php?id_pdc=<?= urlencode($pdc['id_pdc']) ?>">
                     <button class="btn-view">Voir</button>
