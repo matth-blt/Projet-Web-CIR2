@@ -37,7 +37,7 @@
                 $statement = $this->db->prepare($request);
                 $statement->execute();
                 $row = $statement->fetch(PDO::FETCH_ASSOC);
-                return (int) $row['total'];
+                return (int)$row['total'];
             } catch (PDOException $exception) {
                 error_log('Count error: ' . $exception->getMessage());
                 return 0;
