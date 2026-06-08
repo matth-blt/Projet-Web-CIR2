@@ -19,12 +19,10 @@ Il consiste en une application web complète permettant d'explorer, de visualise
    * Tableau de résultats asynchrone (AJAX/JSON) affiché sur la même page sous forme paginée (100 par 100).
    * Affichage adaptatif (responsive) : le tableau se transforme automatiquement en fiches/cartes individuelles sur tablettes et smartphones (`max-width: 768px`).
 3. **Carte Interactive (OpenStreetMap & Leaflet.js)** :
-   * Formulaire à double filtre (Année, Département).
-   * Rendu dynamique et performant des marqueurs (Bounding Box et Zoom) :
-     * À bas niveau de zoom (zoom < 10), les points physiques sont regroupés et comptés par station pour économiser la mémoire.
-     * À haut niveau de zoom (zoom >= 10), seuls les points de charge individuels situés dans la zone visible sont chargés et affichés.
+   * La carte s'affiche initialement vide de tout marqueur. Elle requiert la sélection d'au moins un filtre actif (Année ou Département) pour interroger la base de données.
+   * Rendu individuel des points de charge physiques sur la carte selon les critères sélectionnés.
    * Au clic sur un marqueur, la carte se recentre doucement (`flyTo`) et affiche une bulle d'informations contenant un lien vers la fiche détails de la borne.
-   * Désélection visuelle au clic sur la carte ou fermeture de la bulle d'information.
+   * Désélection visuelle au clic sur la carte ou fermeture de la bulle d'information (l'icône active reprend son style d'origine).
 4. **Fiche Détails** :
    * Page affichant toutes les informations d'une borne (coordonnées, opérateur, tarification, câble attaché, modes de paiement, gratuité).
 
