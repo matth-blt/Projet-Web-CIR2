@@ -200,4 +200,4 @@ echo password_hash($password, PASSWORD_BCRYPT);
 ```bash
 php hash.php
 ```
-Récupérer le mot de passe hasher et copier le dans le tableau de `auth.php`.
+Récupérez le mot de passe hasher et copier le dans le tableau de `auth.php`.
