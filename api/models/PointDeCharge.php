@@ -63,7 +63,7 @@
                 ';
 
                 if ($accueil) {
-                    $request .= ' GROUP BY pdc.id_pdc ORDER BY RAND() LIMIT 5';
+                    $request .= ' GROUP BY pdc.id_pdc ORDER BY RAND() LIMIT 6';
                 } else {
                     $request .= ' GROUP BY pdc.id_pdc';
                     if ($limit !== null) {

@@ -178,7 +178,7 @@ sudo a2ensite projet-cir2-31
 
 ---
 
-## 🔑 Identifiants d'administration (Back-office)
+## Identifiants d'administration (Back-office)
 Pour accéder à l'interface d'administration sous l'URL `http://projet-cir2-31/back/`, utilisez l'un des comptes statiques :
 
 | Identifiant | Mot de passe |
