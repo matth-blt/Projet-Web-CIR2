@@ -10,7 +10,7 @@ Il consiste en une application web complète permettant d'explorer, de visualise
 ### Front-office (Grand Public)
 1. **Accueil (Tableau de bord)** :
    * Présentation textuelle du service.
-   * Statistiques dynamiques issues de la base de données (nombre total de bornes, nombre d'aménageurs, nombre de types de prise).
+   * Statistiques dynamiques issues de la base de données (nombre total de bornes, nombre d'aménageurs, nombre de types de prise, etc...).
    * Graphique linéaire Chart.js de la progression des installations par année.
    * Tableau de statistiques croisées montrant dynamiquement le nombre de points de charge par année et par département breton.
 2. **Recherche de Bornes** :
@@ -126,10 +126,10 @@ projet-cir2-31/
    ```
 2. Modifier et executez le script d'importation PHP pour analyser les fichiers et peupler automatiquement les tables normalisées de la base de données :
    ```php
-      $DB_USER = 'nom_utilisateur';
-      $DB_PASSWORD = 'mot_de_passe';
-      $DB_HOST = 'localhost';
-      $DB_NAME = 'irve';
+   $DB_USER = 'nom_utilisateur';
+   $DB_PASSWORD = 'mot_de_passe';
+   $DB_HOST = 'localhost';
+   $DB_NAME = 'irve';
    ```
    ```bash
    php bdd/bdd.php
@@ -138,11 +138,11 @@ projet-cir2-31/
 ### 3. Configuration de l'accès à la base de données
 Éditez le fichier `api/constants.php` pour renseigner vos identifiants d'accès locaux :
 ```php
-   define('DB_USER', 'nom_utilisateur');
-   define('DB_PASSWORD', 'mot_de_passe');
-   define('DB_NAME', 'irve');
-   define('DB_SERVER', 'localhost');
-   define('DB_PORT', '3306');
+define('DB_USER', 'nom_utilisateur');
+define('DB_PASSWORD', 'mot_de_passe');
+define('DB_NAME', 'irve');
+define('DB_SERVER', 'localhost');
+define('DB_PORT', '3306');
 ```
 
 ### 4. Configuration du Virtual Host Apache
