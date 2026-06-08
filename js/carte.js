@@ -188,13 +188,27 @@ function populateFilters(data) {
 async function fetchMapPoints(filters = {}, fitBounds = false) {
     try {
         const queryParams = new URLSearchParams();
-        if (filters.annee) queryParams.append("annee", filters.annee);
-        if (filters.code_dep) queryParams.append("code_dep", filters.code_dep);
-        if (filters.zoom !== undefined) queryParams.append("zoom", filters.zoom);
-        if (filters.min_lat !== undefined) queryParams.append("min_lat", filters.min_lat);
-        if (filters.max_lat !== undefined) queryParams.append("max_lat", filters.max_lat);
-        if (filters.min_lng !== undefined) queryParams.append("min_lng", filters.min_lng);
-        if (filters.max_lng !== undefined) queryParams.append("max_lng", filters.max_lng);
+        if (filters.annee) {
+            queryParams.append("annee", filters.annee);
+        }
+        if (filters.code_dep) {
+            queryParams.append("code_dep", filters.code_dep);
+        }
+        if (filters.zoom !== undefined) { 
+            queryParams.append("zoom", filters.zoom); 
+        }
+        if (filters.min_lat !== undefined) { 
+            queryParams.append("min_lat", filters.min_lat); 
+        }
+        if (filters.max_lat !== undefined) { 
+            queryParams.append("max_lat", filters.max_lat); 
+        }
+        if (filters.min_lng !== undefined) { 
+            queryParams.append("min_lng", filters.min_lng); 
+        }
+        if (filters.max_lng !== undefined) { 
+            queryParams.append("max_lng", filters.max_lng);
+        }
 
         const response = await fetch(`../api/request.php/pdc/map?${queryParams.toString()}`);
         if (!response.ok) {

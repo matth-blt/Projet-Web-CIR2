@@ -21,7 +21,10 @@ async function fetchStats() {
         updateStatsUI(data);
     } catch (error) {
         console.error("Erreur lors de la récupération des stats:", error);
-        const targets = ["stat-total-records", "stat-amenageurs", "stat-prises", "stat-dep-22", "stat-dep-29", "stat-dep-35", "stat-dep-56"];
+        const targets = [
+            "stat-total-records", "stat-amenageurs", "stat-prises", 
+            "stat-dep-22", "stat-dep-29", "stat-dep-35", "stat-dep-56"
+        ];
         targets.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
@@ -83,7 +86,7 @@ function updateStatsUI(data) {
     // 6. Total de points de charge (getNbrPDC)
     const totalRecordsEl = document.getElementById("stat-total-records");
     if (totalRecordsEl && data.total_pdc !== undefined) {
-        totalRecordsEl.textContent = parseInt(data.total_pdc, 10).toLocaleString('fr-FR') + " points au total";
+        totalRecordsEl.textContent = data.total_pdc.toString() + " points au total";
     }
 }
 

@@ -156,7 +156,7 @@ async function fetchPDCs(page = 1, lockCurrentInputs = false) {
         // Mettre à jour le compteur de résultats
         const countEl = document.getElementById("results-count");
         if (countEl) {
-            countEl.textContent = `${formatNumber(data.total)} bornes trouvées`;
+            countEl.textContent = `${data.total} bornes trouvées`;
         }
         
         // Rendre les lignes du tableau
@@ -245,13 +245,13 @@ function renderResultsTable(pdcs) {
 */
 function renderPager(currentPage, totalPages) {
     const pager = document.getElementById("results-pager");
-    if (!pager) return;
-    
+    if (!pager) { return; }
+
     pager.innerHTML = "";
+
+    if (totalPages <= 1) { return; }
+        
     
-    if (totalPages <= 1) return;
-    
-    // Bouton Précédent (←)
     const prevBtn = document.createElement("button");
     prevBtn.className = "pager-btn";
     prevBtn.textContent = "←";
@@ -265,22 +265,25 @@ function renderPager(currentPage, totalPages) {
     // Calcul de la plage de pages à afficher (exactement comme dans back/index.php)
     let range = [];
     if (totalPages <= 7) {
-        for (let i = 1; i <= totalPages; i++) range.push(i);
+        for (let i = 1; i <= totalPages; i++) {
+            range.push(i);
+        }    
     } else {
         range.push(1);
-        if (currentPage > 3) range.push("...");
-        
+        if (currentPage > 3) { range.push("..."); }
+            
         const start = Math.max(2, currentPage - 1);
         const end = Math.min(totalPages - 1, currentPage + 1);
         for (let p = start; p <= end; p++) {
             range.push(p);
         }
         
-        if (currentPage < totalPages - 2) range.push("...");
+        if (currentPage < totalPages - 2) { 
+            range.push("..."); 
+        }
         range.push(totalPages);
     }
-    
-    // Rendu des boutons de page
+
     range.forEach(p => {
         if (p === "...") {
             const dots = document.createElement("span");
@@ -299,7 +302,6 @@ function renderPager(currentPage, totalPages) {
         }
     });
     
-    // Bouton Suivant (→)
     const nextBtn = document.createElement("button");
     nextBtn.className = "pager-btn";
     nextBtn.textContent = "→";
@@ -326,16 +328,4 @@ function escapeHtml(str) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-}
-
-/**
- * Formate un nombre entier en lui ajoutant des espaces comme séparateurs de milliers.
- * Si le nombre est nul ou indéfini, renvoie '-'.
- * 
- * @param {number|null|undefined} num - Le nombre à formater.
- * @returns {string} Le nombre formaté.
-*/
-function formatNumber(num) {
-    if (num === null || num === undefined) return "-";
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
