@@ -600,7 +600,6 @@
          * @param array $filters Critères de filtrage et limites de coordonnées.
          * @param string|int [filters.annee] Année de mise en service filtrée.
          * @param string|int [filters.code_dep] Code de département breton filtré.
-         * @param int [filters.zoom] Niveau de zoom actuel de l'utilisateur.
          * @param float [filters.min_lat] Latitude minimale de la Bounding Box.
          * @param float [filters.max_lat] Latitude maximale de la Bounding Box.
          * @param float [filters.min_lng] Longitude minimale de la Bounding Box.
