@@ -22,7 +22,7 @@ async function fetchStats() {
     } catch (error) {
         console.error("Erreur lors de la récupération des stats:", error);
         const targets = [
-            "stat-total-records", "stat-amenageurs", "stat-prises", 
+            "stat-total-records", "stat-amenageurs", 
             "stat-dep-22", "stat-dep-29", "stat-dep-35", "stat-dep-56"
         ];
         targets.forEach(id => {
@@ -55,11 +55,6 @@ function updateStatsUI(data) {
         amenageursEl.textContent = data.total_amenageurs;
     }
 
-    // 2. Types de prise
-    const prisesEl = document.getElementById("stat-prises");
-    if (prisesEl) {
-        prisesEl.textContent = data.total_prises;
-    }
 
     // 3. Départements
     if (data.departments && Array.isArray(data.departments)) {
@@ -86,7 +81,12 @@ function updateStatsUI(data) {
     // 6. Total de points de charge (getNbrPDC)
     const totalRecordsEl = document.getElementById("stat-total-records");
     if (totalRecordsEl && data.total_pdc !== undefined) {
-        totalRecordsEl.textContent = data.total_pdc.toString() + " points au total";
+        totalRecordsEl.textContent = data.total_pdc.toLocaleString('fr-FR');
+    }
+
+    // 7. Rendu du tableau par type de prise
+    if (data.pdc_par_type_prise && Array.isArray(data.pdc_par_type_prise)) {
+        renderPrisesStatsTable(data.pdc_par_type_prise);
     }
 }
 
@@ -239,3 +239,38 @@ function renderStatsTable(pdcParAnneeDep) {
         tbody.appendChild(tr);
     });
 }
+
+/**
+ * Génère dynamiquement le tableau affichant le nombre de points de charge par type de prise.
+ * 
+ * @param {Array<{type_prise: string, nombre_points_de_charge: number}>} prisesData - Les statistiques par type de prise.
+ * @returns {void}
+*/
+function renderPrisesStatsTable(prisesData) {
+    const tbody = document.getElementById('tablePrisesStatsBody');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    if (prisesData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;color:var(--text3)">Aucun résultat</td></tr>';
+        return;
+    }
+
+    prisesData.forEach(item => {
+        const tr = document.createElement('tr');
+        
+        const tdType = document.createElement('td');
+        const strong = document.createElement('strong');
+        strong.textContent = item.type_prise;
+        tdType.appendChild(strong);
+        
+        const tdCount = document.createElement('td');
+        tdCount.textContent = parseInt(item.nombre_points_de_charge, 10).toLocaleString('fr-FR');
+
+        tr.appendChild(tdType);
+        tr.appendChild(tdCount);
+        tbody.appendChild(tr);
+    });
+}
+

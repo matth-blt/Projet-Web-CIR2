@@ -176,5 +176,31 @@
                 return -1;
             }
         }
+
+        /**
+         * Récupère le nombre de points de charge pour chaque type de prise.
+         * 
+         * @return array Liste associative (type_prise, nombre_points_de_charge) ordonnée par volume décroissant.
+        */
+        public function getNbrPDCParTypeDePrise(): array {
+            try {
+                $stmt = $this->db->prepare('
+                    SELECT 
+                        type_prise,
+                        COUNT(id_pdc) AS nombre_points_de_charge
+                    FROM 
+                        a_des
+                    GROUP BY 
+                        type_prise
+                    ORDER BY 
+                        nombre_points_de_charge DESC;
+                ');
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (PDOException $exception) {
+                error_log('Stats error: ' . $exception->getMessage());
+                return [];
+            }
+        }
     }
 ?>

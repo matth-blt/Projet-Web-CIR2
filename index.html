@@ -56,9 +56,6 @@
                     <div>
                         <div class="stat-chart-title">Points de charge par année et par département</div>
                     </div>
-                    <div>
-                        <span class="stat-tag" id="stat-total-records">-</span>
-                    </div>
                 </div>
                 <div class="table-wrap">
                     <table id="tableGroupedStats">
@@ -86,9 +83,9 @@
                     <span class="stat-tag">actifs</span>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Types de prise</div>
-                    <div class="stat-value" id="stat-prises">-</div>
-                    <span class="stat-tag">types distincts</span>
+                    <div class="stat-label">Points de charge</div>
+                    <div class="stat-value" id="stat-total-records">-</div>
+                    <span class="stat-tag">au total</span>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Côtes-d'Armor (22)</div>
@@ -109,6 +106,28 @@
                     <div class="stat-label">Morbihan (56)</div>
                     <div class="stat-value" id="stat-dep-56">-</div>
                     <span class="stat-tag">points</span>
+                </div>
+            </div>
+
+            <!-- Tableau : points par type de prise -->
+            <div class="stat-chart-card" style="margin-top: 16px;">
+                <div class="stat-chart-head">
+                    <div>
+                        <div class="stat-chart-title">Points de charge par type de prise</div>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table id="tablePrisesStats">
+                        <thead>
+                            <tr>
+                                <th>Type de prise</th>
+                                <th>Nombre de points de charge</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablePrisesStatsBody">
+                            <!-- Rempli en JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

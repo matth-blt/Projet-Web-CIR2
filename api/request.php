@@ -30,7 +30,8 @@
                 'total_prises' => $statsModel->getNbrTypeDePrises(),
                 'departments' => $statsModel->getNbrPDCParDepartements(),
                 'pdc_par_annee' => $statsModel->getNbrPDCParAnnees(),
-                'pdc_par_annee_departement' => $statsModel->getNbrPDCDepartementAnnees()
+                'pdc_par_annee_departement' => $statsModel->getNbrPDCDepartementAnnees(),
+                'pdc_par_type_prise' => $statsModel->getNbrPDCParTypeDePrise()
             ];
         } catch (Exception $e) {
             $data = false;
