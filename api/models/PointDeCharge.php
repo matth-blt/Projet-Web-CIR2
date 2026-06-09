@@ -597,13 +597,9 @@
          * Si le niveau de zoom est faible (zoom < 10), agrège les bornes physiques par station pour économiser la mémoire du navigateur.
          * Si le zoom est élevé (zoom >= 10), renvoie les points de charge individuels situés dans la boîte englobante (Bounding Box) visible.
          * 
-         * @param array $filters Critères de filtrage et limites de coordonnées :
+         * @param array $filters Critères de filtrage :
          * - 'annee' (string|int) : Année de mise en service filtrée.
          * - 'code_dep' (string|int) : Code de département breton filtré.
-         * - 'min_lat' (float) : Latitude minimale de la Bounding Box.
-         * - 'max_lat' (float) : Latitude maximale de la Bounding Box.
-         * - 'min_lng' (float) : Longitude minimale de la Bounding Box.
-         * - 'max_lng' (float) : Longitude maximale de la Bounding Box.
          * @return array Tableau de marqueurs géolocalisés.
         */
         public function getMapPoints(array $filters): array {
@@ -711,4 +707,4 @@
             }
         }
     }
-?>
+?>    

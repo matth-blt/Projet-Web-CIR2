@@ -155,14 +155,9 @@ function populateFilters(data) {
  * 
  * @async
  * @function fetchMapPoints
- * @param {Object} [filters={}] - Critères de filtrage et limites de coordonnées.
+ * @param {Object} [filters={}] - Critères de filtrage.
  * @param {string|number} [filters.annee] - Année choisie.
  * @param {string|number} [filters.code_dep] - Code de département choisi.
- * @param {number} [filters.zoom] - Niveau de zoom de la carte.
- * @param {number} [filters.min_lat] - Latitude minimale visible.
- * @param {number} [filters.max_lat] - Latitude maximale visible.
- * @param {number} [filters.min_lng] - Longitude minimale visible.
- * @param {number} [filters.max_lng] - Longitude maximale visible.
  * @param {boolean} [fitBounds=false] - Ajuste ou non les limites géographiques de la vue de la carte sur les points trouvés.
  * @returns {Promise<void>}
  */
