@@ -157,25 +157,7 @@
             }
         }
 
-        /**
-         * Récupère le nombre total de types de prises distincts gérés par l'application.
-         * 
-         * @return int Nombre total de types de prises, ou -1 en cas d'erreur.
-        */
-        public function getNbrTypeDePrises(): int {
-            try {
-                $stmt = $this->db->prepare('
-                    SELECT COUNT(*) AS nbr_type_prise 
-                    FROM prise;
-                ');
-                $stmt->execute();
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $row ? (int)$row['nbr_type_prise'] : 0;
-            } catch (PDOException $exception) {
-                error_log('Stats error: ' . $exception->getMessage());
-                return -1;
-            }
-        }
+
 
         /**
          * Récupère le nombre de points de charge pour chaque type de prise.

@@ -42,7 +42,6 @@ async function fetchStats() {
  * @param {Object} data - L'objet JSON contenant les statistiques.
  * @param {string|number} data.total_pdc - Le nombre total de points de charge.
  * @param {number} data.total_amenageurs - Le nombre total d'aménageurs.
- * @param {number} data.total_prises - Le nombre total de types de prise.
  * @param {Array<{numero_departement: string|number, nombre_points_de_charge: number}>} data.departments - Liste des statistiques par département.
  * @param {Array<{annee: string|number, nombre_points_de_charge: number}>} data.pdc_par_annee - Liste de points de charge par année.
  * @param {Array<{annee: string|number, numero_departement: string|number, nom_departement?: string, nombre_points_de_charge: number}>} data.pdc_par_annee_departement - Liste de points de charge croisés par année et département.
